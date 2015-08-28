@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="HomePageTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nj2-3K-ulT">
+                        <rect key="frame" x="13" y="8" width="100" height="3"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="100" id="iUf-LM-tv3"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Tkf-1N-A3q">
+                        <rect key="frame" x="118" y="5" width="189" height="3"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="2" id="tkO-yi-qKW"/>
+                        </constraints>
+                    </progressView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Nj2-3K-ulT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="0F9-dr-rLB"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Tkf-1N-A3q" secondAttribute="trailing" constant="5" id="19c-xB-69A"/>
+                    <constraint firstItem="Nj2-3K-ulT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="Dj8-Bc-4Lm"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="Nj2-3K-ulT" secondAttribute="bottom" id="GaQ-aw-0xW"/>
+                    <constraint firstItem="Nj2-3K-ulT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Pug-iI-FQn"/>
+                    <constraint firstItem="Nj2-3K-ulT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="UKF-sV-4Dk"/>
+                    <constraint firstAttribute="centerY" secondItem="Tkf-1N-A3q" secondAttribute="centerY" id="cPT-50-zaz"/>
+                    <constraint firstItem="Tkf-1N-A3q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="110" id="g8R-LU-ea8"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="0F9-dr-rLB"/>
+                        <exclude reference="Pug-iI-FQn"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="progress" destination="Tkf-1N-A3q" id="oeq-E6-XPc"/>
+                <outlet property="textLabel" destination="Nj2-3K-ulT" id="inn-ri-TAf"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

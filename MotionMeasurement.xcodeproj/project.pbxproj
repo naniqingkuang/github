@@ -1,0 +1,575 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7D2F95E21B8B0CBF00A8CE8A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F95E01B8B0CBF00A8CE8A /* LoginViewController.m */; };
+		7D2F95E31B8B0CBF00A8CE8A /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D2F95E11B8B0CBF00A8CE8A /* LoginViewController.xib */; };
+		7D357C321B87181C001024A4 /* HomePageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D357C301B87181C001024A4 /* HomePageTableViewCell.m */; };
+		7D357C331B87181C001024A4 /* HomePageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D357C311B87181C001024A4 /* HomePageTableViewCell.xib */; };
+		7D357C351B872299001024A4 /* RIghtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D357C341B872299001024A4 /* RIghtViewController.xib */; };
+		7DC718E01B855B090068253C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC718DF1B855B090068253C /* main.m */; };
+		7DC718E31B855B090068253C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC718E21B855B090068253C /* AppDelegate.m */; };
+		7DC718E61B855B090068253C /* MotionMeasurement.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7DC718E41B855B090068253C /* MotionMeasurement.xcdatamodeld */; };
+		7DC718EE1B855B090068253C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DC718ED1B855B090068253C /* Images.xcassets */; };
+		7DC718F11B855B090068253C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DC718EF1B855B090068253C /* LaunchScreen.xib */; };
+		7DC718FD1B855B090068253C /* MotionMeasurementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC718FC1B855B090068253C /* MotionMeasurementTests.m */; };
+		7DC719101B855B950068253C /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719091B855B950068253C /* CoreDataManager.m */; };
+		7DC719111B855B950068253C /* hello.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7190A1B855B950068253C /* hello.gif */; };
+		7DC719131B855B950068253C /* mainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7190E1B855B950068253C /* mainView.m */; };
+		7DC719141B855B950068253C /* police.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7190F1B855B950068253C /* police.png */; };
+		7DC719181B855BA90068253C /* BlueToothSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719161B855BA90068253C /* BlueToothSetViewController.m */; };
+		7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DC719171B855BA90068253C /* BlueToothSetViewController.xib */; };
+		7DC7191F1B855E810068253C /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7191E1B855E810068253C /* SliderViewController.m */; };
+		7DC719241B85618E0068253C /* LeftViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719211B85618E0068253C /* LeftViewController.m */; };
+		7DC719251B85618E0068253C /* RightViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719231B85618E0068253C /* RightViewController.m */; };
+		7DC7192E1B85680B0068253C /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7192C1B85680B0068253C /* HomeViewController.m */; };
+		7DC7192F1B85680B0068253C /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7192D1B85680B0068253C /* HomeViewController.xib */; };
+		7DFD4EE11B902E3800A95106 /* DPMeterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD4EDE1B902E3800A95106 /* DPMeterView.m */; };
+		7DFD4EE21B902E3800A95106 /* UIBezierPath+BasicShapes.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFD4EE01B902E3800A95106 /* UIBezierPath+BasicShapes.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7DC718F71B855B090068253C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7DC718D21B855B090068253C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7DC718D91B855B090068253C;
+			remoteInfo = MotionMeasurement;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7D2F95DF1B8B0CBF00A8CE8A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		7D2F95E01B8B0CBF00A8CE8A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		7D2F95E11B8B0CBF00A8CE8A /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		7D357C2F1B87181C001024A4 /* HomePageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageTableViewCell.h; sourceTree = "<group>"; };
+		7D357C301B87181C001024A4 /* HomePageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableViewCell.m; sourceTree = "<group>"; };
+		7D357C311B87181C001024A4 /* HomePageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomePageTableViewCell.xib; sourceTree = "<group>"; };
+		7D357C341B872299001024A4 /* RIghtViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RIghtViewController.xib; sourceTree = "<group>"; };
+		7DC718DA1B855B090068253C /* MotionMeasurement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MotionMeasurement.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DC718DE1B855B090068253C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DC718DF1B855B090068253C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7DC718E11B855B090068253C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		7DC718E21B855B090068253C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		7DC718E51B855B090068253C /* MotionMeasurement.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MotionMeasurement.xcdatamodel; sourceTree = "<group>"; };
+		7DC718ED1B855B090068253C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7DC718F01B855B090068253C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		7DC718F61B855B090068253C /* MotionMeasurementTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MotionMeasurementTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DC718FB1B855B090068253C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7DC718FC1B855B090068253C /* MotionMeasurementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MotionMeasurementTests.m; sourceTree = "<group>"; };
+		7DC719081B855B950068253C /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
+		7DC719091B855B950068253C /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
+		7DC7190A1B855B950068253C /* hello.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = hello.gif; sourceTree = "<group>"; };
+		7DC7190D1B855B950068253C /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
+		7DC7190E1B855B950068253C /* mainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mainView.m; sourceTree = "<group>"; };
+		7DC7190F1B855B950068253C /* police.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = police.png; sourceTree = "<group>"; };
+		7DC719151B855BA90068253C /* BlueToothSetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothSetViewController.h; sourceTree = "<group>"; };
+		7DC719161B855BA90068253C /* BlueToothSetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothSetViewController.m; sourceTree = "<group>"; };
+		7DC719171B855BA90068253C /* BlueToothSetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlueToothSetViewController.xib; sourceTree = "<group>"; };
+		7DC7191D1B855E810068253C /* SliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderViewController.h; sourceTree = "<group>"; };
+		7DC7191E1B855E810068253C /* SliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SliderViewController.m; sourceTree = "<group>"; };
+		7DC719201B85618E0068253C /* LeftViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftViewController.h; sourceTree = "<group>"; };
+		7DC719211B85618E0068253C /* LeftViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftViewController.m; sourceTree = "<group>"; };
+		7DC719221B85618E0068253C /* RightViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightViewController.h; sourceTree = "<group>"; };
+		7DC719231B85618E0068253C /* RightViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightViewController.m; sourceTree = "<group>"; };
+		7DC7192B1B85680B0068253C /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		7DC7192C1B85680B0068253C /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		7DC7192D1B85680B0068253C /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		7DFD4EDD1B902E3800A95106 /* DPMeterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DPMeterView.h; sourceTree = "<group>"; };
+		7DFD4EDE1B902E3800A95106 /* DPMeterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPMeterView.m; sourceTree = "<group>"; };
+		7DFD4EDF1B902E3800A95106 /* UIBezierPath+BasicShapes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBezierPath+BasicShapes.h"; sourceTree = "<group>"; };
+		7DFD4EE01B902E3800A95106 /* UIBezierPath+BasicShapes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBezierPath+BasicShapes.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7DC718D71B855B090068253C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC718F31B855B090068253C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7D2F95DE1B8B0CA600A8CE8A /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				7D2F95DF1B8B0CBF00A8CE8A /* LoginViewController.h */,
+				7D2F95E01B8B0CBF00A8CE8A /* LoginViewController.m */,
+				7D2F95E11B8B0CBF00A8CE8A /* LoginViewController.xib */,
+			);
+			name = Login;
+			sourceTree = "<group>";
+		};
+		7DC718D11B855B090068253C = {
+			isa = PBXGroup;
+			children = (
+				7DC719071B855B580068253C /* MotionMeasurementClass */,
+				7DC718DC1B855B090068253C /* MotionMeasurement */,
+				7DC718F91B855B090068253C /* MotionMeasurementTests */,
+				7DC718DB1B855B090068253C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7DC718DB1B855B090068253C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7DC718DA1B855B090068253C /* MotionMeasurement.app */,
+				7DC718F61B855B090068253C /* MotionMeasurementTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7DC718DC1B855B090068253C /* MotionMeasurement */ = {
+			isa = PBXGroup;
+			children = (
+				7DC718E11B855B090068253C /* AppDelegate.h */,
+				7DC718E21B855B090068253C /* AppDelegate.m */,
+				7DC718ED1B855B090068253C /* Images.xcassets */,
+				7DC718EF1B855B090068253C /* LaunchScreen.xib */,
+				7DC718E41B855B090068253C /* MotionMeasurement.xcdatamodeld */,
+				7DC718DD1B855B090068253C /* Supporting Files */,
+			);
+			path = MotionMeasurement;
+			sourceTree = "<group>";
+		};
+		7DC718DD1B855B090068253C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7DC718DE1B855B090068253C /* Info.plist */,
+				7DC718DF1B855B090068253C /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7DC718F91B855B090068253C /* MotionMeasurementTests */ = {
+			isa = PBXGroup;
+			children = (
+				7DC718FC1B855B090068253C /* MotionMeasurementTests.m */,
+				7DC718FA1B855B090068253C /* Supporting Files */,
+			);
+			path = MotionMeasurementTests;
+			sourceTree = "<group>";
+		};
+		7DC718FA1B855B090068253C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7DC718FB1B855B090068253C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7DC719071B855B580068253C /* MotionMeasurementClass */ = {
+			isa = PBXGroup;
+			children = (
+				7D2F95DE1B8B0CA600A8CE8A /* Login */,
+				7DC7191C1B855E500068253C /* MainNavigation */,
+				7DC7191B1B855BED0068253C /* Tools */,
+				7DC7191A1B855BC60068253C /* HomePage */,
+			);
+			name = MotionMeasurementClass;
+			sourceTree = "<group>";
+		};
+		7DC7191A1B855BC60068253C /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				7DC7190F1B855B950068253C /* police.png */,
+				7DC7190A1B855B950068253C /* hello.gif */,
+				7DC7190D1B855B950068253C /* mainView.h */,
+				7DC7190E1B855B950068253C /* mainView.m */,
+				7D357C2F1B87181C001024A4 /* HomePageTableViewCell.h */,
+				7D357C301B87181C001024A4 /* HomePageTableViewCell.m */,
+				7D357C311B87181C001024A4 /* HomePageTableViewCell.xib */,
+				7DFD4EDD1B902E3800A95106 /* DPMeterView.h */,
+				7DFD4EDE1B902E3800A95106 /* DPMeterView.m */,
+				7DFD4EDF1B902E3800A95106 /* UIBezierPath+BasicShapes.h */,
+				7DFD4EE01B902E3800A95106 /* UIBezierPath+BasicShapes.m */,
+				7DC7192B1B85680B0068253C /* HomeViewController.h */,
+				7DC7192C1B85680B0068253C /* HomeViewController.m */,
+				7DC7192D1B85680B0068253C /* HomeViewController.xib */,
+			);
+			name = HomePage;
+			sourceTree = "<group>";
+		};
+		7DC7191B1B855BED0068253C /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				7DC719081B855B950068253C /* CoreDataManager.h */,
+				7DC719091B855B950068253C /* CoreDataManager.m */,
+				7DC719151B855BA90068253C /* BlueToothSetViewController.h */,
+				7DC719161B855BA90068253C /* BlueToothSetViewController.m */,
+				7DC719171B855BA90068253C /* BlueToothSetViewController.xib */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
+		7DC7191C1B855E500068253C /* MainNavigation */ = {
+			isa = PBXGroup;
+			children = (
+				7DC719201B85618E0068253C /* LeftViewController.h */,
+				7DC719211B85618E0068253C /* LeftViewController.m */,
+				7DC719221B85618E0068253C /* RightViewController.h */,
+				7DC719231B85618E0068253C /* RightViewController.m */,
+				7D357C341B872299001024A4 /* RIghtViewController.xib */,
+				7DC7191D1B855E810068253C /* SliderViewController.h */,
+				7DC7191E1B855E810068253C /* SliderViewController.m */,
+			);
+			name = MainNavigation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7DC718D91B855B090068253C /* MotionMeasurement */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DC719001B855B090068253C /* Build configuration list for PBXNativeTarget "MotionMeasurement" */;
+			buildPhases = (
+				7DC718D61B855B090068253C /* Sources */,
+				7DC718D71B855B090068253C /* Frameworks */,
+				7DC718D81B855B090068253C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MotionMeasurement;
+			productName = MotionMeasurement;
+			productReference = 7DC718DA1B855B090068253C /* MotionMeasurement.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7DC718F51B855B090068253C /* MotionMeasurementTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DC719031B855B090068253C /* Build configuration list for PBXNativeTarget "MotionMeasurementTests" */;
+			buildPhases = (
+				7DC718F21B855B090068253C /* Sources */,
+				7DC718F31B855B090068253C /* Frameworks */,
+				7DC718F41B855B090068253C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7DC718F81B855B090068253C /* PBXTargetDependency */,
+			);
+			name = MotionMeasurementTests;
+			productName = MotionMeasurementTests;
+			productReference = 7DC718F61B855B090068253C /* MotionMeasurementTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7DC718D21B855B090068253C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "@猪猪";
+				TargetAttributes = {
+					7DC718D91B855B090068253C = {
+						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 395Q23NHPD;
+					};
+					7DC718F51B855B090068253C = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 7DC718D91B855B090068253C;
+					};
+				};
+			};
+			buildConfigurationList = 7DC718D51B855B090068253C /* Build configuration list for PBXProject "MotionMeasurement" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7DC718D11B855B090068253C;
+			productRefGroup = 7DC718DB1B855B090068253C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7DC718D91B855B090068253C /* MotionMeasurement */,
+				7DC718F51B855B090068253C /* MotionMeasurementTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7DC718D81B855B090068253C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC719141B855B950068253C /* police.png in Resources */,
+				7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */,
+				7DC719111B855B950068253C /* hello.gif in Resources */,
+				7DC718F11B855B090068253C /* LaunchScreen.xib in Resources */,
+				7DC718EE1B855B090068253C /* Images.xcassets in Resources */,
+				7D357C351B872299001024A4 /* RIghtViewController.xib in Resources */,
+				7DC7192F1B85680B0068253C /* HomeViewController.xib in Resources */,
+				7D357C331B87181C001024A4 /* HomePageTableViewCell.xib in Resources */,
+				7D2F95E31B8B0CBF00A8CE8A /* LoginViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC718F41B855B090068253C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7DC718D61B855B090068253C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DFD4EE21B902E3800A95106 /* UIBezierPath+BasicShapes.m in Sources */,
+				7DFD4EE11B902E3800A95106 /* DPMeterView.m in Sources */,
+				7DC719241B85618E0068253C /* LeftViewController.m in Sources */,
+				7DC719181B855BA90068253C /* BlueToothSetViewController.m in Sources */,
+				7DC718E31B855B090068253C /* AppDelegate.m in Sources */,
+				7D357C321B87181C001024A4 /* HomePageTableViewCell.m in Sources */,
+				7DC718E61B855B090068253C /* MotionMeasurement.xcdatamodeld in Sources */,
+				7DC7191F1B855E810068253C /* SliderViewController.m in Sources */,
+				7DC719251B85618E0068253C /* RightViewController.m in Sources */,
+				7DC7192E1B85680B0068253C /* HomeViewController.m in Sources */,
+				7D2F95E21B8B0CBF00A8CE8A /* LoginViewController.m in Sources */,
+				7DC719101B855B950068253C /* CoreDataManager.m in Sources */,
+				7DC719131B855B950068253C /* mainView.m in Sources */,
+				7DC718E01B855B090068253C /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7DC718F21B855B090068253C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DC718FD1B855B090068253C /* MotionMeasurementTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7DC718F81B855B090068253C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7DC718D91B855B090068253C /* MotionMeasurement */;
+			targetProxy = 7DC718F71B855B090068253C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7DC718EF1B855B090068253C /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7DC718F01B855B090068253C /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7DC718FE1B855B090068253C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		7DC718FF1B855B090068253C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7DC719011B855B090068253C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = MotionMeasurement/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		7DC719021B855B090068253C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = MotionMeasurement/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		7DC719041B855B090068253C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
+			};
+			name = Debug;
+		};
+		7DC719051B855B090068253C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7DC718D51B855B090068253C /* Build configuration list for PBXProject "MotionMeasurement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DC718FE1B855B090068253C /* Debug */,
+				7DC718FF1B855B090068253C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DC719001B855B090068253C /* Build configuration list for PBXNativeTarget "MotionMeasurement" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DC719011B855B090068253C /* Debug */,
+				7DC719021B855B090068253C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DC719031B855B090068253C /* Build configuration list for PBXNativeTarget "MotionMeasurementTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DC719041B855B090068253C /* Debug */,
+				7DC719051B855B090068253C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7DC718E41B855B090068253C /* MotionMeasurement.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7DC718E51B855B090068253C /* MotionMeasurement.xcdatamodel */,
+			);
+			currentVersion = 7DC718E51B855B090068253C /* MotionMeasurement.xcdatamodel */;
+			path = MotionMeasurement.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 7DC718D21B855B090068253C /* Project object */;
+}

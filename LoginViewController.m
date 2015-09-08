@@ -7,8 +7,12 @@
 //
 
 #import "LoginViewController.h"
-
+#import "RequestUtil.h"
+#import "MBProgressHUD+Util.h"
+#import "RegisterViewController.h"
 @interface LoginViewController ()
+@property (strong, nonatomic) IBOutlet UITextField *nameText;
+@property (strong, nonatomic) IBOutlet UITextField *passedText;
 
 @end
 
@@ -35,7 +39,26 @@
 }
 */
 - (IBAction)loginButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if(!self.nameText.text || self.passedText.text.length != 6)
+    {
+        [MBProgressHUD showError:@"用户名或者密码不对，密码要去六位"];
+        return;
+    }
+    [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag)
+     {
+         if(flag)
+         {
+             [self dismissViewControllerAnimated:YES completion:nil];
+         }
+         else
+         {
+             [MBProgressHUD showError:@"登录失败"];
+         }
+     }];
+}
+- (IBAction)registerAcount:(UIButton *)sender {
+    RegisterViewController *RegisterVC = [[RegisterViewController alloc]initWithNibName:@"RegisterViewController" bundle:nil];
+    [self presentViewController:RegisterVC animated:YES completion:nil];
 }
 
 @end

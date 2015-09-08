@@ -14,16 +14,14 @@
 #import "BlueToothSetViewController.h"
 #import "HomePageTableViewCell.h"
 #import "LoginViewController.h"
-#import "DPMeterView.h"
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet mainView *TodayMeasurementView;
-@property (strong, nonatomic) IBOutlet UILabel *chargeSumLB;
 @property (strong, nonatomic) IBOutlet UINavigationItem *dateNavigationItem;
-@property (strong, nonatomic) IBOutlet UIView *ChargeTopVIew;
-@property (strong, nonatomic) IBOutlet DPMeterView *chargeView;
 @property (strong, nonatomic)UIView *loginView;
+
+@property (strong, nonatomic) IBOutlet UIButton *chargeButton;
 
 @end
 
@@ -43,23 +41,12 @@
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM月dd日"];
     NSString *dateStr =[format stringFromDate:[NSDate date]];
-    
-    [self.chargeView setMeterType:DPMeterTypeLinearVertical];
-    self.chargeView.progressTintColor = [UIColor colorWithRed:216/255.f green:147/255.f blue:48/255.f alpha:1.f];
-    self.chargeView.trackTintColor = [UIColor colorWithRed:231/255.f green:190/255.f blue:132/255.f alpha:1.f];
-    [self.chargeView setShape:[UIBezierPath bezierPathWithRoundedRect:self.chargeView.bounds cornerRadius:0.f].CGPath];
-    [self.chargeView.layer setBorderWidth:3.f];
-    self.ChargeTopVIew.layer.cornerRadius = 1.0;
-    self.ChargeTopVIew.layer.masksToBounds = YES;
-    self.chargeView.layer.masksToBounds = YES;
-    self.chargeView.layer.cornerRadius = 2.0;
-    
-    [self.chargeView.layer setBorderColor:[UIColor colorWithRed:195/255.f green:129/255.f blue:35/255.f alpha:1.f].CGColor];
+    self.chargeButton.imageView.image = [UIImage imageNamed:@"1.jpg"];
     self.dateNavigationItem.title= dateStr;
     [self performSelector:@selector(toLoginVC) withObject:nil afterDelay:0.0];
 }
 - (void)toLoginVC
-{
+{ 
     //弹出登录界面
     LoginViewController *loginVC=[[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
     
@@ -159,8 +146,6 @@
     }
     [self.TodayMeasurementView setPersentMaskOfCircle:i];
     int sum = i *2000;
-    [self.chargeView setProgress:i animated:YES];
-    self.chargeSumLB.text = [NSString stringWithFormat:@"%d%@",(int)(i *100),@"%"];
     [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%d",sum]];
 }
 @end

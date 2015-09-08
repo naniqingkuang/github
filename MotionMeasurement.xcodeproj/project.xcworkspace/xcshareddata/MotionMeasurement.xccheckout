@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6F046B50-DDFF-47F9-B330-F942911688D9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>MotionMeasurement</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>EBCFBC0AD4E32321949A674C373A7D8DFF2135E2</key>
+		<string>https://github.com/naniqingkuang/github.git</string>
+		<key>e2391257-57d8-704c-aa19-c67db33402c2++7580</key>
+		<string>https://111.47.111.130/svn/CMCC_Repository/AndEdu/AndEduiOS</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>MotionMeasurement.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>EBCFBC0AD4E32321949A674C373A7D8DFF2135E2</key>
+		<string>../..</string>
+		<key>e2391257-57d8-704c-aa19-c67db33402c2++7580</key>
+		<string>../../../AndEduiOS</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>e2391257-57d8-704c-aa19-c67db33402c2++7580</key>
+		<string>https://111.47.111.130/svn/CMCC_Repository</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/naniqingkuang/github.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>EBCFBC0AD4E32321949A674C373A7D8DFF2135E2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>e2391257-57d8-704c-aa19-c67db33402c2++7580</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AndEduiOS</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>EBCFBC0AD4E32321949A674C373A7D8DFF2135E2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>github</string>
+		</dict>
+	</array>
+</dict>
+</plist>

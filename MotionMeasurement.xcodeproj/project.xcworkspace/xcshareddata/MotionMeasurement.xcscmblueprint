@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "e2391257-57d8-704c-aa19-c67db33402c2++7580" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2" : 0,
+    "e2391257-57d8-704c-aa19-c67db33402c2++7580" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6F046B50-DDFF-47F9-B330-F942911688D9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2" : "github",
+    "e2391257-57d8-704c-aa19-c67db33402c2++7580" : "AndEduiOS"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MotionMeasurement",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MotionMeasurement.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/naniqingkuang\/github.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/111.47.111.130\/svn\/CMCC_Repository",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "e2391257-57d8-704c-aa19-c67db33402c2++7580"
+    }
+  ]
+}

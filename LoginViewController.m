@@ -10,16 +10,22 @@
 #import "RequestUtil.h"
 #import "MBProgressHUD+Util.h"
 #import "RegisterViewController.h"
+#import "ModifyViewController.h"
 @interface LoginViewController ()
 @property (strong, nonatomic) IBOutlet UITextField *nameText;
 @property (strong, nonatomic) IBOutlet UITextField *passedText;
-
+@property (strong, nonatomic) IBOutlet UIButton *loginButton;
+@property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
 @end
 
 @implementation LoginViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.logoImageView.layer.cornerRadius = 10;
+    self.logoImageView.layer.masksToBounds = YES;
+    self.loginButton.layer.cornerRadius = 8;
+    self.loginButton.layer.masksToBounds = YES;
     // Do any additional setup after loading the view from its nib.
     NSLog(@"%s",__FUNCTION__);
 }
@@ -39,6 +45,8 @@
 }
 */
 - (IBAction)loginButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
     if(!self.nameText.text || self.passedText.text.length != 6)
     {
         [MBProgressHUD showError:@"用户名或者密码不对，密码要去六位"];
@@ -49,6 +57,10 @@
          if(flag)
          {
              [self dismissViewControllerAnimated:YES completion:nil];
+             [RequestUtil getUserinfo:self.nameText.text block:^(NSDictionary *dict) {
+                 UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                 [RequestUtil setCurrentUser:item];
+             }];
          }
          else
          {

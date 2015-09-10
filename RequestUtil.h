@@ -13,8 +13,12 @@
 #define Server_url          @"http://msznyl.com:8088/MSZNYL/app/"
 #define User_login          @"userLogin"
 #define User_register       @"receiveAppUserInfo"
+#define Get_UserInfo        @"getAppUserInfo"
 @interface RequestUtil : NSObject
 
++ (void)setCurrentUser:(UserUtil *)item;
++ (UserUtil *)getCurrentUser;
 + (void)userLogin:(NSString *)name passwd:(NSString *)passwd block:(void (^)(bool)) aBlock;
 + (void)userRegister:(UserUtil *)item block:(void (^)(bool))aBlock;
++ (void)getUserinfo:(NSString *)userName block:(void(^)(NSDictionary* )) aBlock;
 @end

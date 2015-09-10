@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserUtil.h"
 
+static UserUtil *g_CurrentUser;
 @interface HomeViewController : UIViewController
-
 @end

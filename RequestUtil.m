@@ -9,6 +9,9 @@
 #import "RequestUtil.h"
 #import "Reachability.h"
 #import "MBProgressHUD+Util.h"
+#import "UserUtil.h"
+
+static UserUtil *g_currentUser;
 @implementation RequestUtil
 
 - (int)checkNetState
@@ -79,5 +82,26 @@
             }
         }
     }];
+}
++ (void)getUserinfo:(NSString *)userName block:(void(^)(NSDictionary* )) aBlock
+{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:Get_UserInfo];
+    NSString *param = [NSString stringWithFormat:@"\"userName\":%@",userName];
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSDictionary *data = [dict objectForKey:@"data"];
+        aBlock(data);
+    }];
+}
++ (void)setCurrentUser:(UserUtil *)item
+{
+    g_currentUser = item;
+}
++ (UserUtil *)getCurrentUser
+{
+    if(!g_currentUser)
+    {
+        g_currentUser = [[UserUtil alloc]init];
+    }
+    return g_currentUser;
 }
 @end

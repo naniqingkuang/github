@@ -20,9 +20,7 @@
 @property (strong, nonatomic) IBOutlet mainView *TodayMeasurementView;
 @property (strong, nonatomic) IBOutlet UINavigationItem *dateNavigationItem;
 @property (strong, nonatomic)UIView *loginView;
-
-@property (strong, nonatomic) IBOutlet UIButton *chargeButton;
-
+@property (strong, nonatomic) IBOutlet UIImageView *chargeImageView;
 @end
 
 @implementation HomeViewController
@@ -41,7 +39,6 @@
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM月dd日"];
     NSString *dateStr =[format stringFromDate:[NSDate date]];
-    self.chargeButton.imageView.image = [UIImage imageNamed:@"1.jpg"];
     self.dateNavigationItem.title= dateStr;
     [self performSelector:@selector(toLoginVC) withObject:nil afterDelay:0.0];
 }
@@ -146,6 +143,9 @@
     }
     [self.TodayMeasurementView setPersentMaskOfCircle:i];
     int sum = i *2000;
+    int mod = i*10;
     [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%d",sum]];
+    NSString *str = [NSString stringWithFormat:@"%d.jpg",(mod % 5)];
+    self.chargeImageView.image = [UIImage imageNamed:str];
 }
 @end

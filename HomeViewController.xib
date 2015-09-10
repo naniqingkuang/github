@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HomeViewController">
             <connections>
                 <outlet property="TodayMeasurementView" destination="TTQ-MK-6YP" id="e9Q-r2-fX1"/>
-                <outlet property="chargeButton" destination="ZNg-mW-5sf" id="Hgb-gZ-1zN"/>
+                <outlet property="chargeImageView" destination="KTA-zT-OvA" id="TnS-pN-WjX"/>
                 <outlet property="dateNavigationItem" destination="nmC-hs-oOx" id="uBB-6U-gp5"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -19,9 +19,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8FH-Gj-mTi">
-                    <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="44" id="Dcg-LF-CSO"/>
+                        <constraint firstAttribute="height" constant="64" id="Dcg-LF-CSO"/>
                     </constraints>
                     <items>
                         <navigationItem id="nmC-hs-oOx">
@@ -34,7 +34,7 @@
                     </items>
                 </navigationBar>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t22-je-Qha">
-                    <rect key="frame" x="0.0" y="84" width="600" height="280"/>
+                    <rect key="frame" x="0.0" y="94" width="600" height="280"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WtJ-m5-vsn">
                             <rect key="frame" x="0.0" y="95" width="40" height="40"/>
@@ -78,10 +78,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EPh-lQ-NGp">
-                    <rect key="frame" x="0.0" y="364" width="600" height="236"/>
+                    <rect key="frame" x="0.0" y="374" width="600" height="226"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BXz-ap-PF1">
-                            <rect key="frame" x="0.0" y="128" width="600" height="60"/>
+                            <rect key="frame" x="0.0" y="123" width="600" height="60"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C5E-m2-EXT">
                                     <rect key="frame" x="30" y="0.0" width="150" height="60"/>
@@ -178,28 +178,27 @@
                         <constraint firstItem="BXz-ap-PF1" firstAttribute="leading" secondItem="EPh-lQ-NGp" secondAttribute="leading" id="mdk-7g-Jzy"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZNg-mW-5sf">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KTA-zT-OvA">
                     <rect key="frame" x="500" y="64" width="100" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="30" id="CaU-Wd-zjL"/>
-                        <constraint firstAttribute="width" constant="100" id="EsB-Ox-FYv"/>
+                        <constraint firstAttribute="width" constant="100" id="IdM-1a-70w"/>
+                        <constraint firstAttribute="height" constant="30" id="Vlh-Fi-KPJ"/>
                     </constraints>
-                    <state key="normal" title="Button"/>
-                </button>
+                </imageView>
             </subviews>
             <constraints>
                 <constraint firstItem="EPh-lQ-NGp" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="AFd-fu-2y1"/>
                 <constraint firstItem="t22-je-Qha" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="I4u-0s-VVK"/>
                 <constraint firstAttribute="bottom" secondItem="EPh-lQ-NGp" secondAttribute="bottom" id="L28-aw-3he"/>
+                <constraint firstAttribute="trailing" secondItem="KTA-zT-OvA" secondAttribute="trailing" id="WUS-xq-Q50"/>
                 <constraint firstAttribute="trailing" secondItem="EPh-lQ-NGp" secondAttribute="trailing" id="XPe-hU-vHv"/>
                 <constraint firstAttribute="trailing" secondItem="8FH-Gj-mTi" secondAttribute="trailing" id="bBQ-dm-f0w"/>
-                <constraint firstAttribute="trailing" secondItem="ZNg-mW-5sf" secondAttribute="trailing" id="ey4-eS-3PK"/>
-                <constraint firstItem="t22-je-Qha" firstAttribute="top" secondItem="8FH-Gj-mTi" secondAttribute="bottom" constant="20" id="fRl-J9-bvZ"/>
+                <constraint firstItem="t22-je-Qha" firstAttribute="top" secondItem="8FH-Gj-mTi" secondAttribute="bottom" constant="30" id="fRl-J9-bvZ"/>
                 <constraint firstItem="EPh-lQ-NGp" firstAttribute="top" secondItem="t22-je-Qha" secondAttribute="bottom" id="mvt-HV-Eai"/>
-                <constraint firstItem="ZNg-mW-5sf" firstAttribute="top" secondItem="8FH-Gj-mTi" secondAttribute="bottom" id="ph1-8u-dUZ"/>
-                <constraint firstItem="8FH-Gj-mTi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="vph-Kj-f93"/>
+                <constraint firstItem="8FH-Gj-mTi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="vph-Kj-f93"/>
                 <constraint firstItem="8FH-Gj-mTi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wTb-GA-hqj"/>
                 <constraint firstAttribute="trailing" secondItem="t22-je-Qha" secondAttribute="trailing" id="yaM-Jh-Y0k"/>
+                <constraint firstItem="KTA-zT-OvA" firstAttribute="top" secondItem="8FH-Gj-mTi" secondAttribute="bottom" id="yhD-AS-N88"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>

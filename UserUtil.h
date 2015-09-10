@@ -25,4 +25,5 @@
 @property (nonatomic, copy)NSString *clientid1_32;
 @property (nonatomic, copy)NSString *clientid2_32;
 - (NSString *) checkType;
+- (instancetype)initWithDict:(NSDictionary *)dict;
 @end

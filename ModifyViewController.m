@@ -7,7 +7,7 @@
 //
 
 #import "ModifyViewController.h"
-
+#import "SliderViewController.h"
 @interface ModifyViewController ()
 
 @end
@@ -254,6 +254,12 @@
         res = cell.contentText.text;
     }
     return res;
+}
+- (IBAction)backButtonClicked:(id)sender {
+    [[SliderViewController sharedSliderController]leftItemClick];
+    
+}
+- (IBAction)modifyCommit:(id)sender {
 }
 
 @end

@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <CoreBluetooth/CoreBluetooth.h>
 
-@interface BlueToothSetViewController : UIViewController<CBCentralManagerDelegate>
-@property (strong, nonatomic) CBCentralManager *centerManager;
+@interface BlueToothSetViewController : UIViewController
 @end

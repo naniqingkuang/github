@@ -9,6 +9,7 @@
 #import "LeftViewController.h"
 #import "SliderViewController.h"
 #import "BlueToothSetViewController.h"
+#import "ModifyViewController.h"
 @interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
@@ -61,10 +62,10 @@
             cell.textLabel.text=@"设置";
             break;
         case 1:
-            cell.textLabel.text=@"用户";
+            cell.textLabel.text=@"蓝牙设置";
             break;
         case 2:
-            cell.textLabel.text=@"模式";
+            cell.textLabel.text=@"信息修改";
             break;
         default:
             break;
@@ -84,6 +85,9 @@
             break;
         case 1:
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"BlueToothSetViewController"];
+            break;
+        case 2:
+            [[SliderViewController sharedSliderController] showContentControllerWithModel:@"ModifyViewController"];
             break;
         default:
             break;

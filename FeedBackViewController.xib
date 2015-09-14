@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8152.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8124.4"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedBackViewController">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NaM-Fo-Rts">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="kaQ-eN-TeX"/>
+                    </constraints>
+                    <items>
+                        <navigationItem title="反馈" id="djP-zk-fM5">
+                            <barButtonItem key="leftBarButtonItem" title="返回" id="uIH-L3-TIF"/>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="joO-kN-54w">
+                    <rect key="frame" x="0.0" y="64" width="600" height="200"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="66G-dz-ftL"/>
+                    </constraints>
+                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8cO-vh-xhH">
+                    <rect key="frame" x="0.0" y="264" width="600" height="30"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Llw-yy-PgB">
+                            <rect key="frame" x="430" y="4" width="46" height="30"/>
+                            <state key="normal" title="Button"/>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5o-B9-ndE">
+                            <rect key="frame" x="0.0" y="8" width="42" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gde-bo-R14">
+                            <rect key="frame" x="67" y="4" width="46" height="30"/>
+                            <state key="normal" title="Button"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="47N-Ma-2O9"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pYe-Gp-f8b">
+                    <rect key="frame" x="65" y="320" width="240" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="NaM-Fo-Rts" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="5ZO-Uc-xc2"/>
+                <constraint firstAttribute="trailing" secondItem="8cO-vh-xhH" secondAttribute="trailing" id="Czf-Xo-79U"/>
+                <constraint firstItem="8cO-vh-xhH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="E6m-VH-Tqe"/>
+                <constraint firstItem="joO-kN-54w" firstAttribute="top" secondItem="NaM-Fo-Rts" secondAttribute="bottom" id="IdY-O1-cN1"/>
+                <constraint firstItem="joO-kN-54w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Lf5-Kr-HVf"/>
+                <constraint firstItem="8cO-vh-xhH" firstAttribute="top" secondItem="joO-kN-54w" secondAttribute="bottom" id="P3m-zz-gg3"/>
+                <constraint firstAttribute="trailing" secondItem="NaM-Fo-Rts" secondAttribute="trailing" id="egh-eh-2Uj"/>
+                <constraint firstAttribute="trailing" secondItem="joO-kN-54w" secondAttribute="trailing" id="lP6-nC-j3K"/>
+                <constraint firstItem="NaM-Fo-Rts" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ne6-k2-bsV"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

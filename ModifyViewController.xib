@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8152.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8124.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModifyViewController">
@@ -28,10 +28,14 @@
                         <navigationItem title="Title" id="uzb-R8-xds">
                             <barButtonItem key="leftBarButtonItem" title="返回" id="hNQ-G0-Oap">
                                 <connections>
-                                    <action selector="returnButtonClicked:" destination="-1" id="gls-zC-zdn"/>
+                                    <action selector="backButtonClicked:" destination="-1" id="xiT-yQ-Nls"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem key="rightBarButtonItem" title="提交修改" id="vzf-5V-MJI"/>
+                            <barButtonItem key="rightBarButtonItem" title="提交修改" id="vzf-5V-MJI">
+                                <connections>
+                                    <action selector="modifyCommit:" destination="-1" id="WCm-8U-gKw"/>
+                                </connections>
+                            </barButtonItem>
                         </navigationItem>
                     </items>
                 </navigationBar>

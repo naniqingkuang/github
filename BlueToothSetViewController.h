@@ -9,4 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface BlueToothSetViewController : UIViewController
+@property (nonatomic, copy)void(^m_block)();
 @end

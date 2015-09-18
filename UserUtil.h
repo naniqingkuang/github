@@ -24,6 +24,12 @@
 @property (nonatomic, copy)NSString *email32;
 @property (nonatomic, copy)NSString *clientid1_32;
 @property (nonatomic, copy)NSString *clientid2_32;
+@property (nonatomic, copy)NSString *currentDate;
+@property (nonatomic, copy)NSString *insertTime;
+@property (nonatomic, copy)NSString *actflag1;
+@property (nonatomic, copy)NSString *myId;
+
 - (NSString *) checkType;
 - (instancetype)initWithDict:(NSDictionary *)dict;
+- (void)checkAndAvoidNull;
 @end

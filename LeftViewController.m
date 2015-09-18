@@ -10,6 +10,7 @@
 #import "SliderViewController.h"
 #import "BlueToothSetViewController.h"
 #import "ModifyViewController.h"
+#import "LoginViewController.h"
 @interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
@@ -67,6 +68,9 @@
         case 2:
             cell.textLabel.text=@"信息修改";
             break;
+        case 3:
+            cell.textLabel.text = @"退出登录";
+            break;
         default:
             break;
     }
@@ -75,10 +79,12 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 4;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    LoginViewController *loginVC = nil;
+    ModifyViewController *modifyVC = nil;
     switch (indexPath.row) {
         case 0:
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
@@ -87,7 +93,13 @@
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"BlueToothSetViewController"];
             break;
         case 2:
-            [[SliderViewController sharedSliderController] showContentControllerWithModel:@"ModifyViewController"];
+           // [[SliderViewController sharedSliderController] showContentControllerWithModel:@"ModifyViewController"];
+             modifyVC = [[ModifyViewController alloc]initWithNibName:@"ModifyViewController" bundle:nil];
+            [self presentViewController:modifyVC animated:YES completion:nil];
+            break;
+        case 3:
+            loginVC = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
+            [self presentViewController:loginVC animated:NO completion:nil];
             break;
         default:
             break;

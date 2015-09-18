@@ -17,8 +17,11 @@
 #import "UserUtil.h"
 #import "MBProgressHUD+Util.h"
 #import "RequestUtil.h"
+#import "BlueToothUtil.h"
 #define Titles  @"用户",@"密码",@"确认密码",@"真实姓名",@"性别",@"用户类型",@"出生日期",@"身高",@"体重",@"住址",@"手机号",@"邮箱"
-
+#define USER_TYPE @"心梗的人",@"脑卒中的人",@"下肢骨折的人",@"下肢关节的人",@"减肥的人",@"伏案工作的人",@"青少年成长的人",@"正常人和亚健康人群"
+#define USER_GENDER @"男",@"女"
+#define USER_TYPE_DICT @"心梗的人":@"1",@"脑卒中的人":@"2",@"下肢骨折的人":@"3",@"下肢关节的人":@"4",@"减肥的人":@"5",@"伏案工作的人":@"6",@"青少年成长的人":@"7",@"正常人和亚健康人群":@"8"
 @interface ModifyViewController ()<UITableViewDelegate,UITableViewDataSource,UIPickerViewDataSource,UIPickerViewDelegate,UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIPickerView *pickerView;
@@ -28,9 +31,9 @@
 @property (strong, nonatomic) IBOutlet UIView *datePickerBackgroundView;
 @property (nonatomic, strong) NSIndexPath *currentPath;
 @property (nonatomic, strong) UITextField *curText;
-@property (nonatomic, strong) UserUtil *modifyUser;
-@property (nonatomic, strong) NSDictionary *dataDic;
-
+@property (nonatomic, strong) UserUtil *registerUser;
+@property (nonatomic, strong) NSMutableArray *dataDest;
+@property (nonatomic, strong) NSDictionary *userTypeDict;
 @end
 
 @implementation ModifyViewController
@@ -49,10 +52,21 @@
 }
 - (void)initData
 {
-    
     self.titleList = @[Titles];
-    self.modifyUser = [RequestUtil getCurrentUser];
-    self.dataDic = @{@"用户":self.modifyUser.userName32 ,@"密码":self.modifyUser.password32,@"确认密码":@"",@"真实姓名":self.modifyUser.realName32,@"性别":self.modifyUser.gender1,@"用户类型":self.modifyUser.userType1,@"出生日期": self.modifyUser.birthday8,@"身高":self.modifyUser.height,@"体重":self.modifyUser.weight,@"住址":self.modifyUser.address256,@"手机号":self.modifyUser.phone32,@"邮箱":self.modifyUser.email32};
+    self.registerUser = [RequestUtil getCurrentUser];
+    self.dataDest = [[NSMutableArray alloc]initWithObjects:self.registerUser.userName32,
+                     self.registerUser.password32,
+                     @"",
+                     self.registerUser.realName32,
+                     self.registerUser.gender1,
+                     self.registerUser.userType1,
+                     self.registerUser.birthday8,
+                     self.registerUser.height,
+                     self.registerUser.weight,
+                     self.registerUser.address256,
+                     self.registerUser.phone32,
+                     self.registerUser.email32, nil];
+    self.userTypeDict = @{USER_TYPE_DICT};
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -79,8 +93,9 @@
             cell = (TableViewCell2 *)[[[NSBundle mainBundle]loadNibNamed:@"TableViewCell2" owner:self options:nil]lastObject];
         }
         cell.titleLB.text = title;
-        cell.contentLB.text = self.dataDic[title];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentLB.tag = indexPath.row;
+        cell.contentLB.text = self.dataDest[indexPath.row];
         return cell;
     }
     else
@@ -92,9 +107,10 @@
             cell = (TableViewCell1 *)[[[NSBundle mainBundle]loadNibNamed:@"TableViewCell1" owner:self options:nil]lastObject];
         }
         cell.titleLB.text = title;
-        cell.contentText.text = self.dataDic[title];
         cell.contentText.delegate = self;
+        cell.contentText.text = self.dataDest[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.contentText.tag = indexPath.row;
         return cell;
         
     }
@@ -131,18 +147,19 @@
 {
     self.pickerView.hidden = NO;
     self.datePickerBackgroundView.hidden = YES;
-    self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:@"男",@"女",nil];
+    self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:USER_GENDER,nil];
     [self.pickerView reloadAllComponents];
     self.currentPath = [NSIndexPath indexPathForRow:4 inSection:0];
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
     cell.contentLB.text = @"";
+    
 }
 
 - (void)pickUserType
 {
     self.pickerView.hidden = NO;
     self.datePickerBackgroundView.hidden = YES;
-    self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:@"心梗的人",@"脑卒中的人",@"下肢骨折的人",@"下肢关节的人",@"减肥的人",@"伏案工作的人",@"青少年成长的人",@"正常人和亚健康人群",nil];
+    self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:USER_TYPE,nil];
     [self.pickerView reloadAllComponents];
     self.currentPath = [NSIndexPath indexPathForRow:5 inSection:0];
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
@@ -184,9 +201,9 @@
 {
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
     NSString *title = self.pickerViewArr[row];
+    [self.dataDest replaceObjectAtIndex:self.currentPath.row withObject:title];
     cell.contentLB.text = title;
     self.pickerView.hidden = YES;
-    
 }
 - (IBAction)returnButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -197,6 +214,7 @@
     [formatter setDateFormat:@"YYYY-MM-dd"];
     cell.contentLB.text = [formatter stringFromDate:self.datePicker.date];
     self.datePickerBackgroundView.hidden = YES;
+    [self.dataDest replaceObjectAtIndex:self.currentPath.row withObject:cell.contentLB.text];
 }
 - (IBAction)datePickerCancelButtonClicked:(id)sender {
     self.datePickerBackgroundView.hidden = YES;
@@ -222,18 +240,29 @@
 }
 - (void)getDataFromCell
 {
-    self.modifyUser.userName32 = [self getResultFromTextFeild:0 section:0];
-    self.modifyUser.password32 = [self getResultFromTextFeild:1 section:0];
-    self.modifyUser.realName32 = [self getResultFromTextFeild:3 section:0];
-    self.modifyUser.gender1 = [self getResultFromTextFeild:4 section:0];
-    self.modifyUser.userType1 = [self getResultFromTextFeild:5 section:0];
-    self.modifyUser.birthday8 = [self getResultFromTextFeild:6 section:0];
-    self.modifyUser.height = [self getResultFromTextFeild:7 section:0];
-    self.modifyUser.weight = [self getResultFromTextFeild:8 section:0];
-    self.modifyUser.address256 = [self getResultFromTextFeild:9 section:0];
-    self.modifyUser.phone32 = [self getResultFromTextFeild:10 section:0];
-    self.modifyUser.email32 = [self getResultFromTextFeild:10 section:0];
-    NSString *err = [self.modifyUser checkType];
+    self.registerUser.userName32 = self.dataDest[0];
+    self.registerUser.password32 = self.dataDest[1];
+    self.registerUser.realName32 = self.dataDest[3];
+    self.registerUser.gender1 =  [self.dataDest[4] isEqual:@"男" ]? @"1" : @"2";
+    self.registerUser.userType1 = self.userTypeDict[(self.dataDest[5])];
+    self.registerUser.birthday8 = self.dataDest[6];
+    self.registerUser.height = self.dataDest[7];
+    self.registerUser.weight = self.dataDest[8];
+    self.registerUser.address256 = self.dataDest[9];
+    self.registerUser.phone32 = self.dataDest[10];
+    self.registerUser.email32 = self.dataDest[11];
+    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
+        self.registerUser.deviceID18 = name;
+    }];
+    if(!self.registerUser.deviceID18)
+    {
+        self.registerUser.deviceID18 = @"YDNNN2015090600012";
+    }
+    self.registerUser.clientid2_32 = @"0e0d6ec90fae2ebf1a96f661439c0dfc";
+    NSDateFormatter *formmater = [[NSDateFormatter alloc]init];
+    [formmater setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+    self.registerUser.registerdate14 = [formmater stringFromDate:[NSDate date]];
+    NSString *err = [self.registerUser checkType];
     if(err.length >0)
     {
         [MBProgressHUD showError:err];
@@ -256,10 +285,27 @@
     return res;
 }
 - (IBAction)backButtonClicked:(id)sender {
-    [[SliderViewController sharedSliderController]leftItemClick];
-    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+    }];
 }
-- (IBAction)modifyCommit:(id)sender {
+- (IBAction)updateCommit:(id)sender {
+    [self getDataFromCell];
+    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
+        self.registerUser.deviceID18 = name;
+    }];
+    [self.registerUser checkAndAvoidNull];
+    [RequestUtil userUpdateInfo:self.registerUser block:^(bool flag) {
+        if (flag) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+            [RequestUtil setCurrentUser:self.registerUser];
+        }
+    }];
 }
 
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    [self.dataDest replaceObjectAtIndex:textField.tag withObject:textField.text];
+    return YES;
+}
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "UserUtil.h"
-
+#import <objc/runtime.h>
 @implementation UserUtil
 
 - (NSString *) checkType
@@ -61,7 +61,24 @@
         self.phone32 = [dict objectForKey:@"phone"];
         self.email32 = [dict objectForKey:@"email"];
         self.birthday8 = [dict objectForKey:@"brithday"];
+        self.myId = [dict objectForKey:@"id"];
+        self.insertTime = [dict objectForKey:@"isrtime"];
+        self.clientid2_32 = [dict objectForKey:@"clientid2"];
+        self.actflag1 = [dict objectForKey:@"actflag"];
+        self.birthday8 = [dict objectForKey:@"birthday"];
     }
     return self;
+}
+- (void)checkAndAvoidNull
+{
+    unsigned int count = 0;
+    NSString *str = nil;
+    objc_property_t *ivar = class_copyPropertyList([self class], &count);
+    for (int i = 0; i < count; i++) {
+        str = [NSString stringWithUTF8String:property_getName(ivar[i])];
+        if(nil == [self valueForKey:str]){
+            [self setValue:@"" forKey:str];
+        }
+    }
 }
 @end

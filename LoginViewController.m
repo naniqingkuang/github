@@ -11,6 +11,7 @@
 #import "MBProgressHUD+Util.h"
 #import "RegisterViewController.h"
 #import "ModifyViewController.h"
+#import "SliderViewController.h"
 @interface LoginViewController ()
 @property (strong, nonatomic) IBOutlet UITextField *nameText;
 @property (strong, nonatomic) IBOutlet UITextField *passedText;
@@ -45,28 +46,33 @@
 }
 */
 - (IBAction)loginButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+   // [self dismissViewControllerAnimated:YES completion:nil];
     
     if(!self.nameText.text || self.passedText.text.length != 6)
     {
-        [MBProgressHUD showError:@"用户名或者密码不对，密码要去六位"];
+        [MBProgressHUD showError:@"用户名或者密码格式不正确，密码要去六位"];
         return;
     }
-    [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag)
-     {
-         if(flag)
-         {
-             [self dismissViewControllerAnimated:YES completion:nil];
-             [RequestUtil getUserinfo:self.nameText.text block:^(NSDictionary *dict) {
-                 UserUtil *item = [[UserUtil alloc]initWithDict:dict];
-                 [RequestUtil setCurrentUser:item];
-             }];
-         }
-         else
-         {
-             [MBProgressHUD showError:@"登录失败"];
-         }
-     }];
+    [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag) {
+        if(flag){
+            [RequestUtil getUserinfo:self.nameText.text block:^(NSDictionary *dict) {
+                UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                [RequestUtil setCurrentUser:item];
+                [self dismissViewControllerAnimated:YES completion:^{
+                    [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+                }];
+            }];
+        }
+    }];
+    
+//        if([item.userName32 isEqualToString:self.nameText.text] && [item.password32 isEqualToString:self.passedText.text])
+//        {
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        }
+//        else
+//        {
+//            [MBProgressHUD showError:@"用户名或者密码不正确"];
+//        }
 }
 - (IBAction)registerAcount:(UIButton *)sender {
     RegisterViewController *RegisterVC = [[RegisterViewController alloc]initWithNibName:@"RegisterViewController" bundle:nil];

@@ -39,7 +39,7 @@
                                     </constraints>
                                 </imageView>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="用户名" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mGY-wu-wwy">
-                                    <rect key="frame" x="20" y="0.0" width="500" height="39"/>
+                                    <rect key="frame" x="40" y="0.0" width="480" height="39"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
@@ -65,7 +65,7 @@
                                 <constraint firstAttribute="trailing" secondItem="2bl-Cg-bmi" secondAttribute="trailing" id="hIc-Qa-lWO"/>
                                 <constraint firstAttribute="bottom" secondItem="2bl-Cg-bmi" secondAttribute="bottom" id="kER-Lx-daN"/>
                                 <constraint firstAttribute="bottom" secondItem="mGY-wu-wwy" secondAttribute="bottom" constant="1" id="omG-rX-lRm"/>
-                                <constraint firstItem="mGY-wu-wwy" firstAttribute="leading" secondItem="ZaO-Yb-qT5" secondAttribute="trailing" id="zIG-Ao-62p"/>
+                                <constraint firstItem="mGY-wu-wwy" firstAttribute="leading" secondItem="ZaO-Yb-qT5" secondAttribute="trailing" constant="20" id="zIG-Ao-62p"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Uf-RR-tft">
@@ -78,7 +78,7 @@
                                     </constraints>
                                 </imageView>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="   密码" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yu9-dr-xIf">
-                                    <rect key="frame" x="20" y="0.0" width="500" height="39"/>
+                                    <rect key="frame" x="40" y="0.0" width="480" height="39"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
@@ -103,7 +103,7 @@
                                 <constraint firstAttribute="bottom" secondItem="8Ug-Mr-jJo" secondAttribute="bottom" constant="10" id="Od4-cH-DZs"/>
                                 <constraint firstItem="yu9-dr-xIf" firstAttribute="top" secondItem="2Uf-RR-tft" secondAttribute="top" id="QeM-rQ-oLg"/>
                                 <constraint firstAttribute="bottom" secondItem="yu9-dr-xIf" secondAttribute="bottom" constant="1" id="aOl-DM-ssY"/>
-                                <constraint firstItem="yu9-dr-xIf" firstAttribute="leading" secondItem="8Ug-Mr-jJo" secondAttribute="trailing" id="kzA-hM-SQH"/>
+                                <constraint firstItem="yu9-dr-xIf" firstAttribute="leading" secondItem="8Ug-Mr-jJo" secondAttribute="trailing" constant="20" id="kzA-hM-SQH"/>
                                 <constraint firstItem="8Ug-Mr-jJo" firstAttribute="top" secondItem="2Uf-RR-tft" secondAttribute="top" constant="10" id="m9E-gv-Uu1"/>
                             </constraints>
                         </view>

@@ -61,14 +61,14 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TTQ-MK-6YP" customClass="mainView">
-                            <rect key="frame" x="40" y="10" width="520" height="210"/>
+                            <rect key="frame" x="40" y="10" width="520" height="240"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
                     <constraints>
                         <constraint firstItem="zMt-CX-7Q7" firstAttribute="leading" secondItem="TTQ-MK-6YP" secondAttribute="trailing" id="4Ab-qo-gyi"/>
                         <constraint firstItem="TTQ-MK-6YP" firstAttribute="leading" secondItem="WtJ-m5-vsn" secondAttribute="trailing" id="9Cc-iT-MU5"/>
-                        <constraint firstAttribute="bottom" secondItem="TTQ-MK-6YP" secondAttribute="bottom" constant="60" id="AVt-LW-mh8"/>
+                        <constraint firstAttribute="bottom" secondItem="TTQ-MK-6YP" secondAttribute="bottom" constant="30" id="AVt-LW-mh8"/>
                         <constraint firstItem="WtJ-m5-vsn" firstAttribute="centerY" secondItem="t22-je-Qha" secondAttribute="centerY" constant="-25" id="QXT-bH-E2o"/>
                         <constraint firstItem="WtJ-m5-vsn" firstAttribute="leading" secondItem="t22-je-Qha" secondAttribute="leading" id="UBD-M2-shf"/>
                         <constraint firstItem="TTQ-MK-6YP" firstAttribute="top" secondItem="t22-je-Qha" secondAttribute="top" constant="10" id="Xql-vD-8Ot"/>

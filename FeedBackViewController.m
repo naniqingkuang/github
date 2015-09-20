@@ -7,16 +7,47 @@
 //
 
 #import "FeedBackViewController.h"
-
+#import "RequestUtil.h"
+#import "UserUtil.h"
 @interface FeedBackViewController ()
-
+@property (strong, nonatomic) IBOutlet UITextView *contentTExtView;
+@property (strong, nonatomic) IBOutlet UIButton *button1;
+@property (strong, nonatomic) IBOutlet UIButton *button2;
+@property (strong, nonatomic) IBOutlet UIButton *button3;
+@property (strong, nonatomic) NSString *fdType;
 @end
 
 @implementation FeedBackViewController
+- (IBAction)feedBackComit:(id)sender {
+    UserUtil *item = [RequestUtil getCurrentUser];
+    [RequestUtil uploadFeedBack:item.userName32 device:item.deviceID18 content:self.contentTExtView.text type:self.fdType block:^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.fdType = @"1";
+    self.button1.backgroundColor = [UIColor grayColor];
     // Do any additional setup after loading the view from its nib.
+}
+- (IBAction)backButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (IBAction)selectType:(id)sender {
+    self.button1.backgroundColor = [UIColor clearColor];
+    self.button2.backgroundColor = [UIColor clearColor];
+    self.button3.backgroundColor = [UIColor clearColor];
+    UIButton *button = sender;
+    button.backgroundColor = [UIColor grayColor];
+    if(button == self.button1) {
+        self.fdType = @"1";
+    } else if(button == self.button2) {
+        self.fdType = @"2";
+    } else if(button == self.button3) {
+        self.fdType = @"3";
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

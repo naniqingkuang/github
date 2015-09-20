@@ -108,7 +108,7 @@
         }
         cell.titleLB.text = title;
         cell.contentText.delegate = self;
-        cell.contentText.text = self.dataDest[indexPath.row];
+       // cell.contentText.text = self.dataDest[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentText.tag = indexPath.row;
         return cell;
@@ -285,9 +285,11 @@
     return res;
 }
 - (IBAction)backButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-    }];
+//    [self dismissViewControllerAnimated:YES completion:^{
+//        [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+//    }];
+//     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+    [[SliderViewController sharedSliderController]leftItemClick];
 }
 - (IBAction)updateCommit:(id)sender {
     [self getDataFromCell];

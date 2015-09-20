@@ -11,6 +11,7 @@
 #import "MBProgressHUD+Util.h"
 #import "UserUtil.h"
 #import <objc/runtime.h>
+#import "EveryDataUtil.h"
 static UserUtil *g_currentUser;
 @implementation RequestUtil
 
@@ -51,6 +52,7 @@ static UserUtil *g_currentUser;
 {
     return [NSString stringWithFormat:@"%@%@",url,subStr];
 }
+#pragma mark 登录
 + (void)userLogin:(NSString *)name passwd:(NSString *)passwd block:(void (^)(bool)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:User_login];
@@ -70,6 +72,7 @@ static UserUtil *g_currentUser;
         }
     }];
 }
+#pragma mark 注册
 + (void)userRegister:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:User_register];
@@ -89,6 +92,7 @@ static UserUtil *g_currentUser;
         }
     }];
 }
+#pragma mark 修改数据
 + (void)userUpdateInfo:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_INFO_UPDATE];
@@ -109,6 +113,7 @@ static UserUtil *g_currentUser;
     }];
 
 }
+#pragma mark 获取用户信息
 + (void)getUserinfo:(NSString *)userName block:(void(^)(NSDictionary *)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:Get_UserInfo];
@@ -130,6 +135,7 @@ static UserUtil *g_currentUser;
         
     }];
 }
+#pragma mark 验证用户是否唯一
 + (void)checkUserName:(NSString *)userName withBlock:(void(^)()) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_NAME_CHECK];
@@ -149,6 +155,311 @@ static UserUtil *g_currentUser;
         }
 
     }];
+}
+#pragma mark 更新密码
++ (void)updatePasswd:(NSString *)name passed:(NSString *)passwd newPassed:(NSString *)aNewPasswd block:(void (^)()) aBlock
+{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_RESET_PASSWD];
+    NSDictionary *param = @{@"userName":name, @"password":passwd, @"newpwd":aNewPasswd};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(aBlock)
+        {
+            if(200 == statusCode)
+            {
+                aBlock();
+            }
+            else
+            {
+                NSString *err = [dict objectForKey:@"reason"];
+                [MBProgressHUD showError: err];
+            }
+        }
+        
+    }];
+}
+#pragma mark 上传实时数据
++ (void)uploadCurrentData:(NSString *)name
+                 deviceID:(NSString *)deviceID
+                 sportsDL:(NSString *)sportsDL
+                 sportsCL:(NSString *)sportsCL
+                    block:(void (^) ()) aBlock
+{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_CURRENT_DATA];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"sportsDL":sportsDL,
+                            @"sportsCL":sportsCL};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+
+    }];
+
+}
+#pragma mark 获取配置参数
++ (void)doloadPatam:(NSString *)name
+             device:(NSString *)deviceID
+              block:(void (^)(NSDictionary *))aBlock{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_DOWN_PARAM];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock([dict objectForKey:@"data"]);
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+        
+    }];
+}
+#pragma mark 上传硬件数据
++ (void)uploadHardWareParam:(NSString *)name
+                     device:(NSString *)deviceID
+                        app:(NSString *)appID
+                       soft:(NSString *)softID
+                   hardWare:(NSString *)hardWareID
+                      block:(void (^)()) aBlock{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_HARDWARE_PARAM];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"appVersion":appID,
+                            @"devProgrmVersion":softID,
+                            @"devHrdVersion":hardWareID};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+}
++ (void)getFDList:(NSString *)name
+           device:(NSString *)deviceID
+             page:(int)pageNum
+            block:(void (^)(NSDictionary *) )aBlock
+{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_LIST];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"startTime":@"",
+                            @"endTime":@"",
+                            @"currentpage":[NSNumber numberWithInt:pageNum]};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock([dict objectForKey:@"data"]);
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+}
++ (void)getFDAnswer:(NSString *)name
+             device:(NSString *)deviceID
+         feedBackID:(NSString *)feedBackID
+              block:(void (^)(NSDictionary *))aBlock {
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_LIST];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"msgID":feedBackID};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock([dict objectForKey:@"data"]);
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+}
++ (void)uploadFeedBack:(NSString *)name
+                device:(NSString *)deviceID
+               content:(NSString *)content
+                  type:(NSString *)type
+                 block:(void(^)()) aBlock {
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_FDDATA];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"msgtype":type,
+                            @"textmsg":content,
+                            @"files":@""};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+        
+    }];
+
+}
++ (void)uploadAlertEvent:(NSString *)name
+                  device:(NSString *)deviceID
+                  reason:(NSString *)aReason
+               startTime:(NSString *)startTime
+             MotionStart:(NSString *)motionStartTime
+             singleTotal:(double)singleTotal
+              daylyTotal:(double )daylyTotal
+             maxValueNum:(int)value
+                   block:(void(^)()) aBlock {
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_ALERT_EVENT];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"alarmReson":aReason,
+                            @"alarmTime":startTime,
+                            @"startTime":motionStartTime,
+                            @"singleTotal":[NSNumber numberWithDouble:singleTotal],
+                            @"dayTotal":[NSNumber numberWithDouble:daylyTotal],
+                            @"maxValueNum":[NSNumber numberWithInt:value]};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+        
+    }];
+}
++ (void)uploadDaylyData:(NSString *)name
+                 device:(NSString *)deviceID
+               dayTotal:(double)dayTotal
+         dayMaxValueNum:(int)dayMaxValueNum
+            dayAlarmNum:(int)dayAlarmNum
+            daySportNum:(int)daySportNum
+              everyData:(NSArray *)arr
+                  block:(void(^)()) aBlock {
+    NSMutableArray *mulArr = [[NSMutableArray alloc]initWithCapacity:arr.count];
+    for (EveryDataUtil *item in arr) {
+        NSDictionary *dict = @{ @"sportSerialNum":[NSNumber numberWithInt:item.sportSerialNum],
+                                @"startTime":item.startTime,
+                                @"endTime":item.endTime,
+                                @"singleTotal":[NSNumber numberWithDouble:item.singleTotal],
+                                @"maxValueNum":[NSNumber numberWithInt:item.maxValueNum]
+                                };
+        [mulArr addObject:dict];
+    }
+    NSDictionary *dataDict = @{@"everyData":mulArr};
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_DALYY_DATA];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"dayTotal":[NSNumber numberWithDouble:dayTotal],
+                            @"dayMaxValueNum":[NSNumber numberWithInt:dayMaxValueNum],
+                            @"dayAlarmNum":[NSNumber numberWithInt:dayAlarmNum],
+                            @"daySportNum":[NSNumber numberWithInt:daySportNum],
+                            @"everyData":dataDict
+                            };
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+}
+
++ (void)updateAPPClientID:(NSString *)name device:(NSString *)deviceID appClientID:(NSString *)appClientID block:(void(^)()) aBlock
+{
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPDATE_APP_CLIENT_ID];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"clientID":appClientID,
+                            @"type":@"2"};
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+}
+
++ (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock {
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_KEEP_HEART_BEAT];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"YYYYMMDDhhmmss"];
+    NSString *currentTime = [dateFormatter stringFromDate:[NSDate date]];
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"requestTime":currentTime
+                            };
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock([dict objectForKey:@"dataType"]);
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+
 }
 + (void)setCurrentUser:(UserUtil *)item
 {

@@ -15,6 +15,7 @@
 #import "HomePageTableViewCell.h"
 #import "LoginViewController.h"
 #import "BlueToothUtil.h"
+#import "RequestUtil.h"
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -23,6 +24,8 @@
 @property (strong, nonatomic) UIView *loginView;
 @property (strong, nonatomic) IBOutlet UIImageView *chargeImageView;
 @property (strong, nonatomic) BlueToothUtil *blueTooth;
+@property (strong, nonatomic) UserUtil *curUser;
+@property (strong, nonatomic) userParam *curUserParam;
 @end
 
 @implementation HomeViewController
@@ -38,6 +41,10 @@
     [self.TodayMeasurementView setLineWidth:22 AndOffset:10];
     [self.TodayMeasurementView setUp];
     [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"20000"];
+    self.curUser = [RequestUtil getCurrentUser];
+    [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
+        self.curUserParam = [[userParam alloc]initWithDict:dict];
+    }];
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM月dd日"];
     NSString *dateStr =[format stringFromDate:[NSDate date]];
@@ -47,7 +54,14 @@
     [[BlueToothUtil getBlueToothInstance]readCurrentMotionMeasurement:^(float equivalent, float inpulse) {
         [self.TodayMeasurementView setPersentMaskOfCircle:(equivalent/200.0)];
         [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%0.1f",equivalent]];
-
+        [RequestUtil uploadCurrentData:self.curUser.userName32
+                              deviceID:self.curUser.deviceID18
+                              sportsDL:[NSString stringWithFormat:@"%6.2f",equivalent]
+                              sportsCL:[NSString stringWithFormat:@"%6.2f",inpulse]
+                                 block:nil];
+    }];
+    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
+        self.curUser.deviceID18 = name;
     }];
 }
 - (void)toLoginVC
@@ -65,11 +79,23 @@
     [format setDateFormat:@"MM月dd日"];
     NSString *dateStr =[format stringFromDate:[NSDate date]];
     self.dateNavigationItem.title = dateStr;
-//    for (float i = 0.01; i < 1; i +=0.001 ) {
-//        [self.TodayMeasurementView setPersentMaskOfCircle:i];
-//        sleep(1);
-//    }
-   // [self.navigationController presentViewController:[[UIViewController alloc]init] animated:YES completion:nil];
+    if(self.curUser.deviceID18.length >1)
+    {
+        __block NSString *hardWareID = nil;
+        __block NSString *softWareID = nil;
+        [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
+            hardWareID = hardWareEdition;
+        }];
+        [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
+            softWareID = softEdition;
+        }];
+        [RequestUtil uploadHardWareParam:self.curUser.userName32
+                                  device:self.curUser.deviceID18
+                                     app:@""
+                                    soft:softWareID
+                                hardWare:hardWareID
+                                   block:nil];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -88,9 +114,7 @@
 - (IBAction)backDate:(UIButton *)sender {
 }
 - (IBAction)forwardDate:(UIButton *)sender {
-//    UINavigationController *nav = [[UINavigationController alloc]init];
-//    BlueToothSetViewController * vc = [[BlueToothSetViewController alloc]initWithNibName:@"BlueToothSetViewController" bundle:nil];
-//    [nav pushViewController:vc animated:YES];
+
 }
 #pragma mark tableviewDelegate and dataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -129,43 +153,10 @@
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
-        NSLog(@"deviceID:%@",name);
-    }];
-    [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
-        NSLog(@"hardWareEdition:%@",hardWareEdition);
-    }];
-    [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
-        NSLog(@"softEdition:%@",softEdition);
-    }];
-    [[BlueToothUtil getBlueToothInstance]readDoorLimit:^(short doorLimit) {
-        NSLog(@"doorlimit:%d",doorLimit);
-    }];
-//    static float i = 0;
-//    static BOOL Flags = YES;
-//    if(Flags)
-//    {
-//        i += 0.1;
-//    }
-//    else
-//    {
-//        i -= 0.1;
-//    }
-//    if(i > 1.0)
-//    {
-//        Flags = !Flags;
-//        i = 1.0;
-//    }
-//    if(i <0 )
-//    {
-//        i = 0.0;
-//        Flags = !Flags;
-//    }
-//    [self.TodayMeasurementView setPersentMaskOfCircle:i];
-//    int sum = i *2000;
-//    int mod = i*10;
-//    [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%d",sum]];
     NSString *str = [NSString stringWithFormat:@"2.jpg"];
     self.chargeImageView.image = [UIImage imageNamed:str];
+    static float i = 0;
+    i +=0.1;
+    [self.TodayMeasurementView setPersentMaskOfCircle:(i)];
 }
 @end

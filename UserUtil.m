@@ -8,6 +8,48 @@
 
 #import "UserUtil.h"
 #import <objc/runtime.h>
+
+@implementation userParam
+- (NSString *)checkType{
+    NSString *res = @"";
+    return res;
+}
+- (instancetype)initWithDict:(NSDictionary *)dict{
+    self = [super init];
+    if (self) {
+        unsigned int count = 0;
+        NSString *str = nil;
+        NSString *key = nil;
+        NSString *obj = nil;
+        NSArray *arr = [dict allKeys];
+        objc_property_t *ivar = class_copyPropertyList([self class], &count);
+        for (int i = 0; i < count; i++) {
+            str =[NSString stringWithUTF8String:property_getName(ivar[i])];
+            key = arr[i];
+            obj = [dict objectForKey:key];
+            if(nil == obj)
+            {
+                obj = @"";
+            }
+            [self setValue:str forKey:obj];
+        }
+
+    }
+    return self;
+}
+- (void)checkAndAvoidNull{
+    unsigned int count = 0;
+    NSString *str = nil;
+    objc_property_t *ivar = class_copyPropertyList([self class], &count);
+    for (int i = 0; i < count; i++) {
+        str = [NSString stringWithUTF8String:property_getName(ivar[i])];
+        if(nil == [self valueForKey:str]){
+            [self setValue:@"" forKey:str];
+        }
+    }
+}
+@end
+
 @implementation UserUtil
 
 - (NSString *) checkType

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedBackListViewController">
+            <connections>
+                <outlet property="myTableView" destination="dN4-23-WNe" id="5Q7-Hv-Crf"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FX1-tk-9c4">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="0vs-YU-6zH"/>
+                    </constraints>
+                    <items>
+                        <navigationItem title="反馈列表" id="ktj-xl-VDo">
+                            <barButtonItem key="leftBarButtonItem" title="返回" id="Sqq-Is-Gxd">
+                                <connections>
+                                    <action selector="backButtonClicked:" destination="-1" id="oMV-4k-mMf"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" image="add" id="eVp-g1-o7w">
+                                <connections>
+                                    <action selector="addNewFDItem:" destination="-1" id="coq-zR-DcU"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dN4-23-WNe">
+                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="w9Z-24-fiP"/>
+                        <outlet property="delegate" destination="-1" id="jtU-Wa-PiZ"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="FX1-tk-9c4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FMP-HH-KA5"/>
+                <constraint firstAttribute="bottom" secondItem="dN4-23-WNe" secondAttribute="bottom" id="Ja9-Wr-zuE"/>
+                <constraint firstItem="dN4-23-WNe" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RdF-sh-pg3"/>
+                <constraint firstAttribute="trailing" secondItem="FX1-tk-9c4" secondAttribute="trailing" id="esZ-eF-NgW"/>
+                <constraint firstItem="FX1-tk-9c4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="obu-hm-TZs"/>
+                <constraint firstItem="dN4-23-WNe" firstAttribute="top" secondItem="FX1-tk-9c4" secondAttribute="bottom" id="q2y-pL-KxJ"/>
+                <constraint firstAttribute="trailing" secondItem="dN4-23-WNe" secondAttribute="trailing" id="tMH-48-dFw"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="add" width="35" height="35"/>
+    </resources>
+</document>

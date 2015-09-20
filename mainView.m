@@ -27,6 +27,7 @@
     NSString *_title;
     NSString *_targetSum;
     NSString *_curSum;
+    BOOL _isShadowSet;
 }
 @end
 
@@ -43,9 +44,10 @@
 
 - (void)setUp
 {
+    _isShadowSet = NO;
     float width = self.layer.frame.size.width;
     float height = self.layer.frame.size.height;
-    float radius =  width > height ? ((height)/2): ((width )/2 );
+    float radius =  width > height ? ((height)/2) *2/3: ((width )/2 *2/3);
     _trackLayer = [CAShapeLayer layer];
     _trackLayer.frame = self.bounds;
     _trackLayer.fillColor = [[UIColor clearColor]CGColor];
@@ -108,12 +110,12 @@
     
     //设置阴影
     _layerShandow = [CALayer layer];
-    _layerShandow.backgroundColor = [[UIColor clearColor] CGColor];
-    _layerShandow.shadowColor = [UIColor grayColor].CGColor;
+    _layerShandow.backgroundColor = [[UIColor blackColor] CGColor];
+    _layerShandow.shadowColor = [UIColor blackColor].CGColor;
     _layerShandow.shadowOffset = CGSizeMake(-1,2);
-    _layerShandow.shadowOpacity = 0.6;
-    _layerShandow.shadowRadius = 1.0;
-//    _layerShandow.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake((width-radius*2)/2, (height-radius*2)/2, radius*2, radius*2) cornerRadius:radius].CGPath;
+    _layerShandow.shadowOpacity = 0.8;
+    _layerShandow.shadowRadius = 5.0;
+   // _layerShandow.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake((width-radius*2)/2, (height-radius*2)/2, radius*2, radius*2) cornerRadius:radius].CGPath;
     
     //动画
 //    _webView = [[UIWebView alloc]init];
@@ -166,11 +168,26 @@
     [self.layer addSublayer:_dataView.layer];
     //_circleHeadLayer.frame = CGRectMake(0, 0, lineWidth*2, lineWidth*2);
 }
+- (void)circleFullAction:(float )aPercent
+{
+    if(aPercent - 1.0 < 0.0001 && aPercent > 1.0)
+    {
+        //[_layerShandow removeFromSuperlayer];
+        _isShadowSet = NO;
+        [_progressLayer addSublayer:_layerShandow];
+    }
+    else if(!_isShadowSet)
+    {
+        _isShadowSet = YES;
+        [_layerShandow removeFromSuperlayer];
+        //[self.layer addSublayer:_layerShandow];
+    }
+}
 - (void)drawRect:(CGRect)rect
 {
     float width = self.layer.frame.size.width ;
     float height = self.layer.frame.size.height;
-    float radius =  width > height ? ((height)/2): ((width )/2);
+    float radius =  width > height ? ((height)/2) - 15.0: ((width )/2 - 15.0);
    // 底图
     if (_trackLayer) {
         _trackLayer.lineWidth = lineWidth;
@@ -214,7 +231,7 @@
     
     //显示内容
     float rectWidth =(radius*2 - (lineWidth +offSet)*2 )/1.414;
-    _dataView.layer.frame = CGRectMake((width/2 - rectWidth/2), (height/2 - rectWidth/2), rectWidth , rectWidth);
+    _dataView.layer.frame = CGRectMake((width/2 - rectWidth/2 + 15.), (height/2 - rectWidth/2 +15.), rectWidth , rectWidth);
     _todaySumLB.text = _curSum;
     if(![_titleNameLB.text isEqual:_title])
     {

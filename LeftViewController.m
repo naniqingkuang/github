@@ -11,6 +11,7 @@
 #import "BlueToothSetViewController.h"
 #import "ModifyViewController.h"
 #import "LoginViewController.h"
+#import "UpdatePasswdViewController.h"
 @interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate>
 
 @end
@@ -71,6 +72,11 @@
         case 3:
             cell.textLabel.text = @"退出登录";
             break;
+        case 4:
+            cell.textLabel.text = @"密码修改";
+            break;
+        case 5:
+            cell.textLabel.text = @"反馈";
         default:
             break;
     }
@@ -79,7 +85,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 4;
+    return 6;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -93,14 +99,19 @@
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"BlueToothSetViewController"];
             break;
         case 2:
-           // [[SliderViewController sharedSliderController] showContentControllerWithModel:@"ModifyViewController"];
-             modifyVC = [[ModifyViewController alloc]initWithNibName:@"ModifyViewController" bundle:nil];
-            [self presentViewController:modifyVC animated:YES completion:nil];
+            [[SliderViewController sharedSliderController] showContentControllerWithModel:@"ModifyViewController"];
+//             modifyVC = [[ModifyViewController alloc]initWithNibName:@"ModifyViewController" bundle:nil];
+//            [self presentViewController:modifyVC animated:YES completion:nil];
             break;
         case 3:
             loginVC = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
             [self presentViewController:loginVC animated:NO completion:nil];
             break;
+        case 4:
+            [[SliderViewController sharedSliderController] showContentControllerWithModel:@"UpdatePasswdViewController"];
+            break;
+        case 5:
+            [[SliderViewController sharedSliderController]showContentControllerWithModel:@"FeedBackListViewController"];
         default:
             break;
     }

@@ -20,12 +20,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self initData];
     // Do any additional setup after loading the view from its nib.
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self initData];
 }
 - (void)initData {
     UserUtil *item = [RequestUtil getCurrentUser];
-    [RequestUtil getFDList:item.userName32 device:item.deviceID18 page:0 block:^(NSDictionary *dict) {
+    [RequestUtil getFDList:item.userName32 device:item.deviceID18 page:1 block:^(NSDictionary *dict) {
         self.dataList = [dict objectForKey:@"result"];
         [self.myTableView reloadData];
     }];
@@ -46,8 +50,13 @@
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
     NSDictionary *dict = self.dataList[indexPath.row];
-    cell.textLabel.text = dict[@"fdTime"];
-    cell.detailTextLabel.text = dict[@"msgID"];
+   // cell.textLabel.text = dict[@"fdTime"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"YYYYMMddHHmmss"];
+    NSDate *date = [formatter dateFromString:dict[@"fdTime"]];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+//    cell.textLabel.text = dict[@"msgID"];
+    cell.textLabel.text = [formatter stringFromDate:date];
     return cell;
 }
 - (IBAction)addNewFDItem:(id)sender {

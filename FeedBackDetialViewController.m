@@ -28,14 +28,14 @@
 {
     UserUtil *item = [RequestUtil getCurrentUser];
     [RequestUtil getFDAnswer:item.userName32 device:item.deviceID18 feedBackID:self.feedBackID block:^(NSDictionary * dict){
-        NSString *type = dict[@"msgtype "];
+        NSString *type = dict[@"msgtype"];
         NSString *content = dict[@"textmsg"];
         NSString *answerContent = dict[@"rcontent"];
         NSDictionary *typeDict = @{FD_TYPE_DICT};
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.feedBackTypeLB.text = typeDict[type];
-            self.feedBackOontentTextView.text = content;
-            self.answerTextView.text = answerContent;
+            self.feedBackTypeLB.text = [NSString stringWithFormat:@"类型: %@",typeDict[type]];
+            self.feedBackOontentTextView.text =[NSString stringWithFormat:@"内容: %@",content];
+            self.answerTextView.text = [NSString stringWithFormat:@"回复内容: %@",answerContent];
 
         });
     }];

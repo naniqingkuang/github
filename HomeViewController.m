@@ -26,6 +26,11 @@
 @property (strong, nonatomic) BlueToothUtil *blueTooth;
 @property (strong, nonatomic) UserUtil *curUser;
 @property (strong, nonatomic) userParam *curUserParam;
+@property (strong, nonatomic) NSTimer *heartBeatTimer;
+@property (assign, atomic) double equivalent;
+@property (assign, atomic) double inpulse;
+@property (copy, atomic) NSString *softEdition;
+@property (copy, atomic) NSString *hardWareEdition;
 @end
 
 @implementation HomeViewController
@@ -54,14 +59,63 @@
     [[BlueToothUtil getBlueToothInstance]readCurrentMotionMeasurement:^(float equivalent, float inpulse) {
         [self.TodayMeasurementView setPersentMaskOfCircle:(equivalent/200.0)];
         [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%0.1f",equivalent]];
-        [RequestUtil uploadCurrentData:self.curUser.userName32
-                              deviceID:self.curUser.deviceID18
-                              sportsDL:[NSString stringWithFormat:@"%6.2f",equivalent]
-                              sportsCL:[NSString stringWithFormat:@"%6.2f",inpulse]
-                                 block:nil];
+        self.equivalent = equivalent;
+        self.inpulse = inpulse;
     }];
     [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
         self.curUser.deviceID18 = name;
+    }];
+    [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
+        self.softEdition = softEdition;
+    }];
+    [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
+        self.hardWareEdition = hardWareEdition;
+    }];
+   // self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+}
+#pragma  mark  心跳包
+- (void)heartBeatAction {
+    [RequestUtil keepHeartBeat:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSString *cmdStr) {
+        int cmd = [[cmdStr substringToIndex:1]intValue];
+        switch (cmd) {
+            case 0:
+                NSLog(@"心跳消息：消息为空");
+                break;
+            case 1:  //VIP用户的反馈数据有最新回复
+                
+                break;
+            case 2: //上传实时数据
+                if(self.curUser.userName32 && self.curUser.deviceID18 && self.equivalent && self.inpulse) {
+                    [RequestUtil uploadCurrentData:self.curUser.userName32
+                                          deviceID:self.curUser.deviceID18
+                                          sportsDL:[NSString stringWithFormat:@"%6.2f",self.equivalent]
+                                          sportsCL:[NSString stringWithFormat:@"%6.2f",self.inpulse]
+                                             block:nil];
+                }
+                break;
+            case 3:
+                
+                break;
+            case 4: //上传设备信息
+                if(self.curUser.userName32 && self.curUser.deviceID18 && self.softEdition && self.hardWareEdition)
+                {
+                   [RequestUtil uploadHardWareParam:self.curUser.userName32 device:self.curUser.deviceID18 app:@"V1.0" soft:self.softEdition hardWare:self.hardWareEdition block:nil];
+                }
+                break;
+            case 5:  //关闭心跳包
+                [self.heartBeatTimer invalidate];
+                break;
+            case 6:  //更改心跳间隔
+                [self.heartBeatTimer invalidate];
+                NSString *timeVal = [cmdStr substringFromIndex:[cmdStr rangeOfComposedCharacterSequenceAtIndex:3].location];
+                int timeValInt = [timeVal intValue];
+                if(timeValInt <1)
+                {
+                    timeValInt = 1;
+                }
+                self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:timeValInt target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+                break;
+        }
     }];
 }
 - (void)toLoginVC

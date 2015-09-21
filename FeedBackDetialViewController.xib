@@ -24,7 +24,7 @@
                         <constraint firstAttribute="height" constant="64" id="82F-cM-cTq"/>
                     </constraints>
                     <items>
-                        <navigationItem title="Title" id="Up0-h3-Dna">
+                        <navigationItem title="反馈详情" id="Up0-h3-Dna">
                             <barButtonItem key="leftBarButtonItem" title="返回" id="78h-o4-AbL">
                                 <connections>
                                     <action selector="backButtonClicked:" destination="-1" id="nAo-5m-Dfe"/>
@@ -33,12 +33,12 @@
                         </navigationItem>
                     </items>
                 </navigationBar>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="反馈类型：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqz-0g-VyE">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqz-0g-VyE">
                     <rect key="frame" x="20" y="84" width="560" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="L7C-ET-bUe"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -50,15 +50,6 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="回复：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s0l-YA-HXD">
-                    <rect key="frame" x="20" y="234" width="560" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="28b-eV-JiY"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Pb-Mc-Et0">
                     <rect key="frame" x="20" y="264" width="560" height="100"/>
                     <constraints>
@@ -70,19 +61,16 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="s0l-YA-HXD" secondAttribute="trailing" constant="20" id="06K-B8-ETL"/>
                 <constraint firstItem="5Pb-Mc-Et0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Dv8-Fb-U1X"/>
                 <constraint firstItem="pq2-Ax-rzp" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="FrA-Kg-vjf"/>
-                <constraint firstItem="5Pb-Mc-Et0" firstAttribute="top" secondItem="s0l-YA-HXD" secondAttribute="bottom" id="LRR-9b-g5l"/>
                 <constraint firstAttribute="trailing" secondItem="pq2-Ax-rzp" secondAttribute="trailing" constant="20" id="XBU-at-Zme"/>
                 <constraint firstItem="GPd-MG-pjd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="b6V-i5-WBh"/>
                 <constraint firstAttribute="trailing" secondItem="5Pb-Mc-Et0" secondAttribute="trailing" constant="20" id="c9r-sh-Uqy"/>
                 <constraint firstItem="GPd-MG-pjd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cVD-gJ-UiK"/>
-                <constraint firstItem="s0l-YA-HXD" firstAttribute="top" secondItem="pq2-Ax-rzp" secondAttribute="bottom" constant="20" id="faz-Wg-bQK"/>
                 <constraint firstItem="pq2-Ax-rzp" firstAttribute="top" secondItem="lqz-0g-VyE" secondAttribute="bottom" id="i7A-2s-uyP"/>
                 <constraint firstItem="lqz-0g-VyE" firstAttribute="top" secondItem="GPd-MG-pjd" secondAttribute="bottom" constant="20" id="lc3-5V-BTI"/>
                 <constraint firstItem="lqz-0g-VyE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="me8-YH-iWJ"/>
-                <constraint firstItem="s0l-YA-HXD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="mfA-dr-9OG"/>
+                <constraint firstItem="5Pb-Mc-Et0" firstAttribute="top" secondItem="pq2-Ax-rzp" secondAttribute="bottom" constant="50" id="psG-f9-RT7"/>
                 <constraint firstAttribute="trailing" secondItem="lqz-0g-VyE" secondAttribute="trailing" constant="20" id="tA8-5A-5Qc"/>
                 <constraint firstAttribute="trailing" secondItem="GPd-MG-pjd" secondAttribute="trailing" id="zjr-UK-dII"/>
             </constraints>

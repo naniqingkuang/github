@@ -21,15 +21,36 @@ static UserUtil *g_currentUser;
     NetworkStatus status = [reach currentReachabilityStatus];
     return status;
 }
-
++ (void)multiFormPost:(NSString *)url withPara:(NSDictionary *)param dataForm:(id<AFMultipartFormData> )myFormData completionBlock:(void (^)(NSDictionary *)) completionBlock {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
+    manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
+    [manager POST:url parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        formData = myFormData;
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if(responseObject != nil)
+        {
+            if(completionBlock)
+            {
+                NSError *err = nil;
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&err];
+                if(!err)
+                {
+                    completionBlock(dict);
+                }
+            }
+            
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
+}
 + (void)requestPost:(NSString *)url withPara:(NSDictionary *)para completionBlock:(void (^)(NSDictionary *)) completionBlock
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
     manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
-//    NSDictionary *dict = @{@"userName":@"qq"};
-//    
+   // manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
     [manager POST:url parameters:para success:^ void(AFHTTPRequestOperation * operation, id reponseObject) {
         if(reponseObject != nil)
         {
@@ -153,7 +174,6 @@ static UserUtil *g_currentUser;
                 [MBProgressHUD showError: @"用户已存在"];
             }
         }
-
     }];
 }
 #pragma mark 更新密码
@@ -271,10 +291,10 @@ static UserUtil *g_currentUser;
                             @"currentpage":[NSNumber numberWithInt:pageNum]};
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
-        if(200 == statusCode)
+        if(200 == statusCode || 0 == statusCode)
         {
             if(aBlock){
-                aBlock([dict objectForKey:@"data"]);
+                aBlock(dict);
             }
         }
         else
@@ -288,7 +308,7 @@ static UserUtil *g_currentUser;
              device:(NSString *)deviceID
          feedBackID:(NSString *)feedBackID
               block:(void (^)(NSDictionary *))aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_LIST];
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_ANSWER];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"msgID":feedBackID};
@@ -318,7 +338,7 @@ static UserUtil *g_currentUser;
                             @"msgtype":type,
                             @"textmsg":content,
                             @"files":@""};
-    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+    [self multiFormPost:fullUrl withPara:param dataForm:nil completionBlock:^(NSDictionary *dict){
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
         if(200 == statusCode)
         {
@@ -331,9 +351,7 @@ static UserUtil *g_currentUser;
             NSString *err = [dict objectForKey:@"reason"];
             [MBProgressHUD showError: err];
         }
-        
     }];
-
 }
 + (void)uploadAlertEvent:(NSString *)name
                   device:(NSString *)deviceID
@@ -446,11 +464,11 @@ static UserUtil *g_currentUser;
                             @"requestTime":currentTime
                             };
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
-        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
-        if(200 == statusCode)
+        NSArray *dataArr = [dict objectForKey:@"cmd"];
+        if(dataArr)
         {
             if(aBlock){
-                aBlock([dict objectForKey:@"dataType"]);
+                aBlock([dataArr[0] objectForKey:@"c"]);
             }
         }
         else
@@ -459,7 +477,6 @@ static UserUtil *g_currentUser;
             [MBProgressHUD showError: err];
         }
     }];
-
 }
 + (void)setCurrentUser:(UserUtil *)item
 {

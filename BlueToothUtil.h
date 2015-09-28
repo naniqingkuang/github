@@ -20,5 +20,6 @@
 - (void)readSoftEdition:(void(^)(NSString *softEdition)) softEditionBlock;
 - (void)readHareEdition:(void(^)(NSString *hardWareEdition)) aHardWareEditionBlock;
 - (void)readDoorLimit:(void(^)(short doorLimit)) aReadDoorLimitBlock;
-
+- (BOOL)isBlueToothConnected;
+- (void)stopScan;
 @end

@@ -130,19 +130,18 @@
     _todaySumLB = [[UILabel alloc]init];
     [_todaySumLB setTextAlignment:NSTextAlignmentCenter];
     [_todaySumLB setFont:[UIFont systemFontOfSize:32]];
-    _todaySumLB.frame =CGRectMake(0, rectWidth/4, rectWidth,rectWidth /2);
+    _todaySumLB.frame =CGRectMake(0, rectWidth/2, rectWidth,rectWidth /2);
     _titleNameLB = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, rectWidth,rectWidth/4)];
     _titleNameLB.textAlignment = NSTextAlignmentCenter;
     _titleNameLB.font = [UIFont systemFontOfSize:16];
     _titleNameLB.textColor = [UIColor grayColor];
-    _targetSumLB = [[UILabel alloc]init];
-    _targetSumLB.frame = CGRectMake(0, rectWidth*3/4, rectWidth,rectWidth /4);
-    _targetSumLB.font = [UIFont systemFontOfSize:16];
-    _targetSumLB.textColor = [UIColor grayColor];
-
-    _targetSumLB.textAlignment = NSTextAlignmentCenter;
+//    _targetSumLB = [[UILabel alloc]init];
+//    _targetSumLB.frame = CGRectMake(0, rectWidth*3/4, rectWidth,rectWidth /4);
+//    _targetSumLB.font = [UIFont systemFontOfSize:16];
+//    _targetSumLB.textColor = [UIColor grayColor];
+    //_targetSumLB.textAlignment = NSTextAlignmentCenter;
     [_dataView addSubview:_titleNameLB];
-    [_dataView addSubview:_targetSumLB];
+ //   [_dataView addSubview:_targetSumLB];
     [_dataView addSubview:_todaySumLB];
     
     //进度条的头部图像
@@ -238,10 +237,10 @@
         _titleNameLB.text = _title;
 
     }
-    if(![_targetSumLB.text isEqual:_targetSum])
-    {
-        _targetSumLB.text = _targetSum;
-    }
+//    if(![_targetSumLB.text isEqual:_targetSum])
+//    {
+//        _targetSumLB.text = _targetSum;
+//    }
 }
 - (void)setPersentMaskOfCircle:(CGFloat)value
 {
@@ -262,5 +261,22 @@
 - (void)setCurrentSum:(NSString *)curSum
 {
     _curSum = curSum;
+}
+- (void)aninationStart {
+    static int i = 0;
+    i++;
+    CABasicAnimation *cabasicAM = [CABasicAnimation animationWithKeyPath:@"transform"];
+    cabasicAM.fillMode = kCAFillModeForwards;
+    cabasicAM.removedOnCompletion = NO;
+    cabasicAM.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.5, 0.5, 0.5)];
+    cabasicAM.duration = 1;
+    [self.layer addAnimation:cabasicAM forKey:nil];
+    CABasicAnimation *cabasicAM1 = [CABasicAnimation animationWithKeyPath:@"transform"];
+    cabasicAM1.fillMode = kCAFillModeForwards;
+    cabasicAM1.removedOnCompletion = NO;
+    cabasicAM1.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1, 1, 1)];
+    cabasicAM.duration = 10;
+    [self.layer addAnimation:cabasicAM1 forKey:nil];
+
 }
 @end

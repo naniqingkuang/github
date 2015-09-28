@@ -9,19 +9,23 @@
 #import <Foundation/Foundation.h>
 @interface userParam : NSObject
 @property (nonatomic, copy) NSString *actflag;
+@property (nonatomic, copy) NSString *acttime;
 @property (nonatomic, copy) NSString *dayValueMaxParam;
 @property (nonatomic, copy) NSString *dayValueMinParam;
 @property (nonatomic, copy) NSString *myID;
-@property (nonatomic, copy) NSString *intervalTimeParam;
+@property (nonatomic, assign)int  intervalTimeParam;
 @property (nonatomic, copy) NSString *intervalTimeTypeParam;
 @property (nonatomic, copy) NSString *isrtime;
-@property (nonatomic, copy) NSString *maxValueNumParam;
+@property (nonatomic, assign) int  maxValueNumParam;
 @property (nonatomic, copy) NSString *maxValueParam;
 @property (nonatomic, copy) NSString *singleValueMaxParam;
 @property (nonatomic, copy) NSString *singleValueMinParam;
 @property (nonatomic, copy) NSString *sportsBeginTimeParam;
 @property (nonatomic, copy) NSString *sportsEndTimeParam;
 @property (nonatomic, copy) NSString *userType;
+@property (nonatomic, copy) NSString *weightValueParam;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *userName;
 - (NSString *) checkType;
 - (instancetype)initWithDict:(NSDictionary *)dict;
 - (void)checkAndAvoidNull;

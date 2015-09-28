@@ -13,6 +13,7 @@
 #import <objc/runtime.h>
 #import "EveryDataUtil.h"
 static UserUtil *g_currentUser;
+static NSString *userName;
 @implementation RequestUtil
 
 - (int)checkNetState
@@ -50,7 +51,7 @@ static UserUtil *g_currentUser;
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
     manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
-   // manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
     [manager POST:url parameters:para success:^ void(AFHTTPRequestOperation * operation, id reponseObject) {
         if(reponseObject != nil)
         {
@@ -141,19 +142,18 @@ static UserUtil *g_currentUser;
     NSDictionary *dict = @{@"userName":userName};
     [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
-        if(aBlock)
+        if(200 == statusCode)
         {
-            if(200 == statusCode)
-            {
-                NSDictionary *data = [dict objectForKey:@"data"];
+            NSDictionary *data = [dict objectForKey:@"data"];
+            if(aBlock) {
                 aBlock(data);
             }
-            else
-            {
-                [MBProgressHUD showError: [NSString stringWithFormat:@"获取用户失败，错误码:%@",[dict objectForKey:@"statusCode"]]];
-            }
         }
-        
+        else
+        {
+            [MBProgressHUD showError: [NSString stringWithFormat:@"获取用户失败，错误码:%@",[dict objectForKey:@"statusCode"]]];
+        }
+
     }];
 }
 #pragma mark 验证用户是否唯一
@@ -489,6 +489,17 @@ static UserUtil *g_currentUser;
         g_currentUser = [[UserUtil alloc]init];
     }
     [g_currentUser checkAndAvoidNull];
+    [g_currentUser checkAndAvoidNull];
    return g_currentUser;
+}
++ (NSString *)getUserName {
+    if(!userName)
+    {
+        return @"";
+    }
+    return userName;
+}
++ (void)setUserName:(NSString *)name {
+    userName = name;
 }
 @end

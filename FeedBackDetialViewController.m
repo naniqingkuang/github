@@ -31,11 +31,12 @@
         NSString *type = dict[@"msgtype"];
         NSString *content = dict[@"textmsg"];
         NSString *answerContent = dict[@"rcontent"];
+        answerContent = [answerContent stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
         NSDictionary *typeDict = @{FD_TYPE_DICT};
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.feedBackTypeLB.text = [NSString stringWithFormat:@"类型: %@",typeDict[type]];
+            self.feedBackTypeLB.text = [NSString stringWithFormat:@" 类型: %@",typeDict[type]];
             self.feedBackOontentTextView.text =[NSString stringWithFormat:@"内容: %@",content];
-            self.answerTextView.text = [NSString stringWithFormat:@"回复内容: %@",answerContent];
+            self.answerTextView.text = [NSString stringWithFormat:@"%@",answerContent];
 
         });
     }];

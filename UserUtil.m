@@ -15,26 +15,28 @@
     return res;
 }
 - (instancetype)initWithDict:(NSDictionary *)dict{
-    self = [super init];
-    if (self) {
-        unsigned int count = 0;
-        NSString *str = nil;
-        NSString *key = nil;
-        NSString *obj = nil;
-        NSArray *arr = [dict allKeys];
-        objc_property_t *ivar = class_copyPropertyList([self class], &count);
-        for (int i = 0; i < count; i++) {
-            str =[NSString stringWithUTF8String:property_getName(ivar[i])];
-            key = arr[i];
-            obj = [dict objectForKey:key];
-            if(nil == obj)
-            {
-                obj = @"";
-            }
-            [self setValue:str forKey:obj];
+        self = [super init];
+        if (self) {
+            self.myID = [dict objectForKey:@"id"];
+            self.actflag = [dict objectForKey:@"actflag"];
+            self.acttime = [dict objectForKey:@"acttime"];
+            self.dayValueMaxParam = [dict objectForKey:@"dayValueMaxParam"];
+            self.dayValueMinParam = [dict objectForKey:@"dayValueMinParam"];
+            self.intervalTimeParam = [[dict objectForKey:@"intervalTimeParam"]intValue];
+            self.intervalTimeTypeParam = [dict objectForKey:@"intervalTimeTypeParam"];
+            self.isrtime = [dict objectForKey:@"isrtime"];
+            self.maxValueNumParam = [[dict objectForKey:@"maxValueNumParam"]intValue];
+            self.maxValueParam = [dict objectForKey:@"maxValueParam"];
+            self.sportsBeginTimeParam = [dict objectForKey:@"sportsBeginTimeParam"];
+            self.singleValueMaxParam = [dict objectForKey:@"singleValueMaxParam"];
+            self.singleValueMinParam = [dict objectForKey:@"singleValueMinParam"];
+            self.sportsEndTimeParam = [dict objectForKey:@"sportsEndTimeParam"];
+            self.userType = [dict objectForKey:@"userType"];
+            self.weightValueParam = [dict objectForKey:@"weightValueParam"];
+            self.status = [dict objectForKey:@"status"];
+            self.userName = [dict objectForKey:@"userName"];
         }
-
-    }
+        return self;
     return self;
 }
 - (void)checkAndAvoidNull{
@@ -98,7 +100,7 @@
         self.address256 = [dict objectForKey:@"address"];
         self.gender1 = [dict objectForKey:@"gender"];
         self.deviceID18 = [dict objectForKey:@"deviceID"];
-        self.height = [dict objectForKey:@"height"];
+        self.height = [NSString stringWithFormat:@"%ld",[[dict objectForKey:@"height"]integerValue]];
         self.weight = [dict objectForKey:@"weight"];
         self.phone32 = [dict objectForKey:@"phone"];
         self.email32 = [dict objectForKey:@"email"];

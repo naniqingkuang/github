@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *bluetoothNameList;
 @property (nonatomic, strong) MBProgressHUD *m_MBprogressHUB;
 @property (nonatomic, copy) NSString *isSelectedName;
+@property (nonatomic, strong) NSTimer *timer;
 @end
 
 @implementation BlueToothSetViewController
@@ -71,11 +72,11 @@
 #pragma mark tableview deledate an datasource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-   return  self.bluetoothNameList.count;
+    return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return  self.bluetoothNameList.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -88,10 +89,11 @@
     }
     if(self.bluetoothNameList.count)
     {
-        NSString *str = [self.bluetoothNameList objectAtIndex:indexPath.row];
+        int i = indexPath.row;
+        NSString *str = self.bluetoothNameList[indexPath.row];
         cell.contextLabel.text = str;
         cell.titleLabel.text = [NSString stringWithFormat:@"%ld",indexPath.row +1];
-        if([self.isSelectedName isEqual:self.bluetoothNameList[indexPath.row ]])
+        if([self.isSelectedName isEqualToString:self.bluetoothNameList[indexPath.row]])
         {
             cell.m_imageView.hidden = NO;
         }
@@ -105,35 +107,44 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    BlueToothTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if([self.isSelectedName isEqual:self.bluetoothNameList[indexPath.row]])
     {
         [[BlueToothUtil getBlueToothInstance]stopConnect:self.bluetoothNameList[indexPath.row]];
         self.isSelectedName = @"";
-        cell.m_imageView.hidden = YES;
+        [self.tableView reloadData];
     }
     else
     {
-        cell.m_imageView.hidden = YES;
         NSString *nameStr = [NSString stringWithFormat:@"正在连接:%@",self.bluetoothNameList[indexPath.row]];
         self.m_MBprogressHUB = [MBProgressHUD showMessage:nameStr toView:self.view];
         [[BlueToothUtil getBlueToothInstance]blueToothConnectTo:self.bluetoothNameList[indexPath.row] block:^{
             if (self.m_MBprogressHUB) {
                 [self.m_MBprogressHUB hide:YES];
             }
-            BlueToothTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.m_imageView.hidden = NO;
             self.isSelectedName = self.bluetoothNameList[indexPath.row];
+            [self.tableView reloadData];
         }];
  
     }
 }
 - (IBAction)refreshBlueToothList:(id)sender {
-    [self resScanBlutTooth];
+   // [self resScanBlutTooth];
+    [[BlueToothUtil getBlueToothInstance]reScan];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
+    self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
+    [self.tableView reloadData];
 }
 - (void)resScanBlutTooth
 {
-    [[BlueToothUtil getBlueToothInstance]reScan];
+    static int i = 0;
+    i ++;
+    if(5 == i)
+    {
+        if (self.timer) {
+            [self.timer invalidate];
+            [[BlueToothUtil getBlueToothInstance]stopScan];
+        }
+    }
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
     [self.tableView reloadData];
 }

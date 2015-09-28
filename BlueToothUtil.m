@@ -77,52 +77,21 @@ static BlueToothUtil* blueTooth;
     NSString *str = [NSString stringWithFormat:@"Did discover peripheral. peripheral: %@ rssi: %@,  advertisementData: %@ ", peripheral, RSSI,  advertisementData];
     NSLog(@"%@",str);
     NSLog(@"%@",peripheral.name);
-    for (CBPeripheral *item in self.discoverPeripheral) {
-        if([item.name isEqual:peripheral.name])
-        {
-            return;
+    if(self.discoverPeripheral.count) {
+        for (CBPeripheral *item in self.discoverPeripheral) {
+            if([item.name isEqualToString:peripheral.name])
+            {
+                return;
+            }
         }
     }
     [self.discoverPeripheral addObject:peripheral];
     [self connectPeripheral:peripheral];
-    //    NSArray *keys = [advertisementData allKeys];
-    //    NSData *dataAmb, *dataObj;
-    //    for (int i = 0; i < [keys count]; ++i) {
-    //        id key = [keys objectAtIndex: i];
-    //        NSString *keyName = (NSString *) key;
-    //        NSObject *value = [advertisementData objectForKey: key];
-    //        if ([value isKindOfClass: [NSArray class]]) {
-    //            printf("   key: %s\n", [keyName cStringUsingEncoding: NSUTF8StringEncoding]);
-    //            NSArray *values = (NSArray *) value;
-    //            for (int j = 0; j < [values count]; ++j) {
-    //                if ([[values objectAtIndex: j] isKindOfClass: [CBUUID class]]) {
-    //                    CBUUID *uuid = [values objectAtIndex: j];
-    //                    NSData *data = uuid.data;
-    //                    if (j == 0) {
-    //                        dataObj = uuid.data;
-    //                    } else {
-    //                        dataAmb = uuid.data;
-    //                    }
-    //                    printf("      uuid(%d):", j);
-    //                    for (int j = 0; j < data.length; ++j)
-    //                        printf(" %02X", ((UInt8 *) data.bytes)[j]);
-    //                    printf("\n");
-    //                } else {
-    //                    const char *valueString = [[value description] cStringUsingEncoding: NSUTF8StringEncoding];
-    //                    printf("      value(%d): %s\n", j, valueString);
-    //                }
-    //            }
-    //        } else {
-    //            const char *valueString = [[value description] cStringUsingEncoding: NSUTF8StringEncoding];
-    //            printf("   key: %s, value: %s\n", [keyName cStringUsingEncoding: NSUTF8StringEncoding], valueString);
-    //        }
-    //    }
-    // [self.tabBarController.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)connectPeripheral:(CBPeripheral *)peripheral
 {
-    if([peripheral.name isEqual:self.m_connectBlueToothName])
+    if([peripheral.name isEqualToString:self.m_connectBlueToothName])
     {
         [self.centerManager connectPeripheral:peripheral options:nil];
     }
@@ -297,7 +266,7 @@ static BlueToothUtil* blueTooth;
 }
 - (void)blueToothConnectTo:(NSString *)name block:(void (^)(void)) m_block
 {
-    if([name isEqual:self.connectBlueTooth.name])
+    if([name isEqualToString:self.connectBlueTooth.name])
     {
         m_block();
         return;
@@ -309,13 +278,23 @@ static BlueToothUtil* blueTooth;
 - (void)reScan
 {
     [self.centerManager stopScan];
+    CBPeripheral *cbPeripheralTemp = nil;
+    for (CBPeripheral *item in self.discoverPeripheral) {
+        if([item.name isEqualToString:self.m_connectBlueToothName]) {
+            cbPeripheralTemp = item;
+        }
+    }
+    [self.discoverPeripheral removeAllObjects];
+    if(cbPeripheralTemp) {
+        [self.discoverPeripheral addObject:cbPeripheralTemp];
+    }
     NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
     [self.centerManager scanForPeripheralsWithServices:nil options:options];
 }
 - (void)stopConnect:(NSString *)name
 {
     [self.centerManager stopScan];
-    if([self.m_connectBlueToothName isEqual:name])
+    if([self.m_connectBlueToothName isEqualToString:name])
     {
         self.m_connectBlueToothName = nil;
         if (self.connectBlueTooth && self.connectCharacristic && self.centerManager) {
@@ -326,6 +305,9 @@ static BlueToothUtil* blueTooth;
         }
 
     }
+}
+- (void)stopScan {
+    [self.centerManager stopScan];
 }
 - (void)writeCmcToBlueTooth:(unsigned char)cmd
 {
@@ -376,5 +358,10 @@ static BlueToothUtil* blueTooth;
     [self writeCmcToBlueTooth:0x22];
 
 }
-
+- (BOOL)isBlueToothConnected {
+    if(self.connectBlueTooth && self.connectCharacristic) {
+        return true;
+    }
+    return false;
+}
 @end

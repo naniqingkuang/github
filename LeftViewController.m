@@ -61,7 +61,7 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     switch(indexPath.row){
         case 0:
-            cell.textLabel.text=@"设置";
+            cell.textLabel.text=@"主页";
             break;
         case 1:
             cell.textLabel.text=@"蓝牙设置";

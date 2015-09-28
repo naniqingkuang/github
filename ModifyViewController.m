@@ -50,6 +50,11 @@
     self.datePickerBackgroundView.hidden = YES;
     self.datePicker.locale = [NSLocale localeWithLocaleIdentifier:@"zh_CN"];
 }
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self initData];
+    [self.tableView reloadData];
+}
 - (void)initData
 {
     self.titleList = @[Titles];
@@ -111,6 +116,12 @@
        // cell.contentText.text = self.dataDest[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentText.tag = indexPath.row;
+        if(indexPath.row == 7) {
+            cell.contentText.text =[NSString stringWithFormat:@"%ld",[self.dataDest[indexPath.row]integerValue]];
+        } else {
+            cell.contentText.text = self.dataDest[indexPath.row];
+
+        }
         return cell;
         
     }
@@ -300,6 +311,7 @@
     [RequestUtil userUpdateInfo:self.registerUser block:^(bool flag) {
         if (flag) {
             [self dismissViewControllerAnimated:YES completion:nil];
+            [MBProgressHUD showError:@"修改成功"];
             [RequestUtil setCurrentUser:self.registerUser];
         }
     }];

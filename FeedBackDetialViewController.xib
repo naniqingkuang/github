@@ -51,10 +51,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="5Pb-Mc-Et0">
-                    <rect key="frame" x="20" y="264" width="560" height="100"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="100" id="TjZ-Ds-eOs"/>
-                    </constraints>
+                    <rect key="frame" x="20" y="264" width="560" height="336"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
@@ -67,6 +64,7 @@
                 <constraint firstItem="GPd-MG-pjd" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="b6V-i5-WBh"/>
                 <constraint firstAttribute="trailing" secondItem="5Pb-Mc-Et0" secondAttribute="trailing" constant="20" id="c9r-sh-Uqy"/>
                 <constraint firstItem="GPd-MG-pjd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cVD-gJ-UiK"/>
+                <constraint firstAttribute="bottom" secondItem="5Pb-Mc-Et0" secondAttribute="bottom" id="dtp-em-7bt"/>
                 <constraint firstItem="pq2-Ax-rzp" firstAttribute="top" secondItem="lqz-0g-VyE" secondAttribute="bottom" id="i7A-2s-uyP"/>
                 <constraint firstItem="lqz-0g-VyE" firstAttribute="top" secondItem="GPd-MG-pjd" secondAttribute="bottom" constant="20" id="lc3-5V-BTI"/>
                 <constraint firstItem="lqz-0g-VyE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="me8-YH-iWJ"/>

@@ -113,4 +113,7 @@
               block:(void(^)()) aBlock;
 
 + (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock;
+
++ (NSString *)getUserName;
++ (void)setUserName:(NSString *)name;
 @end

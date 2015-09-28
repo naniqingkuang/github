@@ -11,6 +11,7 @@
 #import "UserUtil.h"
 #import "FeedBackDetialViewController.h"
 #import "FeedBackViewController.h"
+#import "SliderViewController.h"
 @interface FeedBackListViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *myTableView;
 @property (nonatomic, strong) NSArray *dataList;
@@ -64,7 +65,8 @@
     [self presentViewController:FDVC animated:YES completion:nil];
 }
 - (IBAction)backButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [[SliderViewController sharedSliderController]leftItemClick];
+   // [self dismissViewControllerAnimated:YES completion:nil];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataList.count;

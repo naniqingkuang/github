@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DaylyDataViewController">
+            <connections>
+                <outlet property="tableView" destination="bLL-21-Egh" id="aVO-BD-BEs"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P1E-29-8ZY">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="hqb-rj-WaE"/>
+                    </constraints>
+                    <items>
+                        <navigationItem title="今日详细数据" id="vhP-Jh-gLK">
+                            <barButtonItem key="leftBarButtonItem" title="返回" id="2cn-GB-vO0">
+                                <connections>
+                                    <action selector="backButtonClicked:" destination="-1" id="XSt-Wm-P9h"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bLL-21-Egh">
+                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="g74-Al-COa"/>
+                        <outlet property="delegate" destination="-1" id="brf-se-qdZ"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="P1E-29-8ZY" secondAttribute="trailing" id="7Tq-oE-VOR"/>
+                <constraint firstAttribute="bottom" secondItem="bLL-21-Egh" secondAttribute="bottom" id="8qR-3A-G22"/>
+                <constraint firstItem="bLL-21-Egh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="EKF-RQ-4bD"/>
+                <constraint firstItem="P1E-29-8ZY" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Qce-kh-FVp"/>
+                <constraint firstItem="bLL-21-Egh" firstAttribute="top" secondItem="P1E-29-8ZY" secondAttribute="bottom" id="r8S-SB-bXn"/>
+                <constraint firstItem="P1E-29-8ZY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="sq2-Cc-HNF"/>
+                <constraint firstAttribute="trailing" secondItem="bLL-21-Egh" secondAttribute="trailing" id="zlG-Kz-5vK"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

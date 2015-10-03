@@ -363,6 +363,11 @@ static NSString *userName;
              maxValueNum:(int)value
                    block:(void(^)()) aBlock {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_ALERT_EVENT];
+    if(!name) name = @"";
+    if(!deviceID) deviceID = @"";
+    if(!aReason) aReason = @"";
+    if(!startTime) startTime = @"";
+    if(!motionStartTime) motionStartTime = @"";
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"alarmReson":aReason,

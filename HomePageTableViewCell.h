@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface HomePageTableViewCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet UILabel *textLabel;
+@property (strong, nonatomic) IBOutlet UILabel *mtextLabel;
 @property (strong, nonatomic) IBOutlet UIProgressView *progress;
 
 @end

@@ -33,6 +33,11 @@
                                     <action selector="leftNavigationClicked:" destination="-1" id="Wu9-LL-NJf"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem key="rightBarButtonItem" title="详细数据" id="915-Oz-Bhz">
+                                <connections>
+                                    <action selector="detailButtonClicked:" destination="-1" id="Bws-Hs-fta"/>
+                                </connections>
+                            </barButtonItem>
                         </navigationItem>
                     </items>
                 </navigationBar>

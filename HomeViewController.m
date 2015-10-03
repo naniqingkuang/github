@@ -18,12 +18,8 @@
 #import "RequestUtil.h"
 #import "UserUtil.h"
 #import "MBProgressHUD+Util.h"
+#import "DaylyDataViewController.h"
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
-@interface SingleMotion : NSObject
-@property (nonatomic, copy) NSString *startTime; // 单次运动的时间
-@property (nonatomic, assign) int maxNum;  //超过上限的次数
-@property (nonatomic, assign) double singleTotalNum; //单次运动总量
-@end
 @implementation SingleMotion
 @end
 @interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate>
@@ -54,6 +50,8 @@
 @property (assign, nonatomic) BOOL firstGoFlag;
 @property (copy, atomic) void (^notInParamTimeBlock)();
 @property (copy, atomic) void (^overFloerBlock)();
+@property (strong, nonatomic) NSMutableArray *todayData;  //今天的运动数据
+@property (assign, atomic) int frequecyNum; //纪录今天运动的次数
 @end
 
 @implementation HomeViewController
@@ -81,6 +79,15 @@
         self.equivalent = equivalent;  // 本次当量值
         self.inpulse = inpulse;  //
         self.daylyTotal +=equivalent;    //今日总量
+        NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
+        if(self.curMotion.isSave) {
+            self.curMotion.isSave = NO;
+            self.curMotion.startTime = curTime;
+            self.curMotion.maxNum = 0;
+            self.curMotion.singleTotalNum = 0;
+            self.curMotion.endTime = @"";
+            self.curMotion.index = ++self.frequecyNum;
+        }
         self.curMotion.singleTotalNum +=equivalent; //本次运动量
         __weak HomeViewController *weakSelf = self;
         [self.TodayMeasurementView aninationStart];
@@ -90,10 +97,6 @@
                 self.count = 0;
                 self.firstGoFlag = YES;
                 [self.dateFormatter setDateFormat:@"HH:ss"];
-                NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
-                if(self.curMotion.startTime.length <1) {
-                    self.curMotion.startTime = curTime;
-                }
                 if(equivalent > [self.curUserParam.maxValueParam doubleValue]) {
                     self.curMotion.maxNum ++;  //本次运动超过上限值
                 }
@@ -153,8 +156,20 @@
     self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
     self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
 }
+- (void)todayDataSave:(SingleMotion *)data {
+    if(data && self.todayData) {
+        SingleMotion *item = [[SingleMotion alloc]init];
+        item.startTime = data.startTime;
+        item.endTime = data.endTime;
+        item.maxNum = data.maxNum;
+        item.index = data.index;
+        item.singleTotalNum = data.singleTotalNum;
+        [self.todayData addObject:item];
+    }
+}
 - (void)initData {
     self.typeSevVenConunt = 0;
+    self.frequecyNum = 0;
     self.inpulse = 0.0;
     self.equivalent = 0.0;
     self.daylyTotal = 0.0;
@@ -162,11 +177,13 @@
     self.curMotion.maxNum = 0;
     self.firstGoFlag = NO;
     self.curMotion = [[SingleMotion alloc]init];
+    self.curMotion.isSave = NO;
     self.dateFormatter = [[NSDateFormatter alloc]init];
     [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"0"];
     [self.TodayMeasurementView setCurrentSum:@"0%"];
     self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%d%@",0,@"%"];
     [self.daylyTotalProgress setProgress:0.0];
+    self.todayData = [[NSMutableArray alloc]initWithCapacity:20];
 }
 - (void)mainThread {
     if([LoginViewController hasLogin])
@@ -216,7 +233,7 @@
         }
         if(self.curUserParam)
         {
-            [self.dateFormatter setDateFormat:@"HH:ss"];
+            [self.dateFormatter setDateFormat:@"HH:mm:ss"];
             NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
             NSString *curM = [curTime substringFromIndex:3];
             NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
@@ -232,10 +249,9 @@
                 //－－－－－－－－－－－－－－－－运动时间到检测
                
                 //每天运动时间到达
-                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1))
+                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1) && self.count >58)
                 {
                     if([self.curUserParam.userType isEqualToString:@"7"]) {
-                        
                     } else {
                         //天运动量过量
                         if(self.daylyTotal > [self.curUserParam.dayValueMaxParam intValue]){
@@ -268,7 +284,12 @@
                     self.count ++;
                 }
                 //单词运动判断
-                if(self.count >30 && self.curMotion.singleTotalNum > 0) {
+                if(self.count >60 && self.curMotion.singleTotalNum > 0) {
+                    if(!self.curMotion.isSave) {
+                        self.curMotion.isSave = YES;
+                        self.curMotion.endTime = curTime;
+                        [self todayDataSave:self.curMotion];
+                    }
                     //单词未完成
                     if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
                     {
@@ -295,9 +316,6 @@
                                           maxValueNum:self.curMotion.maxNum
                                                 block:nil];
                     }
-                    self.curMotion.maxNum = 0;
-                    self.curMotion.singleTotalNum = 0;
-                    self.curMotion.startTime = @"";
                     self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
                     self.intervalTime = self.curUserParam.intervalTimeParam * 60;
                     
@@ -490,4 +508,13 @@
     NSString *str = [NSString stringWithFormat:@"2.jpg"];
     self.chargeImageView.image = [UIImage imageNamed:str];
 }
+- (IBAction)detailButtonClicked:(id)sender {
+    DaylyDataViewController *vc = [[DaylyDataViewController alloc]initWithNibName:@"DaylyDataViewController" bundle:nil];
+    vc.daylyData = self.todayData;
+    vc.maxsingleTotal = [self.curUserParam.singleValueMaxParam doubleValue];
+    vc.maxDaylyTotal = [self.curUserParam.dayValueMaxParam doubleValue];
+    vc.daylyTotal = self.daylyTotal;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
 @end

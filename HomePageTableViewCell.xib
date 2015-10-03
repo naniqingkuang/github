@@ -8,15 +8,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="HomePageTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="52" id="KGk-i7-Jjw" customClass="HomePageTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="321" height="52"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="19"/>
+                <rect key="frame" x="0.0" y="0.0" width="321" height="51"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nj2-3K-ulT">
-                        <rect key="frame" x="13" y="8" width="100" height="3"/>
+                        <rect key="frame" x="13" y="8" width="100" height="35"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="100" id="iUf-LM-tv3"/>
                         </constraints>
@@ -24,8 +24,8 @@
                         <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Tkf-1N-A3q">
-                        <rect key="frame" x="118" y="5" width="189" height="3"/>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Tkf-1N-A3q">
+                        <rect key="frame" x="118" y="25" width="190" height="3"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="2" id="tkO-yi-qKW"/>
                         </constraints>
@@ -49,9 +49,10 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="mtextLabel" destination="Nj2-3K-ulT" id="Lo0-cn-ITB"/>
                 <outlet property="progress" destination="Tkf-1N-A3q" id="oeq-E6-XPc"/>
-                <outlet property="textLabel" destination="Nj2-3K-ulT" id="inn-ri-TAf"/>
             </connections>
+            <point key="canvasLocation" x="288.5" y="322"/>
         </tableViewCell>
     </objects>
 </document>

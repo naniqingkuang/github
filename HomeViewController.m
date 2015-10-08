@@ -249,7 +249,7 @@
                 //－－－－－－－－－－－－－－－－运动时间到检测
                
                 //每天运动时间到达
-                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1) && self.count >58)
+                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1))
                 {
                     if([self.curUserParam.userType isEqualToString:@"7"]) {
                     } else {

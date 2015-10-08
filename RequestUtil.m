@@ -494,7 +494,6 @@ static NSString *userName;
         g_currentUser = [[UserUtil alloc]init];
     }
     [g_currentUser checkAndAvoidNull];
-    [g_currentUser checkAndAvoidNull];
    return g_currentUser;
 }
 + (NSString *)getUserName {

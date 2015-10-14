@@ -20,6 +20,7 @@ static BlueToothUtil* blueTooth;
 @property (copy, nonatomic) void(^m_readSoftEdition)(NSString *softEdition);
 @property (copy, nonatomic) void(^m_readHardwareEdition)(NSString *hardWareEdition);
 @property (copy, nonatomic) void(^m_readDoorLimit)(short doorLimit);
+@property (assign, nonatomic) BOOL isConnetct;
 @end
 
 @implementation BlueToothUtil
@@ -29,6 +30,7 @@ static BlueToothUtil* blueTooth;
     if (self) {
         self.centerManager = [[CBCentralManager alloc]initWithDelegate:self queue:dispatch_get_main_queue()];
         [self.centerManager setDelegate:self];
+        self.isConnetct = NO;
         self.discoverPeripheral = [[NSMutableArray alloc]initWithCapacity:10];
 
     }
@@ -76,29 +78,35 @@ static BlueToothUtil* blueTooth;
 {
     NSString *str = [NSString stringWithFormat:@"Did discover peripheral. peripheral: %@ rssi: %@,  advertisementData: %@ ", peripheral, RSSI,  advertisementData];
     NSLog(@"%@",str);
-    NSLog(@"%@",peripheral.name);
-    if(self.discoverPeripheral.count) {
-        for (CBPeripheral *item in self.discoverPeripheral) {
-            if([item.name isEqualToString:peripheral.name])
-            {
-                return;
-            }
-        }
-    }
+    NSLog(@"name:  %@",peripheral.name);
+//    if(self.discoverPeripheral.count) {
+//        for (CBPeripheral *item in self.discoverPeripheral) {
+//            if([item.name isEqualToString:peripheral.name])
+//            {
+//                return;
+//            }
+//        }
+//    }
     [self.discoverPeripheral addObject:peripheral];
     [self connectPeripheral:peripheral];
 }
 
 - (void)connectPeripheral:(CBPeripheral *)peripheral
 {
+    if(self.connectBlueTooth) {
+        if([self.connectBlueTooth.name isEqualToString: peripheral.name] && self.isConnetct) {
+            return;
+        }
+    }
     if([peripheral.name isEqualToString:self.m_connectBlueToothName])
     {
+        [self.centerManager stopScan];
         [self.centerManager connectPeripheral:peripheral options:nil];
     }
 }
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    [self.centerManager stopScan];
+    self.isConnetct = YES;
     peripheral.delegate = self;
     [peripheral discoverServices:nil];
     if(self.m_ConnectedBlock)
@@ -106,9 +114,22 @@ static BlueToothUtil* blueTooth;
         self.m_ConnectedBlock();
     }
 }
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    self.isConnetct = false;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reScan];
+    });
+}
 - (void)centralManager:(nonnull CBCentralManager *)central didDisconnectPeripheral:(nonnull CBPeripheral *)peripheral error:(nullable NSError *)error
 {
-    
+    self.isConnetct = false;
+    if([peripheral.name isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"blueToothName"]]) {
+        [self.centerManager connectPeripheral:peripheral options:nil];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reScan];
+        });
+    }
 }
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
@@ -271,25 +292,24 @@ static BlueToothUtil* blueTooth;
         m_block();
         return;
     }
-    self.m_connectBlueToothName = name;
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    if([name isEqualToString:[userDefault objectForKey:@"blueToothName"]]) {
+        self.m_connectBlueToothName = [userDefault objectForKey:@"blueToothName"];
+    }
     self.m_ConnectedBlock = m_block;
     [self reConnectBlueTooth];
 }
 - (void)reScan
 {
-    [self.centerManager stopScan];
-    CBPeripheral *cbPeripheralTemp = nil;
-    for (CBPeripheral *item in self.discoverPeripheral) {
-        if([item.name isEqualToString:self.m_connectBlueToothName]) {
-            cbPeripheralTemp = item;
+    if(!self.isConnetct) {
+        [self.centerManager stopScan];
+        self.m_connectBlueToothName = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
+        if(self.discoverPeripheral) {
+            [self.discoverPeripheral removeAllObjects];
         }
+        NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
+        [self.centerManager scanForPeripheralsWithServices:nil options:options];
     }
-    [self.discoverPeripheral removeAllObjects];
-    if(cbPeripheralTemp) {
-        [self.discoverPeripheral addObject:cbPeripheralTemp];
-    }
-    NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
-    [self.centerManager scanForPeripheralsWithServices:nil options:options];
 }
 - (void)stopConnect:(NSString *)name
 {
@@ -359,9 +379,17 @@ static BlueToothUtil* blueTooth;
 
 }
 - (BOOL)isBlueToothConnected {
-    if(self.connectBlueTooth && self.connectCharacristic) {
-        return true;
+    if(self.connectBlueTooth && self.connectCharacristic && (self.connectBlueTooth.state == CBPeripheralStateConnected || self.connectBlueTooth.state == CBPeripheralStateConnecting)) {
+        if([self.connectBlueTooth.name isEqualToString:[[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"]]) {
+            return true;
+        }
     }
     return false;
+}
+- (int)getConnectFlag {
+    if(self.connectBlueTooth && self.connectCharacristic ) {
+        return self.connectBlueTooth.state;
+    }
+    return 0;
 }
 @end

@@ -14,6 +14,7 @@
 		7D28DAFC1BA2A3DB00EED6A8 /* BlueToothUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D28DAFB1BA2A3DB00EED6A8 /* BlueToothUtil.m */; };
 		7D2F95E21B8B0CBF00A8CE8A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2F95E01B8B0CBF00A8CE8A /* LoginViewController.m */; };
 		7D2F95E31B8B0CBF00A8CE8A /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D2F95E11B8B0CBF00A8CE8A /* LoginViewController.xib */; };
+		7D3279DD1BC8F0AF00F91566 /* police.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D3279DC1BC8F0AF00F91566 /* police.png */; settings = {ASSET_TAGS = (); }; };
 		7D357C321B87181C001024A4 /* HomePageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D357C301B87181C001024A4 /* HomePageTableViewCell.m */; };
 		7D357C331B87181C001024A4 /* HomePageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D357C311B87181C001024A4 /* HomePageTableViewCell.xib */; };
 		7D357C351B872299001024A4 /* RIghtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D357C341B872299001024A4 /* RIghtViewController.xib */; };
@@ -36,9 +37,7 @@
 		7DC718F11B855B090068253C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DC718EF1B855B090068253C /* LaunchScreen.xib */; };
 		7DC718FD1B855B090068253C /* MotionMeasurementTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC718FC1B855B090068253C /* MotionMeasurementTests.m */; };
 		7DC719101B855B950068253C /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719091B855B950068253C /* CoreDataManager.m */; };
-		7DC719111B855B950068253C /* hello.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7190A1B855B950068253C /* hello.gif */; };
 		7DC719131B855B950068253C /* mainView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7190E1B855B950068253C /* mainView.m */; };
-		7DC719141B855B950068253C /* police.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DC7190F1B855B950068253C /* police.png */; };
 		7DC719181B855BA90068253C /* BlueToothSetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC719161B855BA90068253C /* BlueToothSetViewController.m */; };
 		7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DC719171B855BA90068253C /* BlueToothSetViewController.xib */; };
 		7DC7191F1B855E810068253C /* SliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7191E1B855E810068253C /* SliderViewController.m */; };
@@ -49,6 +48,7 @@
 		7DD4B8B81BAEF7EE00947974 /* EveryDataUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD4B8B71BAEF7EE00947974 /* EveryDataUtil.m */; settings = {ASSET_TAGS = (); }; };
 		7DD510FE1BBFFD56001B8370 /* MBProgressHUD+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD510FD1BBFFD56001B8370 /* MBProgressHUD+Util.m */; settings = {ASSET_TAGS = (); }; };
 		7DD511011BBFFE35001B8370 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD510FF1BBFFE35001B8370 /* MBProgressHUD.m */; settings = {ASSET_TAGS = (); }; };
+		7DD5CFFF1BCA3C23009ED0FB /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DD5CFFE1BCA3C23009ED0FB /* left.png */; settings = {ASSET_TAGS = (); }; };
 		7DD872C71BA3190C001323BC /* BlueToothTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD872C51BA3190C001323BC /* BlueToothTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		7DD872C81BA3190C001323BC /* BlueToothTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DD872C61BA3190C001323BC /* BlueToothTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		7DD89E141B9D338500037C75 /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD89E121B9D338500037C75 /* RegisterViewController.m */; };
@@ -89,6 +89,7 @@
 		7D2F95DF1B8B0CBF00A8CE8A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		7D2F95E01B8B0CBF00A8CE8A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		7D2F95E11B8B0CBF00A8CE8A /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		7D3279DC1BC8F0AF00F91566 /* police.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = police.png; sourceTree = "<group>"; };
 		7D357C2F1B87181C001024A4 /* HomePageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePageTableViewCell.h; sourceTree = "<group>"; };
 		7D357C301B87181C001024A4 /* HomePageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePageTableViewCell.m; sourceTree = "<group>"; };
 		7D357C311B87181C001024A4 /* HomePageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomePageTableViewCell.xib; sourceTree = "<group>"; };
@@ -125,10 +126,8 @@
 		7DC718FC1B855B090068253C /* MotionMeasurementTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MotionMeasurementTests.m; sourceTree = "<group>"; };
 		7DC719081B855B950068253C /* CoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataManager.h; sourceTree = "<group>"; };
 		7DC719091B855B950068253C /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
-		7DC7190A1B855B950068253C /* hello.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = hello.gif; sourceTree = "<group>"; };
 		7DC7190D1B855B950068253C /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
 		7DC7190E1B855B950068253C /* mainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mainView.m; sourceTree = "<group>"; };
-		7DC7190F1B855B950068253C /* police.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = police.png; sourceTree = "<group>"; };
 		7DC719151B855BA90068253C /* BlueToothSetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothSetViewController.h; sourceTree = "<group>"; };
 		7DC719161B855BA90068253C /* BlueToothSetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothSetViewController.m; sourceTree = "<group>"; };
 		7DC719171B855BA90068253C /* BlueToothSetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlueToothSetViewController.xib; sourceTree = "<group>"; };
@@ -141,12 +140,14 @@
 		7DC7192B1B85680B0068253C /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		7DC7192C1B85680B0068253C /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		7DC7192D1B85680B0068253C /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
+		7DC7F8941BCCE9F600D02D6F /* MotionMeasurement.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MotionMeasurement.entitlements; sourceTree = "<group>"; };
 		7DD4B8B61BAEF7EE00947974 /* EveryDataUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EveryDataUtil.h; sourceTree = "<group>"; };
 		7DD4B8B71BAEF7EE00947974 /* EveryDataUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EveryDataUtil.m; sourceTree = "<group>"; };
 		7DD510FC1BBFFD56001B8370 /* MBProgressHUD+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+Util.h"; sourceTree = "<group>"; };
 		7DD510FD1BBFFD56001B8370 /* MBProgressHUD+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+Util.m"; sourceTree = "<group>"; };
 		7DD510FF1BBFFE35001B8370 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		7DD511001BBFFE35001B8370 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		7DD5CFFE1BCA3C23009ED0FB /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		7DD872C41BA3190C001323BC /* BlueToothTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlueToothTableViewCell.h; sourceTree = "<group>"; };
 		7DD872C51BA3190C001323BC /* BlueToothTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlueToothTableViewCell.m; sourceTree = "<group>"; };
 		7DD872C61BA3190C001323BC /* BlueToothTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BlueToothTableViewCell.xib; sourceTree = "<group>"; };
@@ -260,6 +261,7 @@
 		7DC718DC1B855B090068253C /* MotionMeasurement */ = {
 			isa = PBXGroup;
 			children = (
+				7DC7F8941BCCE9F600D02D6F /* MotionMeasurement.entitlements */,
 				7DC718E11B855B090068253C /* AppDelegate.h */,
 				7DC718E21B855B090068253C /* AppDelegate.m */,
 				7DC718ED1B855B090068253C /* Images.xcassets */,
@@ -311,8 +313,7 @@
 		7DC7191A1B855BC60068253C /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
-				7DC7190F1B855B950068253C /* police.png */,
-				7DC7190A1B855B950068253C /* hello.gif */,
+				7D3279DC1BC8F0AF00F91566 /* police.png */,
 				7DC7190D1B855B950068253C /* mainView.h */,
 				7DC7190E1B855B950068253C /* mainView.m */,
 				7D357C2F1B87181C001024A4 /* HomePageTableViewCell.h */,
@@ -357,6 +358,7 @@
 			children = (
 				7DC719201B85618E0068253C /* LeftViewController.h */,
 				7DC719211B85618E0068253C /* LeftViewController.m */,
+				7DD5CFFE1BCA3C23009ED0FB /* left.png */,
 				7DC719221B85618E0068253C /* RightViewController.h */,
 				7DC719231B85618E0068253C /* RightViewController.m */,
 				7D357C341B872299001024A4 /* RIghtViewController.xib */,
@@ -442,12 +444,26 @@
 		7DC718D21B855B090068253C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "@猪猪";
 				TargetAttributes = {
 					7DC718D91B855B090068253C = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 395Q23NHPD;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					7DC718F51B855B090068253C = {
 						CreatedOnToolsVersion = 6.4;
@@ -480,18 +496,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D8AA3AE1BAD8A60002E265C /* FeedBackListViewController.xib in Resources */,
-				7DC719141B855B950068253C /* police.png in Resources */,
 				7DD872C81BA3190C001323BC /* BlueToothTableViewCell.xib in Resources */,
 				7DD89E151B9D338500037C75 /* RegisterViewController.xib in Resources */,
 				7D3981911BC003E70017806B /* DaylyDataViewController.xib in Resources */,
 				7D93E9FC1BABF2C200750FEB /* UpdatePasswdViewController.xib in Resources */,
+				7D3279DD1BC8F0AF00F91566 /* police.png in Resources */,
 				7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */,
-				7DC719111B855B950068253C /* hello.gif in Resources */,
 				7D8572821B9E8B5A00A33803 /* TableViewCell2.xib in Resources */,
 				7D28DAF31BA0153400EED6A8 /* ModifyViewController.xib in Resources */,
 				7DC718F11B855B090068253C /* LaunchScreen.xib in Resources */,
 				7DC718EE1B855B090068253C /* Images.xcassets in Resources */,
 				7D357C351B872299001024A4 /* RIghtViewController.xib in Resources */,
+				7DD5CFFF1BCA3C23009ED0FB /* left.png in Resources */,
 				7D28DAF91BA15C3400EED6A8 /* FeedBackViewController.xib in Resources */,
 				7DC7192F1B85680B0068253C /* HomeViewController.xib in Resources */,
 				7DD89E1A1B9D69BC00037C75 /* TableViewCell1.xib in Resources */,
@@ -607,6 +623,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -670,11 +687,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MotionMeasurement/MotionMeasurement.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MotionMeasurement/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yidong2.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -684,11 +703,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MotionMeasurement/MotionMeasurement.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MotionMeasurement/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yidong2.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -708,6 +729,7 @@
 				);
 				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yidong.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};
@@ -723,6 +745,7 @@
 				);
 				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yidong.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};

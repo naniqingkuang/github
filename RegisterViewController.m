@@ -305,6 +305,44 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     [self.dataDest replaceObjectAtIndex:textField.tag withObject:textField.text];
+    for (int i = 0; i < self.dataDest.count; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+        TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
+        if([cell respondsToSelector:@selector(contentText)]){
+            if(textField == cell.contentText && i > 8) {
+                [self keboardHide:i];
+            }
+        }
+    }
     return YES;
 }
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    for (int i = 0; i < self.dataDest.count; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+        TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
+        if([cell respondsToSelector:@selector(contentText)]){
+            if(textField == cell.contentText && i > 8) {
+                [self keboardShow:i];
+            }
+        }
+    }
+    return YES;
+}
+- (void)keboardShow:(int )num {
+    CGRect frame = self.view.frame;
+    frame.origin.y -= 150;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+- (void)keboardHide:(int )num{
+    CGRect frame = self.view.frame;
+    frame.origin.y +=  150;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+
 @end

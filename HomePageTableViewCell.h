@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface HomePageTableViewCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet UILabel *mtextLabel;
-@property (strong, nonatomic) IBOutlet UIProgressView *progress;
+@property (strong, nonatomic) IBOutlet UILabel *overNumLB;
+@property (strong, nonatomic) IBOutlet UILabel *timeLB;
+@property (strong, nonatomic) IBOutlet UILabel *alertNumLB;
+@property (strong, nonatomic) IBOutlet UILabel *singleTotalLB;
 
 @end

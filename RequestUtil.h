@@ -28,6 +28,7 @@
 #define USER_UPLOAD_DALYY_DATA                  @"receiveDaySportData"
 #define USER_UPDATE_APP_CLIENT_ID               @"updateAppClientID"
 #define USER_KEEP_HEART_BEAT                    @"receiveHeartbeatInfo"
+#define USER_UPLOAD_PROGRESS                    @"receiveProgress"
 
 
 @interface RequestUtil : NSObject
@@ -112,8 +113,13 @@
         appClientID:(NSString *)appClientID
               block:(void(^)()) aBlock;
 
-+ (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock;
-
++ (void)keepHeartBeat:(NSString *)name
+               device:(NSString *)deviceID
+                block:(void(^)(NSString *)) aBlock;
++ (void)updatePercent:(NSString *)name
+               device:(NSString *)deviceID
+              percent:(double) progress
+                block:(void (^)(void)) aBlock;
 + (NSString *)getUserName;
 + (void)setUserName:(NSString *)name;
 @end

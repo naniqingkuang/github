@@ -22,6 +22,7 @@
 #define USER_TYPE @"心梗的人",@"脑卒中的人",@"下肢骨折的人",@"下肢关节的人",@"减肥的人",@"伏案工作的人",@"青少年成长的人",@"正常人和亚健康人群"
 #define USER_GENDER @"男",@"女"
 #define USER_TYPE_DICT @"心梗的人":@"1",@"脑卒中的人":@"2",@"下肢骨折的人":@"3",@"下肢关节的人":@"4",@"减肥的人":@"5",@"伏案工作的人":@"6",@"青少年成长的人":@"7",@"正常人和亚健康人群":@"8"
+
 @interface ModifyViewController ()<UITableViewDelegate,UITableViewDataSource,UIPickerViewDataSource,UIPickerViewDelegate,UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UIPickerView *pickerView;
@@ -89,7 +90,7 @@
 {
     //cell.contentText.text = @"";
     NSString *title = self.titleList[indexPath.row];
-    if([title isEqual:@"性别"] || [title isEqual:@"用户类型"] || [title isEqual:@"出生日期"])
+    if([title isEqualToString:@"性别"] || [title isEqualToString:@"用户类型"] || [title isEqualToString:@"出生日期"])
     {
         NSString *myCellId = @"RegisterTableViewCell2";
         TableViewCell2 *cell = [tableView dequeueReusableCellWithIdentifier:myCellId];
@@ -97,10 +98,33 @@
         {
             cell = (TableViewCell2 *)[[[NSBundle mainBundle]loadNibNamed:@"TableViewCell2" owner:self options:nil]lastObject];
         }
+        NSString *str = nil;
+        if([title isEqualToString:@"性别"]) {
+            str = [self.dataDest[indexPath.row] isEqualToString:@"0"] ? @"男" : @"女";
+        }
+        if([title isEqualToString:@"用户类型"]) {
+            NSArray *arr = [self.userTypeDict allKeys];
+            for (NSString *item in arr) {
+                if([self.userTypeDict[item] isEqualToString:self.registerUser.userType1]){
+                    str = item;
+                }
+            }
+        }
+        if([title isEqualToString:@"出生日期"]){
+            str = self.registerUser.birthday8;
+            if(str && str.length == 8) {
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                [dateFormatter setDateFormat:@"YYYYMMDD"];
+                NSDate *date = [dateFormatter dateFromString:str];
+                [dateFormatter setDateFormat:@"YYYY-MM-DD"];
+                str = [dateFormatter stringFromDate:date];
+            }
+        }
+        
         cell.titleLB.text = title;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentLB.tag = indexPath.row;
-        cell.contentLB.text = self.dataDest[indexPath.row];
+        cell.contentLB.text = str;
         return cell;
     }
     else
@@ -320,6 +344,47 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     [self.dataDest replaceObjectAtIndex:textField.tag withObject:textField.text];
+    for (int i = 0; i < self.dataDest.count; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+        TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
+        if([cell respondsToSelector:@selector(contentText)]){
+            if(textField == cell.contentText && i > 8) {
+                [self keboardHide:i];
+            }
+        }
+    }
+
     return YES;
 }
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    for (int i = 0; i < self.dataDest.count; i++) {
+        NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
+        TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
+        if([cell respondsToSelector:@selector(contentText)]){
+            if(textField == cell.contentText && i > 8) {
+                [self keboardShow:i];
+            }
+        }
+    }
+    
+    return YES;
+}
+- (void)keboardShow:(int )num {
+    CGRect frame = self.view.frame;
+    frame.origin.y -= 150;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+- (void)keboardHide:(int )num{
+    CGRect frame = self.view.frame;
+    frame.origin.y +=  150;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+
 @end

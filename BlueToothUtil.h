@@ -22,4 +22,5 @@
 - (void)readDoorLimit:(void(^)(short doorLimit)) aReadDoorLimitBlock;
 - (BOOL)isBlueToothConnected;
 - (void)stopScan;
+- (int)getConnectFlag;
 @end

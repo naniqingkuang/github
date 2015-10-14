@@ -27,7 +27,11 @@ static BOOL logoFlag;
     [super viewDidLoad];
     self.logoImageView.layer.cornerRadius = 10;
     self.logoImageView.layer.masksToBounds = YES;
-    self.loginButton.layer.cornerRadius = 8;
+    self.loginButton.layer.cornerRadius = 12;
+    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+    self.nameText.text = str;
+    self.nameText.delegate = self;
+    self.passedText.delegate = self;
     self.loginButton.layer.masksToBounds = YES;
     logoFlag = NO;
     // Do any additional setup after loading the view from its nib.
@@ -63,20 +67,13 @@ static BOOL logoFlag;
                 [RequestUtil setCurrentUser:item];
                 logoFlag = YES;
                 [self dismissViewControllerAnimated:YES completion:^{
+                    [[NSUserDefaults standardUserDefaults] setObject:self.nameText.text forKey:@"loginUser"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
                 }];
             }];
         }
     }];
-    
-//        if([item.userName32 isEqualToString:self.nameText.text] && [item.password32 isEqualToString:self.passedText.text])
-//        {
-//            [self dismissViewControllerAnimated:YES completion:nil];
-//        }
-//        else
-//        {
-//            [MBProgressHUD showError:@"用户名或者密码不正确"];
-//        }
 }
 - (IBAction)registerAcount:(UIButton *)sender {
     RegisterViewController *RegisterVC = [[RegisterViewController alloc]initWithNibName:@"RegisterViewController" bundle:nil];
@@ -88,7 +85,7 @@ static BOOL logoFlag;
 //- (void)viewWillAppear:(BOOL)animated {
 //    [super viewWillAppear:animated];
 //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keboardShow:) name:UIKeyboardDidShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keboardShow:) name:UIKeyboardDidHideNotification object:nil];
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keboardHide:) name:UIKeyboardDidHideNotification object:nil];
 //
 //}
 //- (void)viewWillDisappear:(BOOL)animated {
@@ -98,23 +95,66 @@ static BOOL logoFlag;
 //
 //}
 //- (void)keboardShow:(NSNotification *)notification {
-//    CGRect keyBRect = [[[notification userInfo]objectForKey:UIKeyboardBoundsUserInfoKey]CGRectValue];
+//    static double y = 0.0;
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect keyboardRect = [aValue CGRectValue];
 //    NSTimeInterval animationDurat = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]doubleValue];
 //    CGRect frame = self.view.frame;
-//    frame.size.height -= (frame.size.height - keyBRect.size.height);
+//    if(y - keyboardRect.size.height > 0.1 || keyboardRect.size.height - y> 0.1){
+//        frame.origin.y += y-100;
+//        frame.origin.y -= keyboardRect.size.height -100;
+//    }
+//    y = keyboardRect.size.height;
 //    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
 //    [UIView setAnimationDuration:animationDurat];
 //    self.view.frame = frame;
 //    [UIView commitAnimations];
 //}
 //- (void)keboardHide:(NSNotification *)notification {
-//    CGRect keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardBoundsUserInfoKey] CGRectValue];
-//    NSTimeInterval animationDuration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+//    static double y = 0.0;
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect keyboardRect = [aValue CGRectValue];
 //    CGRect frame = self.view.frame;
-//    frame.size.height +=  (frame.size.height - keyboardRect.size.height);
-//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-//    [UIView setAnimationDuration:animationDuration];
+//    if(y - keyboardRect.size.height > 0.1 || keyboardRect.size.height - y> 0.1){
+//        frame.origin.y -= y -100;
+//        frame.origin.y += keyboardRect.size.height -100;
+//    }
+//    y = keyboardRect.size.height;    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+//    NSTimeInterval animationDurat = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+//    [UIView setAnimationDuration:animationDurat];
 //    self.view.frame = frame;
 //    [UIView commitAnimations];
 //}
+- (void)keboardShow{
+    CGRect frame = self.view.frame;
+    frame.origin.y -=  100;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+- (void)keboardHide{
+    CGRect frame = self.view.frame;
+    frame.origin.y +=  100;
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:0.2];
+    self.view.frame = frame;
+    [UIView commitAnimations];
+}
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+{
+    [self keboardHide];
+    return YES;
+}
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    [self keboardShow];
+    return YES;
+}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self.nameText resignFirstResponder];
+    [self.passedText resignFirstResponder];
+}
 @end

@@ -198,6 +198,6 @@
     <resources>
         <image name="count" width="18" height="18"/>
         <image name="ico_passward" width="18" height="18"/>
-        <image name="logo" width="640" height="480"/>
+        <image name="logo" width="60" height="60"/>
     </resources>
 </document>

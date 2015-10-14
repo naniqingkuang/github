@@ -41,8 +41,10 @@
         cell = (HomePageTableViewCell *)[[[NSBundle mainBundle]loadNibNamed:@"HomePageTableViewCell" owner:nil options:nil]lastObject];
     }
     SingleMotion *data = [self.daylyData objectAtIndex:indexPath.row];
-    cell.progress.progress = data.singleTotalNum / self.maxsingleTotal;
-    cell.mtextLabel.text = [NSString stringWithFormat:@"%d %@ - %@",data.index, data.startTime, data.endTime];
+    cell.singleTotalLB.text =[NSString stringWithFormat:@"%6.2f",data.singleTotalNum];
+    cell.alertNumLB.text = [NSString stringWithFormat:@"%d",data.alertCount];
+    cell.overNumLB.text = [NSString stringWithFormat:@"%d",data.maxNum];
+    cell.timeLB.text = [NSString stringWithFormat:@"%@ - %@",data.startTime, data.endTime];
     return cell;
 }
 /*

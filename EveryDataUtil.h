@@ -14,4 +14,5 @@
 @property (nonatomic, copy) NSString *endTime;
 @property (nonatomic, assign) double singleTotal;
 @property (nonatomic, assign) int  maxValueNum;
+@property (nonatomic, assign) int  alertNum;
 @end

@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     UIImageView *imgV=[[UIImageView alloc] initWithFrame:self.view.bounds];
-    [imgV setImage:[UIImage imageNamed:@"3333"]];
+    [imgV setImage:[UIImage imageNamed:@"left"]];
     [self.view addSubview:imgV];
     
     UITableView *tableV=[[UITableView alloc] initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, self.view.frame.size.height-200)];
@@ -90,7 +90,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     LoginViewController *loginVC = nil;
-    ModifyViewController *modifyVC = nil;
     switch (indexPath.row) {
         case 0:
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];

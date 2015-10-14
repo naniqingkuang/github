@@ -40,7 +40,7 @@
                     </items>
                 </navigationBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="379-on-g5N">
-                    <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                    <rect key="frame" x="0.0" y="64" width="600" height="386"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="MVf-NV-xEy"/>
@@ -104,7 +104,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="379-on-g5N" secondAttribute="trailing" id="04f-xD-yCo"/>
                 <constraint firstAttribute="bottom" secondItem="vhr-UQ-Nwc" secondAttribute="bottom" id="6Hh-wB-EWk"/>
@@ -115,7 +115,7 @@
                 <constraint firstItem="379-on-g5N" firstAttribute="top" secondItem="pJa-Jt-Aij" secondAttribute="bottom" id="Rmh-u6-bbp"/>
                 <constraint firstAttribute="trailing" secondItem="v6g-xs-Hke" secondAttribute="trailing" id="SjU-yp-y0g"/>
                 <constraint firstItem="pJa-Jt-Aij" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="TMh-sl-uSk"/>
-                <constraint firstAttribute="bottom" secondItem="379-on-g5N" secondAttribute="bottom" id="VNW-7L-o5n"/>
+                <constraint firstAttribute="bottom" secondItem="379-on-g5N" secondAttribute="bottom" constant="150" id="VNW-7L-o5n"/>
                 <constraint firstItem="pJa-Jt-Aij" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="fCl-Zz-PQn"/>
                 <constraint firstItem="379-on-g5N" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="nyX-W7-c9Q"/>
                 <constraint firstAttribute="bottom" secondItem="v6g-xs-Hke" secondAttribute="bottom" id="yJ7-nS-G5w"/>

@@ -98,7 +98,7 @@ static NSString *userName;
 + (void)userRegister:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:User_register];
-    NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"registerdate":item.registerdate14,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
+    NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"registerdate":item.registerdate14,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8,@"height":item.height,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
         [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
         if(aBlock)
@@ -118,7 +118,7 @@ static NSString *userName;
 + (void)userUpdateInfo:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_INFO_UPDATE];
-    NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
+    NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8, @"height":item.height,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
     [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
         if(aBlock)
@@ -400,6 +400,8 @@ static NSString *userName;
             daySportNum:(int)daySportNum
               everyData:(NSArray *)arr
                   block:(void(^)()) aBlock {
+    int count = 0;
+    int alertCount = 0;
     NSMutableArray *mulArr = [[NSMutableArray alloc]initWithCapacity:arr.count];
     for (EveryDataUtil *item in arr) {
         NSDictionary *dict = @{ @"sportSerialNum":[NSNumber numberWithInt:item.sportSerialNum],
@@ -408,6 +410,8 @@ static NSString *userName;
                                 @"singleTotal":[NSNumber numberWithDouble:item.singleTotal],
                                 @"maxValueNum":[NSNumber numberWithInt:item.maxValueNum]
                                 };
+        count += item.maxValueNum;
+        alertCount += item.alertNum;
         [mulArr addObject:dict];
     }
     NSDictionary *dataDict = @{@"everyData":mulArr};
@@ -415,8 +419,8 @@ static NSString *userName;
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"dayTotal":[NSNumber numberWithDouble:dayTotal],
-                            @"dayMaxValueNum":[NSNumber numberWithInt:dayMaxValueNum],
-                            @"dayAlarmNum":[NSNumber numberWithInt:dayAlarmNum],
+                            @"dayMaxValueNum":[NSNumber numberWithInt:count],
+                            @"dayAlarmNum":[NSNumber numberWithInt:alertCount],
                             @"daySportNum":[NSNumber numberWithInt:daySportNum],
                             @"everyData":dataDict
                             };
@@ -458,7 +462,29 @@ static NSString *userName;
         }
     }];
 }
++ (void)updatePercent:(NSString *)name device:(NSString *)deviceID percent:(double) progress block:(void (^)(void)) aBlock {
+    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_PROGRESS];
 
+    NSDictionary *param = @{@"userName":name,
+                            @"deviceID":deviceID,
+                            @"progress":[NSString stringWithFormat:@"%lf",progress*100]
+                            };
+    [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+        if(200 == statusCode)
+        {
+            if(aBlock){
+                aBlock();
+            }
+        }
+        else
+        {
+            NSString *err = [dict objectForKey:@"reason"];
+            [MBProgressHUD showError: err];
+        }
+    }];
+
+}
 + (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_KEEP_HEART_BEAT];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
@@ -473,7 +499,9 @@ static NSString *userName;
         if(dataArr)
         {
             if(aBlock){
-                aBlock([dataArr[0] objectForKey:@"c"]);
+                for (int i=0; i < dataArr.count; i++) {
+                    aBlock([dataArr[i] objectForKey:@"c"]);
+                }
             }
         }
         else

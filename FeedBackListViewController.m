@@ -48,7 +48,7 @@
     if(!cell)
     {
         cell = [[UITableViewCell alloc]init];
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     NSDictionary *dict = self.dataList[indexPath.row];
    // cell.textLabel.text = dict[@"fdTime"];

@@ -25,6 +25,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
+    self.isSelectedName = [[NSUserDefaults standardUserDefaults]objectForKey:@"blueToothName"];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -89,7 +90,6 @@
     }
     if(self.bluetoothNameList.count)
     {
-        int i = indexPath.row;
         NSString *str = self.bluetoothNameList[indexPath.row];
         cell.contextLabel.text = str;
         cell.titleLabel.text = [NSString stringWithFormat:@"%ld",indexPath.row +1];
@@ -107,30 +107,33 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
     if([self.isSelectedName isEqual:self.bluetoothNameList[indexPath.row]])
     {
         [[BlueToothUtil getBlueToothInstance]stopConnect:self.bluetoothNameList[indexPath.row]];
         self.isSelectedName = @"";
+        [userDefault setObject:@"" forKey:@"blueToothName"];
+        [userDefault synchronize];
+
         [self.tableView reloadData];
     }
     else
     {
-        NSString *nameStr = [NSString stringWithFormat:@"正在连接:%@",self.bluetoothNameList[indexPath.row]];
-        self.m_MBprogressHUB = [MBProgressHUD showMessage:nameStr toView:self.view];
-        [[BlueToothUtil getBlueToothInstance]blueToothConnectTo:self.bluetoothNameList[indexPath.row] block:^{
-            if (self.m_MBprogressHUB) {
-                [self.m_MBprogressHUB hide:YES];
-            }
-            self.isSelectedName = self.bluetoothNameList[indexPath.row];
-            [self.tableView reloadData];
-        }];
- 
+        [userDefault setObject:self.bluetoothNameList[indexPath.row] forKey:@"blueToothName"];
+        [userDefault synchronize];
+        self.isSelectedName = self.bluetoothNameList[indexPath.row];
+        [self.tableView reloadData];
     }
 }
 - (IBAction)refreshBlueToothList:(id)sender {
    // [self resScanBlutTooth];
-    [[BlueToothUtil getBlueToothInstance]reScan];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
+    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
+    if(name.length == 0) {
+        [[BlueToothUtil getBlueToothInstance]reScan];
+    }
+    if(!self.timer) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
+    }
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
     [self.tableView reloadData];
 }
@@ -138,10 +141,12 @@
 {
     static int i = 0;
     i ++;
-    if(5 == i)
+    if(120 == i || [[BlueToothUtil getBlueToothInstance]isBlueToothConnected])
     {
+        i = 0;
         if (self.timer) {
             [self.timer invalidate];
+            self.timer = nil;
             [[BlueToothUtil getBlueToothInstance]stopScan];
         }
     }

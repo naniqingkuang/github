@@ -19,6 +19,7 @@
 #import "UserUtil.h"
 #import "MBProgressHUD+Util.h"
 #import "DaylyDataViewController.h"
+#import "SqlRequestUtil.h"
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
 @implementation SingleMotion
 @end
@@ -29,7 +30,9 @@
     if (self) {
         self.daylyTotal = 0.0;
         self.daylyIsSave = NO;
-        self.thisDayDate = [NSDate date];
+        NSDateFormatter *format = [[NSDateFormatter alloc]init];
+        [format setDateFormat:@"MM-dd"];
+        self.thisDayDate = [format stringFromDate:[NSDate date]];
     }
     return self;
 }
@@ -64,6 +67,7 @@
 @property (strong, nonatomic) NSMutableArray *todayData;  //今天的运动数据
 @property (assign, atomic) int frequecyNum; //纪录今天运动的次数
 @property (strong, atomic) DaylyMotion *daylyMotion;
+@property (strong, atomic) SqlRequestUtil *sql;
 @end
 
 @implementation HomeViewController
@@ -86,6 +90,13 @@
     self.dateNavigationItem.title= dateStr;
     [self performSelector:@selector(toLoginVC) withObject:nil afterDelay:0.0];
     self.blueTooth = [BlueToothUtil getBlueToothInstance];
+    
+    //电量
+    [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
+        NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
+        self.chargeImageView.image = [UIImage imageNamed:str];
+    }];
+    //实时数据
     [[BlueToothUtil getBlueToothInstance]readCurrentMotionMeasurement:^(float equivalent, float inpulse) {
         
         self.equivalent = equivalent;  // 本次当量值
@@ -102,13 +113,15 @@
             self.curMotion.endTime = @"";
             self.curMotion.alertCount = 0;
             self.curMotion.index = ++self.frequecyNum;
+            [format setDateFormat:@"MM-dd"];
+            self.curMotion.date = [format stringFromDate:[NSDate date]];
         }
         //第二天数据清零
-        [self.dateFormatter setDateFormat:@"dd"];
-        if(![[self.dateFormatter stringFromDate:self.daylyMotion.thisDayDate] isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]] ) {
+        [self.dateFormatter setDateFormat:@"MM-dd"];
+        if(![self.daylyMotion.thisDayDate isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]] ) {
             self.daylyMotion.daylyIsSave = NO;
             self.daylyMotion.daylyTotal = 0;
-            self.daylyMotion.thisDayDate = [NSDate date];
+            self.daylyMotion.thisDayDate = [self.dateFormatter stringFromDate:[NSDate date]];
         }
         self.curMotion.singleTotalNum +=equivalent; //本次运动量
         __weak HomeViewController *weakSelf = self;
@@ -225,26 +238,87 @@
         item.index = data.index;
         item.singleTotalNum = data.singleTotalNum;
         item.alertCount = data.alertCount;
+        [self.sql insertSingleMotionData:item];
         [self.todayData addObject:item];
     }
 }
 - (void)initData {
+    self.sql = [[SqlRequestUtil alloc]init];
     self.typeSevVenConunt = 0;
     self.frequecyNum = 0;
     self.inpulse = 0.0;
     self.equivalent = 0.0;
     self.daylyMotion = [[DaylyMotion alloc]init];
+    [self initSqlDaylyData];
     self.count = 0;
     self.curMotion.maxNum = 0;
     self.firstGoFlag = NO;
     self.curMotion = [[SingleMotion alloc]init];
     self.curMotion.isSave = YES;
+    [self.dateFormatter setDateFormat:@"MM-DD"];
+    self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
+    [self initSqlSingleData];
     self.dateFormatter = [[NSDateFormatter alloc]init];
     [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"0"];
     [self.TodayMeasurementView setCurrentSum:@"0%"];
     self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%d%@",0,@"%"];
     [self.daylyTotalProgress setProgress:0.0];
     self.todayData = [[NSMutableArray alloc]initWithCapacity:20];
+}
+- (void)initSqlDaylyData {
+    NSArray *arr = [self.sql readDaylyData];
+    NSDateFormatter *format = [[NSDateFormatter alloc]init];
+    [format setDateFormat:@"MM-dd"];
+    if(arr.count){
+        DaylyMotion *motion = arr[0];  //有数据且是今天
+        if([motion.thisDayDate isEqualToString:[format stringFromDate:[NSDate date]]]) {
+            self.daylyMotion = motion;
+        } else { //更新为现在的数据
+            [self.sql updateDayData:self.daylyMotion];
+        }
+    } else {
+        [self.sql insertDaylyData:self.daylyMotion];
+    }
+}
+- (void)initSqlSingleData {
+    NSArray *arr = [self.sql readSingleData];
+    int index = 0;
+    NSDateFormatter *format = [[NSDateFormatter alloc]init];
+    [format setDateFormat:@"MM-dd"];
+    if(arr.count){
+        SingleMotion *motion = arr[0]; //是今天的数据
+        if([motion.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
+            for (SingleMotion *item in arr) {
+                if(item.index > index) {
+                    index = item.index;
+                    self.curMotion = item;  //回复今天的数据
+                    self.frequecyNum = index;  //回复今天的次数统计
+                }
+            }
+        } else {
+            [self.sql clearSingleData];
+        }
+    } else {
+        [self.sql insertSingleMotionData:self.curMotion];
+    }
+    
+}
+- (void)updateSingleMotionData:(SingleMotion *)data {
+    NSArray *arr = [self.sql readSingleData];
+    int index = 0;
+    if(arr.count){
+        for (SingleMotion *item in arr) {
+            if(item.index > index) {
+                index = item.index;
+            }
+        }
+        if(index < self.curMotion.index) {
+            [self.sql insertSingleMotionData:data];
+        } else {
+            [self.sql updateSingleMotionData:data];
+        }
+    }
+
 }
 - (void)mainThread {
     if([LoginViewController hasLogin])
@@ -256,7 +330,7 @@
             blueToothCount = 0;
         }
         NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
-        if(!(flag == CBPeripheralStateConnected || CBPeripheralStateConnected == flag)) {
+        if(!(flag == CBPeripheralStateConnecting || CBPeripheralStateConnected == flag)) {
                 if(name.length > 0){
                     if((blueToothCount % 3) == 0) {
                         [[BlueToothUtil getBlueToothInstance] reScan];
@@ -308,6 +382,11 @@
             [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
                 self.hardWareEdition = hardWareEdition;
             }];
+        }
+        //数据库数据保存
+        if(self.sql) {
+            [self.sql updateDayData:self.daylyMotion];
+            [self updateSingleMotionData:self.curMotion];
         }
         if(self.curUserParam)
         {
@@ -391,6 +470,7 @@
                         self.curMotion.endTime = curTime;
                         [self todayDataSave:self.curMotion];
                     }
+                    [self updateSingleMotionData:self.curMotion];
                     //单词未完成
                     if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
                     {

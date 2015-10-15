@@ -104,7 +104,7 @@
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="379-on-g5N" secondAttribute="trailing" id="04f-xD-yCo"/>
                 <constraint firstAttribute="bottom" secondItem="vhr-UQ-Nwc" secondAttribute="bottom" id="6Hh-wB-EWk"/>

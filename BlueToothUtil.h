@@ -20,6 +20,7 @@
 - (void)readSoftEdition:(void(^)(NSString *softEdition)) softEditionBlock;
 - (void)readHareEdition:(void(^)(NSString *hardWareEdition)) aHardWareEditionBlock;
 - (void)readDoorLimit:(void(^)(short doorLimit)) aReadDoorLimitBlock;
+- (void)readBatterySum:(void(^)(short batterySum)) aBatterySumReadBlock;
 - (BOOL)isBlueToothConnected;
 - (void)stopScan;
 - (int)getConnectFlag;

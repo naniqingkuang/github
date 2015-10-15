@@ -18,7 +18,7 @@
 #import "MBProgressHUD+Util.h"
 #import "RequestUtil.h"
 #import "BlueToothUtil.h"
-#define Titles  @"用户",@"密码",@"确认密码",@"真实姓名",@"性别",@"用户类型",@"出生日期",@"身高",@"体重",@"住址",@"手机号",@"邮箱"
+#define Titles  @"用户",@"真实姓名",@"性别",@"用户类型",@"出生日期",@"身高",@"体重",@"住址",@"手机号",@"邮箱"
 #define USER_TYPE @"心梗的人",@"脑卒中的人",@"下肢骨折的人",@"下肢关节的人",@"减肥的人",@"伏案工作的人",@"青少年成长的人",@"正常人和亚健康人群"
 #define USER_GENDER @"男",@"女"
 #define USER_TYPE_DICT @"心梗的人":@"1",@"脑卒中的人":@"2",@"下肢骨折的人":@"3",@"下肢关节的人":@"4",@"减肥的人":@"5",@"伏案工作的人":@"6",@"青少年成长的人":@"7",@"正常人和亚健康人群":@"8"
@@ -60,9 +60,8 @@
 {
     self.titleList = @[Titles];
     self.registerUser = [RequestUtil getCurrentUser];
+    self.registerUser.password32 = @"******";
     self.dataDest = [[NSMutableArray alloc]initWithObjects:self.registerUser.userName32,
-                     self.registerUser.password32,
-                     @"",
                      self.registerUser.realName32,
                      self.registerUser.gender1,
                      self.registerUser.userType1,
@@ -140,12 +139,12 @@
        // cell.contentText.text = self.dataDest[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentText.tag = indexPath.row;
-        if(indexPath.row == 7) {
-            cell.contentText.text =[NSString stringWithFormat:@"%ld",[self.dataDest[indexPath.row]integerValue]];
-        } else {
+//        if(indexPath.row == 5) {
+//            cell.contentText.text =[NSString stringWithFormat:@"%ld",[self.dataDest[indexPath.row]integerValue]];
+//        } else {
             cell.contentText.text = self.dataDest[indexPath.row];
 
-        }
+//        }
         return cell;
         
     }
@@ -153,7 +152,7 @@
 }
 - (void)tableView:(nonnull UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    if(indexPath.row == 4)
+    if(indexPath.row == 2)
     {
         if(self.curText)
         {
@@ -161,7 +160,7 @@
         }
         [self pickSexItem];
     }
-    if(indexPath.row == 5)
+    if(indexPath.row == 3)
     {
         if(self.curText)
         {
@@ -169,7 +168,7 @@
         }
         [self pickUserType];
     }
-    if(indexPath.row == 6)
+    if(indexPath.row == 4)
     {
         if(self.curText)
         {
@@ -184,7 +183,7 @@
     self.datePickerBackgroundView.hidden = YES;
     self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:USER_GENDER,nil];
     [self.pickerView reloadAllComponents];
-    self.currentPath = [NSIndexPath indexPathForRow:4 inSection:0];
+    self.currentPath = [NSIndexPath indexPathForRow:2 inSection:0];
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
     cell.contentLB.text = @"";
     
@@ -196,7 +195,7 @@
     self.datePickerBackgroundView.hidden = YES;
     self.pickerViewArr = [[NSMutableArray alloc]initWithObjects:USER_TYPE,nil];
     [self.pickerView reloadAllComponents];
-    self.currentPath = [NSIndexPath indexPathForRow:5 inSection:0];
+    self.currentPath = [NSIndexPath indexPathForRow:3 inSection:0];
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
     cell.contentLB.text = @"";
 }
@@ -204,7 +203,7 @@
 {
     self.pickerView.hidden = YES;
     self.datePickerBackgroundView.hidden = NO;
-    self.currentPath = [NSIndexPath indexPathForRow:6 inSection:0];
+    self.currentPath = [NSIndexPath indexPathForRow:4 inSection:0];
     TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
     cell.contentLB.text = @"";
 }
@@ -276,16 +275,15 @@
 - (void)getDataFromCell
 {
     self.registerUser.userName32 = self.dataDest[0];
-    self.registerUser.password32 = self.dataDest[1];
-    self.registerUser.realName32 = self.dataDest[3];
-    self.registerUser.gender1 =  [self.dataDest[4] isEqual:@"男" ]? @"1" : @"2";
-    self.registerUser.userType1 = self.userTypeDict[(self.dataDest[5])];
-    self.registerUser.birthday8 = self.dataDest[6];
-    self.registerUser.height = self.dataDest[7];
-    self.registerUser.weight = self.dataDest[8];
-    self.registerUser.address256 = self.dataDest[9];
-    self.registerUser.phone32 = self.dataDest[10];
-    self.registerUser.email32 = self.dataDest[11];
+    self.registerUser.realName32 = self.dataDest[1];
+    self.registerUser.gender1 =  [self.dataDest[2] isEqual:@"男" ]? @"1" : @"2";
+    self.registerUser.userType1 = self.userTypeDict[(self.dataDest[3])];
+    self.registerUser.birthday8 = self.dataDest[4];
+    self.registerUser.height = self.dataDest[5];
+    self.registerUser.weight = self.dataDest[6];
+    self.registerUser.address256 = self.dataDest[7];
+    self.registerUser.phone32 = self.dataDest[8];
+    self.registerUser.email32 = self.dataDest[9];
     [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
         self.registerUser.deviceID18 = name;
     }];
@@ -307,7 +305,7 @@
 {
     NSString *res = nil;
     NSIndexPath *path = [NSIndexPath indexPathForItem:row inSection:section];
-    if(row >=4  && row <= 6)
+    if(row >=2  && row <= 4)
     {
         TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:path];
         res = cell.contentLB.text;
@@ -323,8 +321,8 @@
 //    [self dismissViewControllerAnimated:YES completion:^{
 //        [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
 //    }];
-//     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-    [[SliderViewController sharedSliderController]leftItemClick];
+     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+   // [[SliderViewController sharedSliderController]leftItemClick];
 }
 - (IBAction)updateCommit:(id)sender {
     [self getDataFromCell];
@@ -348,7 +346,7 @@
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
         if([cell respondsToSelector:@selector(contentText)]){
-            if(textField == cell.contentText && i > 8) {
+            if(textField == cell.contentText && i > 6) {
                 [self keboardHide:i];
             }
         }
@@ -362,7 +360,7 @@
         NSIndexPath *path = [NSIndexPath indexPathForItem:i inSection:0];
         TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
         if([cell respondsToSelector:@selector(contentText)]){
-            if(textField == cell.contentText && i > 8) {
+            if(textField == cell.contentText && i > 6) {
                 [self keboardShow:i];
             }
         }

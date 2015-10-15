@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, RMoveDirection) {
 
 - (id)init{
     if (self = [super init]){
-        _LeftSContentOffset=160;
+        _LeftSContentOffset=220;
         _RightSContentOffset=160;
         _LeftSContentScale=0.85;
         _RightSContentScale=0.85;

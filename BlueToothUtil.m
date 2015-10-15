@@ -20,6 +20,7 @@ static BlueToothUtil* blueTooth;
 @property (copy, nonatomic) void(^m_readSoftEdition)(NSString *softEdition);
 @property (copy, nonatomic) void(^m_readHardwareEdition)(NSString *hardWareEdition);
 @property (copy, nonatomic) void(^m_readDoorLimit)(short doorLimit);
+@property (copy, nonatomic) void(^m_readBatterySumBlock)(short sum);
 @property (assign, nonatomic) BOOL isConnetct;
 @end
 
@@ -76,17 +77,9 @@ static BlueToothUtil* blueTooth;
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    NSString *str = [NSString stringWithFormat:@"Did discover peripheral. peripheral: %@ rssi: %@,  advertisementData: %@ ", peripheral, RSSI,  advertisementData];
-    NSLog(@"%@",str);
+//    NSString *str = [NSString stringWithFormat:@"Did discover peripheral. peripheral: %@ rssi: %@,  advertisementData: %@ ", peripheral, RSSI,  advertisementData];
+//    NSLog(@"%@",str);
     NSLog(@"name:  %@",peripheral.name);
-//    if(self.discoverPeripheral.count) {
-//        for (CBPeripheral *item in self.discoverPeripheral) {
-//            if([item.name isEqualToString:peripheral.name])
-//            {
-//                return;
-//            }
-//        }
-//    }
     [self.discoverPeripheral addObject:peripheral];
     [self connectPeripheral:peripheral];
 }
@@ -203,6 +196,16 @@ static BlueToothUtil* blueTooth;
                         NSString *str = [NSString stringWithUTF8String:(char *)&data[4]];
                         self.m_readHardwareEdition(str);
                         self.m_readHardwareEdition = nil;
+                    }
+                    break;
+                case 0x03:
+                    if(self.m_readBatterySumBlock)
+                    {
+                        temp[0] = data[4];
+                        temp[1] = data[5];
+                        short *sum = (short *)&temp;
+                        self.m_readBatterySumBlock(*sum);
+                        self.m_readBatterySumBlock = nil;
                     }
                     break;
                 case 0x22:
@@ -371,6 +374,10 @@ static BlueToothUtil* blueTooth;
 {
     self.m_readHardwareEdition = aHardWareEditionBlock;
     [self writeCmcToBlueTooth:0x02];
+}
+- (void)readBatterySum:(void(^)(short batterySum)) aBatterySumReadBlock{
+    self.m_readBatterySumBlock = aBatterySumReadBlock;
+    [self writeCmcToBlueTooth:0x03];
 }
 - (void)readDoorLimit:(void(^)(short doorLimit)) aReadDoorLimitBlock
 {

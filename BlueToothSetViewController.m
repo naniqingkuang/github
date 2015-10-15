@@ -62,11 +62,7 @@
    // [self.connectBlueTooth  readValueForCharacteristic:self.connectCharacristic];
 }
 - (IBAction)backToSetting:(UIBarButtonItem *)sender {
-    if(self.m_block){
-        self.m_block();
-    }else {
-        [[SliderViewController sharedSliderController]leftItemClick];
-    }
+    [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
 }
 
 

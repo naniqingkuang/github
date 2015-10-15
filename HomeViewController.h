@@ -11,6 +11,7 @@
 
 static UserUtil *g_CurrentUser;
 @interface SingleMotion : NSObject
+@property (nonatomic, copy) NSString *date;
 @property (nonatomic, copy) NSString *startTime; // 单次运动的时间
 @property (nonatomic, assign) int maxNum;  //超过上限的次数
 @property (nonatomic, assign) double singleTotalNum; //单次运动总量
@@ -20,7 +21,7 @@ static UserUtil *g_CurrentUser;
 @property (atomic, assign) int  alertCount;
 @end
 @interface DaylyMotion : NSObject
-@property (nonatomic, strong)NSDate *thisDayDate;
+@property (nonatomic, strong)NSString *thisDayDate;
 @property (assign, atomic) double  daylyTotal;  //一天的总和
 @property (assign, nonatomic) BOOL  daylyIsSave;   //当天的数据是否保存，也用于避免当天运动时间到达多次告警
 @end

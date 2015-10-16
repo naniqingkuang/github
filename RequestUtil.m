@@ -395,9 +395,9 @@ static NSString *userName;
 + (void)uploadDaylyData:(NSString *)name
                  device:(NSString *)deviceID
                dayTotal:(double)dayTotal
-         dayMaxValueNum:(int)dayMaxValueNum
-            dayAlarmNum:(int)dayAlarmNum
-            daySportNum:(int)daySportNum
+         dayMaxValueNum:(NSInteger)dayMaxValueNum
+            dayAlarmNum:(NSInteger)dayAlarmNum
+            daySportNum:(NSInteger)daySportNum
               everyData:(NSArray *)arr
                   block:(void(^)()) aBlock {
     int count = 0;
@@ -421,7 +421,7 @@ static NSString *userName;
                             @"dayTotal":[NSNumber numberWithDouble:dayTotal],
                             @"dayMaxValueNum":[NSNumber numberWithInt:count],
                             @"dayAlarmNum":[NSNumber numberWithInt:alertCount],
-                            @"daySportNum":[NSNumber numberWithInt:daySportNum],
+                            @"daySportNum":[NSNumber numberWithInteger:daySportNum],
                             @"everyData":dataDict
                             };
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {

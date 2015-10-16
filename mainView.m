@@ -129,7 +129,7 @@
     _dataView.backgroundColor = [UIColor clearColor];
     _todaySumLB = [[UILabel alloc]init];
     [_todaySumLB setTextAlignment:NSTextAlignmentCenter];
-    [_todaySumLB setFont:[UIFont systemFontOfSize:32]];
+    [_todaySumLB setFont:[UIFont systemFontOfSize:26]];
     _todaySumLB.frame =CGRectMake(0, rectWidth/2, rectWidth,rectWidth /2);
     _titleNameLB = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, rectWidth,rectWidth/4)];
     _titleNameLB.textAlignment = NSTextAlignmentCenter;

@@ -92,9 +92,9 @@
 + (void)uploadDaylyData:(NSString *)name
                  device:(NSString *)deviceID
                dayTotal:(double)dayTotal
-         dayMaxValueNum:(int)dayMaxValueNum
-            dayAlarmNum:(int)dayAlarmNum
-            daySportNum:(int)daySportNum
+         dayMaxValueNum:(NSInteger)dayMaxValueNum
+            dayAlarmNum:(NSInteger)dayAlarmNum
+            daySportNum:(NSInteger)daySportNum
               everyData:(NSArray *)arr
                   block:(void(^)()) aBlock;
 

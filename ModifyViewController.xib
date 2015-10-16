@@ -48,10 +48,10 @@
                     </connections>
                 </tableView>
                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmk-ct-a3u">
-                    <rect key="frame" x="0.0" y="500" width="600" height="100"/>
+                    <rect key="frame" x="0.0" y="450" width="600" height="150"/>
                     <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="100" id="yQx-tH-7Qk"/>
+                        <constraint firstAttribute="height" constant="150" id="yQx-tH-7Qk"/>
                     </constraints>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="DVf-nv-RJQ"/>
@@ -59,19 +59,19 @@
                     </connections>
                 </pickerView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YGq-uJ-rkc">
-                    <rect key="frame" x="0.0" y="480" width="600" height="120"/>
+                    <rect key="frame" x="0.0" y="440" width="600" height="160"/>
                     <subviews>
                         <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="P6e-HS-6PY">
-                            <rect key="frame" x="0.0" y="20" width="600" height="100"/>
+                            <rect key="frame" x="0.0" y="30" width="600" height="130"/>
                             <date key="date" timeIntervalSinceReferenceDate="463476235.41743499">
                                 <!--2015-09-09 07:23:55 +0000-->
                             </date>
                         </datePicker>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EzK-ai-E4u">
-                            <rect key="frame" x="0.0" y="0.0" width="100" height="20"/>
+                            <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="100" id="abr-y6-UGj"/>
-                                <constraint firstAttribute="height" constant="20" id="kVW-pF-Hv6"/>
+                                <constraint firstAttribute="height" constant="30" id="kVW-pF-Hv6"/>
                             </constraints>
                             <state key="normal" title="取消"/>
                             <connections>
@@ -79,10 +79,10 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4tJ-p1-BiN">
-                            <rect key="frame" x="500" y="0.0" width="100" height="20"/>
+                            <rect key="frame" x="500" y="0.0" width="100" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="100" id="Dl9-Qs-15B"/>
-                                <constraint firstAttribute="height" constant="20" id="S7t-gd-0cc"/>
+                                <constraint firstAttribute="height" constant="30" id="S7t-gd-0cc"/>
                             </constraints>
                             <state key="normal" title="确定"/>
                             <connections>
@@ -96,10 +96,10 @@
                         <constraint firstAttribute="trailing" secondItem="P6e-HS-6PY" secondAttribute="trailing" id="6ns-i1-8c4"/>
                         <constraint firstItem="P6e-HS-6PY" firstAttribute="leading" secondItem="YGq-uJ-rkc" secondAttribute="leading" id="7bD-KU-yhC"/>
                         <constraint firstAttribute="bottom" secondItem="P6e-HS-6PY" secondAttribute="bottom" id="DG0-hj-ifB"/>
-                        <constraint firstItem="P6e-HS-6PY" firstAttribute="top" secondItem="YGq-uJ-rkc" secondAttribute="top" constant="20" id="eE7-7t-lRO"/>
+                        <constraint firstItem="P6e-HS-6PY" firstAttribute="top" secondItem="YGq-uJ-rkc" secondAttribute="top" constant="30" id="eE7-7t-lRO"/>
                         <constraint firstAttribute="trailing" secondItem="4tJ-p1-BiN" secondAttribute="trailing" id="gjy-J3-tHt"/>
                         <constraint firstItem="4tJ-p1-BiN" firstAttribute="top" secondItem="YGq-uJ-rkc" secondAttribute="top" id="sE5-y3-5HP"/>
-                        <constraint firstAttribute="height" constant="120" id="sUd-Pl-yQt"/>
+                        <constraint firstAttribute="height" constant="160" id="sUd-Pl-yQt"/>
                         <constraint firstItem="EzK-ai-E4u" firstAttribute="top" secondItem="YGq-uJ-rkc" secondAttribute="top" id="yjM-JG-Ucb"/>
                     </constraints>
                 </view>

@@ -78,13 +78,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BlueToothUtil.m"
-            timestampString = "466588448.87587"
+            timestampString = "466593237.956729"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "-reConnectBlueTooth"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BlueToothUtil.m"
+            timestampString = "466593134.525741"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "-centralManager:didFailToConnectPeripheral:error:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[BlueToothUtil centralManager:didFailToConnectPeripheral:error:]"
+                  moduleName = "MotionMeasurement"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zhuzhu/Desktop/github/BlueToothUtil.m"
+                  timestampString = "466593548.268706"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "152">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__65-[BlueToothUtil centralManager:didFailToConnectPeripheral:error:]_block_invoke"
+                  moduleName = "MotionMeasurement"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zhuzhu/Desktop/github/BlueToothUtil.m"
+                  timestampString = "466593548.269235"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

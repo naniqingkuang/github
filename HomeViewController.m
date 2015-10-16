@@ -255,10 +255,10 @@
     self.firstGoFlag = NO;
     self.curMotion = [[SingleMotion alloc]init];
     self.curMotion.isSave = YES;
-    [self.dateFormatter setDateFormat:@"MM-DD"];
+    self.dateFormatter = [[NSDateFormatter alloc]init];
+    [self.dateFormatter setDateFormat:@"MM-dd"];
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
     [self initSqlSingleData];
-    self.dateFormatter = [[NSDateFormatter alloc]init];
     [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"0"];
     [self.TodayMeasurementView setCurrentSum:@"0%"];
     self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%d%@",0,@"%"];
@@ -706,11 +706,11 @@
     lab.text = @"本次运动量";
     return lab;
 }
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    NSString *str = [NSString stringWithFormat:@"2.jpg"];
-    self.chargeImageView.image = [UIImage imageNamed:str];
-}
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    NSString *str = [NSString stringWithFormat:@"2.jpg"];
+//    self.chargeImageView.image = [UIImage imageNamed:str];
+//}
 - (IBAction)detailButtonClicked:(id)sender {
     DaylyDataViewController *vc = [[DaylyDataViewController alloc]initWithNibName:@"DaylyDataViewController" bundle:nil];
     vc.daylyData = self.todayData;

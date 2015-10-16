@@ -14,7 +14,7 @@
 #import "SliderViewController.h"
 #define screenHeight  ([UIScreen mainScreen].bounds.size.height)
 static BOOL logoFlag;
-@interface LoginViewController ()
+@interface LoginViewController ()<UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *nameText;
 @property (strong, nonatomic) IBOutlet UITextField *passedText;
 @property (strong, nonatomic) IBOutlet UIButton *loginButton;

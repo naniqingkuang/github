@@ -118,6 +118,7 @@ static BlueToothUtil* blueTooth;
     self.isConnetct = false;
     if([peripheral.name isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"blueToothName"]]) {
         [self.centerManager connectPeripheral:peripheral options:nil];
+
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reScan];

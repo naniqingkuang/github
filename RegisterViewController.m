@@ -213,8 +213,8 @@
 }
 - (IBAction)datePickerCancelButtonClicked:(id)sender {
     self.datePickerBackgroundView.hidden = YES;
-    TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
-    cell.contentText.enabled = YES;
+    TableViewCell2 *cell = [self.tableView cellForRowAtIndexPath:self.currentPath];
+    cell.contentLB.enabled = YES;
 }
 - (void)textFieldDidEndEditing:(nonnull UITextField *)textField
 {

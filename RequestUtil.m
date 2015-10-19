@@ -22,12 +22,12 @@ static NSString *userName;
     NetworkStatus status = [reach currentReachabilityStatus];
     return status;
 }
-+ (void)multiFormPost:(NSString *)url withPara:(NSDictionary *)param dataForm:(id<AFMultipartFormData> )myFormData completionBlock:(void (^)(NSDictionary *)) completionBlock {
++ (void)multiFormPost:(NSString *)url withPara:(NSDictionary *)param constructingBodyWithBlock:(void(^) (id<AFMultipartFormData> )) bodyBlock completionBlock:(void (^)(NSDictionary *)) completionBlock {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
     manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
     [manager POST:url parameters:param constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        formData = myFormData;
+        bodyBlock(formData);
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if(responseObject != nil)
         {
@@ -331,14 +331,32 @@ static NSString *userName;
                 device:(NSString *)deviceID
                content:(NSString *)content
                   type:(NSString *)type
+                 image:(NSArray *)imgarr
+                voice:(NSURL *)url
                  block:(void(^)()) aBlock {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_FDDATA];
+    NSMutableArray *mulStr = [[NSMutableArray alloc]initWithCapacity:imgarr.count];
+    int i = 1;
+    for (i=1; i < imgarr.count+1; i++) {
+        [mulStr addObject:[NSString stringWithFormat:@"file%d",i]];
+    }
+    [mulStr addObject:[NSString stringWithFormat:@"file%d",i++]];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"msgtype":type,
                             @"textmsg":content,
-                            @"files":@""};
-    [self multiFormPost:fullUrl withPara:param dataForm:nil completionBlock:^(NSDictionary *dict){
+                            @"files":mulStr};
+    [self multiFormPost:fullUrl withPara:param constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        if(imgarr !=nil&&imgarr.count>0){
+            for(int i=0;i<imgarr.count;i++){
+                NSString *filePathStr = [imgarr objectAtIndex:i];
+                NSURL *filePath = [NSURL fileURLWithPath:filePathStr];
+                [formData appendPartWithFileURL:filePath name:[NSString stringWithFormat:@"file%d",i+1] error:nil];
+            }
+            [formData appendPartWithFileURL:url name:[NSString stringWithFormat:@"file%d",imgarr.count+1] error:nil];
+        }
+
+    } completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
         if(200 == statusCode)
         {
@@ -351,7 +369,23 @@ static NSString *userName;
             NSString *err = [dict objectForKey:@"reason"];
             [MBProgressHUD showError: err];
         }
+
     }];
+//    AFMultipartFormData *fordata =
+//    [self multiFormPost:fullUrl withPara:param dataForm:^ completionBlock:^(NSDictionary *dict){
+//        NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
+//        if(200 == statusCode)
+//        {
+//            if(aBlock){
+//                aBlock();
+//            }
+//        }
+//        else
+//        {
+//            NSString *err = [dict objectForKey:@"reason"];
+//            [MBProgressHUD showError: err];
+//        }
+//    }];
 }
 + (void)uploadAlertEvent:(NSString *)name
                   device:(NSString *)deviceID
@@ -485,6 +519,8 @@ static NSString *userName;
     }];
 
 }
+
+
 + (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_KEEP_HEART_BEAT];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];

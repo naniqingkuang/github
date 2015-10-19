@@ -146,6 +146,7 @@
             [[BlueToothUtil getBlueToothInstance]stopScan];
         }
     }
+    [[BlueToothUtil getBlueToothInstance]reScan];
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
     [self.tableView reloadData];
 }

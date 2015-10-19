@@ -116,14 +116,9 @@ static BlueToothUtil* blueTooth;
 - (void)centralManager:(nonnull CBCentralManager *)central didDisconnectPeripheral:(nonnull CBPeripheral *)peripheral error:(nullable NSError *)error
 {
     self.isConnetct = false;
-    if([peripheral.name isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"blueToothName"]]) {
-        [self.centerManager connectPeripheral:peripheral options:nil];
-
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
             [self reScan];
         });
-    }
 }
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {

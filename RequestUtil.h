@@ -29,7 +29,7 @@
 #define USER_UPDATE_APP_CLIENT_ID               @"updateAppClientID"
 #define USER_KEEP_HEART_BEAT                    @"receiveHeartbeatInfo"
 #define USER_UPLOAD_PROGRESS                    @"receiveProgress"
-
+#define USER_UPLOAD_OTHER_DATA                  @"receiveOtherData"
 
 @interface RequestUtil : NSObject
 
@@ -87,6 +87,8 @@
                 device:(NSString *)deviceID
                content:(NSString *)content
                   type:(NSString *)type
+                 image:(NSArray *)imgarr
+                 voice:(NSURL *)url
                  block:(void(^)()) aBlock;
 
 + (void)uploadDaylyData:(NSString *)name

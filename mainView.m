@@ -244,8 +244,11 @@
 }
 - (void)setPersentMaskOfCircle:(CGFloat)value
 {
-    percent = value;
-    [self setNeedsDisplay];
+    if (value != percent) {
+        percent = value;
+        [self setNeedsDisplay];
+    }
+    return;
 }
 - (void)setLineWidth:(float)bigCircleLineWidth AndOffset:(float)smallCircleLineWidth
 {

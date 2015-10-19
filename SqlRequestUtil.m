@@ -21,6 +21,7 @@
         [self createDB];
         [self createTableDaylyData];
         [self createTableSingleData];
+        [self createTableSingleDataTemp];
     }
     return self;
 }
@@ -73,6 +74,24 @@
         NSLog(@"fail to open");
     }
 }
+-(void)createTableSingleDataTemp{
+    if ([db open]) {
+        if (![db tableExists:@"SingleDataTemp"]) {
+            if ([db  executeUpdate:@"CREATE TABLE SingleDataTemp (date text,startTime text,maxNum INTEGER,singleTotalNum REAL,mIndex INTEGER,endTime text, isSave BLOB,alertCount INTEGER)"]) {
+                [db close];
+                NSLog(@"create table success");
+            }else{
+                NSLog(@"fail to create table");
+            }
+        }else {
+            
+            NSLog(@"table SingleData is already exist");
+        }
+        [db close];
+    }else{
+        NSLog(@"fail to open");
+    }
+}
 - (void)createTableDaylyData {
     if ([db open]) {
         if (![db tableExists:@"DaylyData"]) {
@@ -90,6 +109,7 @@
         NSLog(@"fail to open");
     }
 }
+
 - (void)insertSingleMotionData:(SingleMotion *)data {
     if([db open]) {
         [db executeUpdate:@"insert into SingleData (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
@@ -110,6 +130,29 @@
         
     }
 }
+- (void)insertSingleMotionTempData:(SingleMotion *)data {
+    if([db open]) {
+        [db executeUpdate:@"insert into SingleDataTemp (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
+        [db close];
+    }
+}
+- (void)updateSingleMotionTempData:(SingleMotion *)data date:(NSString *)date {
+    if ([db open]) {
+        NSString *updateSql = [NSString stringWithFormat:
+                               @"UPDATE SingleDataTemp SET date = '%@',startTime = '%@',maxNum = '%@',singleTotalNum = '%@',mIndex = '%@',endTime = '%@', isSave = '%@',alertCount = '%@' WHERE date = '%@'",
+                               data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],date];
+        BOOL res = [db executeUpdate:updateSql];
+        if (!res) {
+            NSLog(@"error when update db table");
+        } else {
+          // SingleMotion *data = [self readSingleDataTemp];
+           // NSLog(@"%@",data);
+        }
+        [db close];
+        
+    }
+}
+
 - (void)insertDaylyData:(DaylyMotion *)data {
     if([db open]) {
         [db executeUpdate:@"insert into DaylyData (thisDayDate,daylyTotal,daylyIsSave) values(?,?,?)",data.thisDayDate,[NSNumber numberWithDouble:data.daylyTotal],[NSNumber numberWithBool:data.daylyIsSave],nil];
@@ -139,6 +182,28 @@
     }
     return nil;
 }
+- (SingleMotion *)readSingleDataTemp {
+    if ([db open]) {
+        NSString * sql = [NSString stringWithFormat:
+                          @"SELECT * FROM %@",@"SingleDataTemp"];
+        SingleMotion *data = [[SingleMotion alloc]init];
+        FMResultSet * rs = [db executeQuery:sql];
+        while ([rs next]) {
+            data.date = [rs stringForColumn:@"date"];
+            data.startTime = [rs stringForColumn:@"startTime"];
+            data.maxNum =[rs intForColumn:@"maxNum"];
+            data.singleTotalNum = [rs doubleForColumn:@"singleTotalNum"];
+            data.index = [rs intForColumn:@"mIndex"];
+            data.endTime = [rs stringForColumn:@"endTime"];
+            data.isSave = [rs boolForColumn:@"isSave"];
+            data.alertCount = [rs intForColumn:@"alertCount"];
+        }
+        [db close];
+        return data;
+    }
+    return nil;
+}
+
 - (void)clearSingleData {
     if ([db open]) {
         

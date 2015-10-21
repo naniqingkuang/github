@@ -55,7 +55,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"YYYYMMddHHmmss"];
     NSDate *date = [formatter dateFromString:dict[@"fdTime"]];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm"];
 //    cell.textLabel.text = dict[@"msgID"];
     cell.textLabel.text = [formatter stringFromDate:date];
     return cell;

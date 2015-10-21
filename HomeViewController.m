@@ -776,5 +776,26 @@
 ;
     [self presentViewController:vc animated:YES completion:nil];
 }
+//- (void)startPlay:(NSString *)url {
+//    NSError *err = nil;
+//    NSString *filePath = [[NSBundle mainBundle] pathForResource:url ofType:@"caf"];
+//    NSData *data = [NSData dataWithContentsOfFile:filePath];
+//    self.player = [[AVAudioPlayer alloc]initWithData:data error:&err];
+//    _player.volume = 1.0;
+//    _player.numberOfLoops = 0;
+//    _player.currentTime = 0.0;
+//    [_player prepareToPlay];
+//    [_player play];
+//}
+//- (void)endPlay {
+//    if(_player) {
+//        [_player stop];
+//    }
+//}
 
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    [self playSound];
+//    [self vibrate];
+//}
 @end

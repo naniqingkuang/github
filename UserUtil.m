@@ -50,6 +50,68 @@
         }
     }
 }
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super init];
+    if (self) {
+        self.myID = [[coder decodeObjectForKey:@"id"]copy ];
+        self.actflag = [[coder decodeObjectForKey:@"actflag"]copy];
+        self.acttime = [[coder decodeObjectForKey:@"acttime"]copy];
+        self.dayValueMaxParam = [[coder decodeObjectForKey:@"dayValueMaxParam"]copy];
+        self.dayValueMinParam = [[coder decodeObjectForKey:@"dayValueMinParam"]copy];
+        self.intervalTimeParam = [[coder decodeObjectForKey:@"intervalTimeParam"]intValue];
+        self.intervalTimeTypeParam = [[coder decodeObjectForKey:@"intervalTimeTypeParam"]copy];
+        self.isrtime = [[coder decodeObjectForKey:@"isrtime"]copy];
+        self.maxValueNumParam = [[coder decodeObjectForKey:@"maxValueNumParam"]intValue];
+        self.maxValueParam = [[coder decodeObjectForKey:@"maxValueParam"]copy];
+        self.sportsBeginTimeParam = [[coder decodeObjectForKey:@"sportsBeginTimeParam"]copy];
+        self.singleValueMaxParam = [[coder decodeObjectForKey:@"singleValueMaxParam"]copy];
+        self.singleValueMinParam = [[coder decodeObjectForKey:@"singleValueMinParam"]copy];
+        self.sportsEndTimeParam = [[coder decodeObjectForKey:@"sportsEndTimeParam"]copy];
+        self.userType = [[coder decodeObjectForKey:@"userType"]copy];
+        self.weightValueParam = [[coder decodeObjectForKey:@"weightValueParam"]copy];
+        self.status = [[coder decodeObjectForKey:@"status"]copy];
+        self.userName = [[coder decodeObjectForKey:@"userName"]copy];
+        
+    }
+    return self;
+}
+- (void)encodeWithCoder:(NSCoder *)coder
+{
+    [coder setValue:self.myID forKey:@"id"];
+    [coder setValue:self.actflag forKey:@"actflag"];
+    [coder setValue: self.acttime forKey:@"acttime"];
+    [coder setValue: self.dayValueMaxParam forKey:@"dayValueMaxParam"];
+    [coder setValue: self.dayValueMinParam forKey:@"dayValueMinParam"];
+    [coder setValue: [NSNumber numberWithInt:self.intervalTimeParam] forKey:@"intervalTimeParam"];
+    [coder setValue:self.intervalTimeTypeParam forKey:@"intervalTimeTypeParam"];
+    [coder setValue:self.isrtime forKey:@"isrtime"];
+    [coder setValue:[NSNumber numberWithInt:self.maxValueNumParam] forKey:@"maxValueNumParam"];
+    [coder setValue:self.maxValueParam forKey:@"maxValueParam"];
+    [coder setValue:self.sportsBeginTimeParam forKey:@"sportsBeginTimeParam"];
+    [coder setValue:self.singleValueMaxParam forKey:@"singleValueMaxParam"];
+    [coder setValue:self.singleValueMinParam forKey:@"singleValueMinParam"];
+    [coder setValue:self.sportsEndTimeParam forKey:@"sportsEndTimeParam"];
+    [coder setValue:self.userType forKey:@"userType"];
+    [coder setValue:self.weightValueParam forKey:@"weightValueParam"];
+    [coder setValue:self.status forKey:@"status"];
+    [coder setValue:self.userName forKey:@"userName"];
+    
+}
++ (void)writeToDefault:(userParam *)data {
+    NSData *keyData = [NSKeyedArchiver archivedDataWithRootObject:data];
+    [[NSUserDefaults standardUserDefaults]setObject:keyData forKey:@"userParam"];
+}
++ (userParam *)readFromDefault {
+    NSData *data = [[NSUserDefaults standardUserDefaults]objectForKey:@"userParam"];
+    userParam *param = nil;
+    if(data){
+        param = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    } else {
+        
+    }
+    return param;
+}
 @end
 
 @implementation UserUtil
@@ -124,65 +186,5 @@
             [self setValue:@"" forKey:str];
         }
     }
-}
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super init];
-    if (self) {
-        self.userName32 = [[coder decodeObjectForKey:@"userName"]copy];
-        self.password32 = [[coder decodeObjectForKey:@"password"]copy];
-        self.realName32 = [[coder decodeObjectForKey:@"realName"]copy];
-        self.registerdate14 = [[coder decodeObjectForKey:@"registerdate"]copy];
-        self.address256 = [[coder decodeObjectForKey:@"address"]copy];
-        self.gender1 = [[coder decodeObjectForKey:@"gender"]copy];
-        self.deviceID18 = [[coder decodeObjectForKey:@"deviceID"]copy];
-        self.height = [[coder decodeObjectForKey:@"height"]copy];
-        self.weight = [[coder decodeObjectForKey:@"weight"]copy];
-        self.phone32 = [[coder decodeObjectForKey:@"phone"]copy];
-        self.email32 = [[coder decodeObjectForKey:@"email"]copy];
-        self.birthday8 = [[coder decodeObjectForKey:@"brithday"]copy];
-        self.myId = [[coder decodeObjectForKey:@"id"]copy];
-        self.insertTime = [[coder decodeObjectForKey:@"isrtime"]copy];
-        self.clientid2_32 = [[coder decodeObjectForKey:@"clientid2"]copy];
-        self.actflag1 = [[coder decodeObjectForKey:@"actflag"]copy];
-        self.birthday8 = [[coder decodeObjectForKey:@"birthday"]copy];
-
-    }
-    return self;
-}
-- (void)encodeWithCoder:(NSCoder *)coder
-{
-    [coder setValue:self.userName32 forKey:@"userName"];
-    [coder setValue:self.password32 forKey:@"password"];
-    [coder setValue:self.realName32 forKey:@"realName"];
-    [coder setValue:self.registerdate14 forKey:@"registerdate"];
-    [coder setValue:self.address256 forKey:@"address"];
-    [coder setValue:self.gender1 forKey:@"gender"];
-    [coder setValue:self.deviceID18 forKey:@"deviceID"];
-    [coder setValue:self.height forKey:@"height"];
-    [coder setValue:self.weight forKey:@"weight"];
-    [coder setValue:self.phone32 forKey:@"phone"];
-    [coder setValue:self.email32 forKey:@"email"];
-    [coder setValue:self.birthday8 forKey:@"brithday"];
-    [coder setValue:self.myId forKey:@"id"];
-    [coder setValue:self.insertTime forKey:@"isrtime"];
-    [coder setValue:self.clientid2_32 forKey:@"clientid2"];
-    [coder setValue:self.actflag1 forKey:@"actflag"];
-    [coder setValue:self.birthday8 forKey:@"birthday"];
-
-}
-+ (void)writeToDefault:(userParam *)data {
-    NSData *keyData = [NSKeyedArchiver archivedDataWithRootObject:data];
-    [[NSUserDefaults standardUserDefaults]setObject:keyData forKey:@"userParam"];
-}
-+ (userParam *)readFromDefault {
-    NSData *data = [[NSUserDefaults standardUserDefaults]objectForKey:@"userParam"];
-    userParam *param = nil;
-    if(data){
-       param = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    } else {
-        
-    }
-    return param;
 }
 @end

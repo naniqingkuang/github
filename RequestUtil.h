@@ -124,4 +124,5 @@
                 block:(void (^)(void)) aBlock;
 + (NSString *)getUserName;
 + (void)setUserName:(NSString *)name;
++ (int)checkNetState;
 @end

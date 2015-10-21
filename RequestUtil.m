@@ -16,13 +16,16 @@ static UserUtil *g_currentUser;
 static NSString *userName;
 @implementation RequestUtil
 
-- (int)checkNetState
++ (int)checkNetState
 {
     Reachability *reach = [Reachability reachabilityForInternetConnection];
     NetworkStatus status = [reach currentReachabilityStatus];
     return status;
 }
 + (void)multiFormPost:(NSString *)url withPara:(NSDictionary *)param constructingBodyWithBlock:(void(^) (id<AFMultipartFormData> )) bodyBlock completionBlock:(void (^)(NSDictionary *)) completionBlock {
+    if(![self checkNetState]){
+        return;
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
     manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
@@ -48,6 +51,9 @@ static NSString *userName;
 }
 + (void)requestPost:(NSString *)url withPara:(NSDictionary *)para completionBlock:(void (^)(NSDictionary *)) completionBlock
 {
+    if(![self checkNetState]){
+        return;
+    }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
     manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
@@ -561,6 +567,7 @@ static NSString *userName;
    return g_currentUser;
 }
 + (NSString *)getUserName {
+    userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"userName"];
     if(!userName)
     {
         return @"";
@@ -569,5 +576,6 @@ static NSString *userName;
 }
 + (void)setUserName:(NSString *)name {
     userName = name;
+    [[NSUserDefaults standardUserDefaults]setObject:userName forKey:@"userName"];
 }
 @end

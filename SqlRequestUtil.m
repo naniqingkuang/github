@@ -22,8 +22,34 @@
         [self createTableDaylyData];
         [self createTableSingleData];
         [self createTableSingleDataTemp];
+       // [self test];
     }
     return self;
+}
+- (void)test {
+    [self clearSingleData];
+    SingleMotion *data = [[SingleMotion alloc]init];
+    data.date = @"11-10";
+    
+    [self insertSingleMotionData:data];
+    data = [[SingleMotion alloc]init];
+    data.index = 1;
+    data.singleTotalNum = 20.0;
+    data.date = @"11-10";
+    [self insertSingleMotionData:data];
+    [self readSingleDataByDate:@"11-10"];
+    [self readSingleData];
+    data = [[SingleMotion alloc]init];
+    data.index = 1;
+    data.singleTotalNum = 20.0;
+    data.date = @"11-11";
+    [self insertSingleMotionData:data];
+    [self readSingleDataByDate:@"11-10"];
+    [self readSingleDataByDate:@"11-11"];
+    [self readSingleData];
+    [self clearSingleDataByDate:@"11-10"];
+    [self readSingleData];
+
 }
 - (void)createDB{
     if(db == nil) {
@@ -74,6 +100,7 @@
         NSLog(@"fail to open");
     }
 }
+
 -(void)createTableSingleDataTemp{
     if ([db open]) {
         if (![db tableExists:@"SingleDataTemp"]) {
@@ -182,6 +209,30 @@
     }
     return nil;
 }
+- (NSArray *)readSingleDataByDate:(NSString *)date {
+    if ([db open]) {
+        NSString * sql = [NSString stringWithFormat:
+                          @"SELECT * FROM %@ WHERE date ='%@' ",@"SingleData",date];
+        NSMutableArray *arr = [[NSMutableArray alloc]initWithCapacity:10];
+        FMResultSet * rs = [db executeQuery:sql];
+        while ([rs next]) {
+            SingleMotion *data = [[SingleMotion alloc]init];
+            data.date = [rs stringForColumn:@"date"];
+            data.startTime = [rs stringForColumn:@"startTime"];
+            data.maxNum =[rs intForColumn:@"maxNum"];
+            data.singleTotalNum = [rs doubleForColumn:@"singleTotalNum"];
+            data.index = [rs intForColumn:@"mIndex"];
+            data.endTime = [rs stringForColumn:@"endTime"];
+            data.isSave = [rs boolForColumn:@"isSave"];
+            data.alertCount = [rs intForColumn:@"alertCount"];
+            [arr addObject:data];
+        }
+        [db close];
+        return arr;
+    }
+    return nil;
+}
+
 - (SingleMotion *)readSingleDataTemp {
     if ([db open]) {
         NSString * sql = [NSString stringWithFormat:
@@ -220,6 +271,23 @@
         
     }
 }
+-(void)clearSingleDataByDate:(NSString *)date {
+    if ([db open]) {
+        
+        NSString *deleteSql = [NSString stringWithFormat:
+                               @"delete from SingleData WHERE date = '%@'",date];
+        BOOL res = [db executeUpdate:deleteSql];
+        
+        if (!res) {
+            NSLog(@"error when delete db table");
+        } else {
+            NSLog(@"success to delete db table");
+        }
+        [db close];
+        
+    }
+}
+
 - (NSArray *)readDaylyData {
     if ([db open]) {
         NSString * sql = [NSString stringWithFormat:

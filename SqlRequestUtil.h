@@ -14,9 +14,11 @@
 - (void)insertSingleMotionData:(SingleMotion *)data;
 - (void)insertDaylyData:(DaylyMotion *)data;
 - (NSArray *)readSingleData;
+- (NSArray *)readSingleDataByDate:(NSString *)date;
 - (NSArray *)readDaylyData;
 - (void)updateDayData:(DaylyMotion *)data;
 - (void)clearSingleData;
+-(void)clearSingleDataByDate:(NSString *)date;
 - (void)updateSingleMotionData:(SingleMotion *)data;
 - (SingleMotion *)readSingleDataTemp;
 - (void)updateSingleMotionTempData:(SingleMotion *)data date:(NSString *)date;

@@ -68,6 +68,7 @@
 @property (assign, atomic) int frequecyNum; //纪录今天运动的次数
 @property (strong, atomic) DaylyMotion *daylyMotion;
 @property (strong, atomic) SqlRequestUtil *sql;
+@property (strong, nonatomic) NSMutableDictionary *historyListDict;
 @end
 
 @implementation HomeViewController
@@ -88,9 +89,10 @@
     [format setDateFormat:@"MM月dd日"];
     NSString *dateStr =[format stringFromDate:[NSDate date]];
     self.dateNavigationItem.title= dateStr;
-    [self performSelector:@selector(toLoginVC) withObject:nil afterDelay:0.0];
     self.blueTooth = [BlueToothUtil getBlueToothInstance];
-    
+    if(![RequestUtil checkNetState]) {
+        [MBProgressHUD showError:@"网络未连接，不能实现数据同步"];
+    }
     //电量
     [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
         NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
@@ -248,8 +250,8 @@
      /[self.curUserParam.dayValueMaxParam doubleValue]];
 }
 - (void)initData {
+    _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
     self.sql = [[SqlRequestUtil alloc]init];
-  //  [self.sql clearSingleData];
     self.typeSevVenConunt = 0;
     self.frequecyNum = 0;
     self.inpulse = 0.0;
@@ -293,11 +295,21 @@
     [format setDateFormat:@"MM-dd"];
     if(arr.count){
         SingleMotion *motion = arr[0]; //是今天的数据
-        if([motion.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
-            self.todayData = [NSMutableArray arrayWithArray:arr];
-        } else {
-            [self.sql clearSingleData];
+        for (SingleMotion *item in arr) {
+            if([motion.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
+                [self.todayData addObject:item];
+            } else {
+                NSArray *keys = [_historyListDict allKeys];
+                for (NSString *str in keys) {
+                    if([str isEqualToString:item.date]){
+                        break;
+                    }
+                }
+                NSArray *arr = [self.sql readSingleDataByDate:item.date];
+                [self.historyListDict setObject:arr forKey:item.date];
+            }
         }
+        
     }
 }
 - (void)initSqlSingleMotionTemp {
@@ -314,226 +326,263 @@
         [self.sql insertSingleMotionTempData:self.curMotion];
     }
 }
+- (void)uploadHistoryData:(NSDictionary *)dict {
+    double total = 0.0;
+    NSInteger maxVlue = 0;
+    NSInteger alert = 0;
+    NSArray *keys = [dict allKeys];
+    if(keys.count){
+        for (NSString *date in keys) {
+            NSArray *data = [dict objectForKey:date];
+            for (SingleMotion *item in data) {
+                maxVlue +=item.maxNum;
+                alert +=item.alertCount;
+                total +=item.singleTotalNum;
+            }
+            [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:total dayMaxValueNum:maxVlue dayAlarmNum:alert daySportNum:data.count everyData:data block:^{
+                [self.sql clearSingleDataByDate:date];
+            }];
+            total = 0.0;
+             maxVlue = 0;
+             alert = 0;
+        }
+    }
+}
 - (void)mainThread {
-    if([LoginViewController hasLogin])
+    [self getHardInfo];
+    [self getParam];  //通过网络获取数据
+    //数据库数据保存
+    if(self.sql) {
+        [self.sql updateDayData:self.daylyMotion];
+        [self.sql updateSingleMotionTempData:self.curMotion date:self.curMotion.date];
+    }
+    if(self.curUserParam)
     {
-        static int blueToothCount = 0;
-        blueToothCount ++;
-        int flag = [[BlueToothUtil getBlueToothInstance]getConnectFlag];
-        if(blueToothCount == 10000) {
-            blueToothCount = 0;
-        }
-        NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
-        if(!(flag == CBPeripheralStateConnecting || CBPeripheralStateConnected == flag)) {
-                if(name.length > 0){
-                    if((blueToothCount % 3) == 0) {
-                        [[BlueToothUtil getBlueToothInstance] reScan];
-                        [MBProgressHUD showError:[NSString stringWithFormat:@"蓝牙:%@未连接，正在连接",name]];
-                    }
-                } else {
-                    if((blueToothCount % 5) == 0) {
-                        [MBProgressHUD showError:@"蓝牙未绑定，请在蓝牙设置界面绑定"];
-                    }
+        [self showToUser];
+        [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.singleTotalNum / [self.curUserParam.singleValueMaxParam doubleValue] block:nil];
+        
+        [self.dateFormatter setDateFormat:@"HH:mm"];
+        NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
+        NSString *curM = [curTime substringFromIndex:3];
+        NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
+        if(![self.curUserParam.userType isEqualToString:@"7"]) { //用户不为7
+            if(self.overFloerBlock) {  //超过了最大值告警
+                if(self.count %30 == 0) {  //半分钟会收到一个警告
+                    self.overFloerBlock();
+                    self.overFloerBlock = nil;
                 }
-        } else if(CBPeripheralStateConnected == flag) {
-                if(![[BlueToothUtil getBlueToothInstance]isBlueToothConnected]) {
-                    [[BlueToothUtil getBlueToothInstance] reScan];
-                    [MBProgressHUD showError:[NSString stringWithFormat:@"%@不是指定设备",name]];
+            }
+            if(self.notInParamTimeBlock) {  //不在规定时间内告警
+                if(self.count %30 == 0) {   //半分钟会收到一个警告
+                    self.notInParamTimeBlock();
+                    self.notInParamTimeBlock = nil;
                 }
-        }
-        if(!self.curUser.deviceID18) {
-            [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
-                self.curUser.deviceID18 = name;
-            }];
-        }
-        if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
-            [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                UserUtil *item = [[UserUtil alloc]initWithDict:dict];
-                [RequestUtil setCurrentUser:item];
-                self.curUser = item;
-                });
-            }];
-            
-        }
-        if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
-        {
-            [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
-                self.curUserParam = [[userParam alloc]initWithDict:dict];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
-                    self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
-                });
-                self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
-            }];
-        }
-        if(!self.softEdition) {
-            [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
-                self.softEdition = softEdition;
-            }];
-        }
-        if(!self.hardWareEdition) {
-            [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
-                self.hardWareEdition = hardWareEdition;
-            }];
-        }
-        //数据库数据保存
-        if(self.sql) {
-            [self.sql updateDayData:self.daylyMotion];
-            [self.sql updateSingleMotionTempData:self.curMotion date:self.curMotion.date];
-        }
-        if(self.curUserParam)
-        {
-            [self showToUser];
-            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.singleTotalNum / [self.curUserParam.singleValueMaxParam doubleValue] block:nil];
-
-            [self.dateFormatter setDateFormat:@"HH:mm"];
-            NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
-            NSString *curM = [curTime substringFromIndex:3];
-            NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
-            if(![self.curUserParam.userType isEqualToString:@"7"]) { //用户不为7
-                if(self.overFloerBlock) {  //超过了最大值告警
-                    if(self.count %30 == 0) {  //半分钟会收到一个警告
-                        self.overFloerBlock();
-                        self.overFloerBlock = nil;
-                    }
-                }
-                if(self.notInParamTimeBlock) {  //不在规定时间内告警
-                    if(self.count %30 == 0) {   //半分钟会收到一个警告
-                        self.notInParamTimeBlock();
-                        self.notInParamTimeBlock = nil;
-                    }
-                }
-//－－－－－－－－－－－－－－－－－－－－－－运动时间到检测 －－－－－－－－－－－－－－－－－－－－－－－－－
-               
-                //每天运动时间到达
-                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1) && (self.daylyMotion.daylyIsSave == NO))
-                {
-                    //上传今天的运动数据
-                    self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
-                    [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:nil];
+            }
+            [self todayEndTimeAction];
+            [self singleEndAction];
+        } else { // 用户为7 天运动量没达到告警
+            if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1)) {
+                if(self.curUserParam.maxValueNumParam > self.curMotion.maxNum) {
+                    [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                           device:self.curUser.deviceID18
+                                           reason:@"3"
+                                        startTime:curTime
+                                      MotionStart:self.curMotion.startTime
+                                      singleTotal:0.0
+                                       daylyTotal:self.curMotion.maxNum
+                                      maxValueNum:0.0
+                                            block:^{
+                                                self.curMotion.alertCount ++;
+                                            }
+                     ];
+                    [MBProgressHUD showError:@"今天运动量未达到"];
                     
-                    if([self.curUserParam.userType isEqualToString:@"7"]) {
-                    } else {
-                        //天运动量过量
-                        if(self.daylyMotion.daylyTotal
- > [self.curUserParam.dayValueMaxParam intValue]){
-                            [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                                   device:self.curUser.deviceID18
-                                                   reason:@"4"
-                                                startTime:curTime
-                                              MotionStart:@""
-                                              singleTotal:0.0
-                                               daylyTotal:self.daylyMotion.daylyTotal
-
-                                              maxValueNum:0.0
-                                                    block:^{
-                                                        self.curMotion.alertCount ++;
-                                                    }
-                             
-];
-                            [MBProgressHUD showError:@"今天运动时间过量"];
-
-                        }
-                        //天运动量每到量
-                        if(self.daylyMotion.daylyTotal
- < [self.curUserParam.dayValueMinParam intValue]){
-                            [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                                   device:self.curUser.deviceID18
-                                                   reason:@"3"
-                                                startTime:curTime
-                                              MotionStart:@""
-                                              singleTotal:0.0
-                                               daylyTotal:self.daylyMotion.daylyTotal
-
-                                              maxValueNum:0.0
-                                                    block:^{
-                                                        self.curMotion.alertCount ++;
-                                                    }
-];
-                            [MBProgressHUD showError:@"今天运动时间没到量"];
-
-                        }
-                    }
-                }
-                
-//－－－－－－－－－－－－－－－－－－－－－－ 单次 －－－－－－－－－－－－－－－－－－－－－－－－－－－
-                
-                if(self.firstGoFlag)
-                {
-                    self.count ++;
-                }
-                //单词运动判断
-                if(self.count >60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
-                    if(!self.curMotion.isSave) {
-                        self.curMotion.isSave = YES;
-                        self.curMotion.endTime = curTime;
-                        [self todayDataSave:self.curMotion];
-                    }
-                    //单词未完成
-                    if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
-                    {
-                        [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                               device:self.curUser.deviceID18
-                                               reason:@"1"
-                                            startTime:curTime
-                                          MotionStart:self.curMotion.startTime
-                                          singleTotal:self.curMotion.singleTotalNum
-                                           daylyTotal:0.0
-                                          maxValueNum:self.curMotion.maxNum
-                                                block:^{
-                                                    self.curMotion.alertCount ++;
-                                                }
-                         ];
-                        [MBProgressHUD showError:@"本次运动未完成"];
-
-                    }
-                    //单词完成过量
-                    if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
-                    {
-                        [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                               device:self.curUser.deviceID18
-                                               reason:@"2"
-                                            startTime:curTime
-                                          MotionStart:self.curMotion.startTime
-                                          singleTotal:self.curMotion.singleTotalNum
-                                           daylyTotal:0.0
-                                          maxValueNum:self.curMotion.maxNum
-                                                block:^{
-                                                    self.curMotion.alertCount ++;
-                                                }
-];
-                        [MBProgressHUD showError:@"本次运动过量"];
-
-                    }
-                    self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
-                    self.intervalTime = self.curUserParam.intervalTimeParam * 60;
-                    
-                }
-
-            } else { // 用户为7 天运动量没达到告警
-                if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1)) {
-                    if(self.curUserParam.maxValueNumParam > self.curMotion.maxNum) {
-                        [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                               device:self.curUser.deviceID18
-                                               reason:@"3"
-                                            startTime:curTime
-                                          MotionStart:self.curMotion.startTime
-                                          singleTotal:0.0
-                                           daylyTotal:self.curMotion.maxNum
-                                          maxValueNum:0.0
-                                                block:^{
-                                                    self.curMotion.alertCount ++;
-                                                }
-];
-                        [MBProgressHUD showError:@"今天运动量未达到"];
-
-                    }
                 }
             }
         }
+    }
+}
+- (void)singleEndAction {
+    [self.dateFormatter setDateFormat:@"HH:mm"];
+    NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
+    if(self.firstGoFlag)
+    {
+        self.count ++;
+    }
+    //单词运动判断
+    if(self.count >60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
+        if(!self.curMotion.isSave) {
+            self.curMotion.isSave = YES;
+            self.curMotion.endTime = curTime;
+            [self todayDataSave:self.curMotion];
+        }
+        //单词未完成
+        if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
+        {
+            [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                   device:self.curUser.deviceID18
+                                   reason:@"1"
+                                startTime:curTime
+                              MotionStart:self.curMotion.startTime
+                              singleTotal:self.curMotion.singleTotalNum
+                               daylyTotal:0.0
+                              maxValueNum:self.curMotion.maxNum
+                                    block:^{
+                                        self.curMotion.alertCount ++;
+                                    }
+             ];
+            [MBProgressHUD showError:@"本次运动未完成"];
+            
+        }
+        //单词完成过量
+        if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
+        {
+            [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                   device:self.curUser.deviceID18
+                                   reason:@"2"
+                                startTime:curTime
+                              MotionStart:self.curMotion.startTime
+                              singleTotal:self.curMotion.singleTotalNum
+                               daylyTotal:0.0
+                              maxValueNum:self.curMotion.maxNum
+                                    block:^{
+                                        self.curMotion.alertCount ++;
+                                    }
+             ];
+            [MBProgressHUD showError:@"本次运动过量"];
+            
+        }
+        self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
+        self.intervalTime = self.curUserParam.intervalTimeParam * 60;
+        
+    }
+}
+- (void)todayEndTimeAction {
+    [self.dateFormatter setDateFormat:@"HH:mm"];
+    NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
+    NSString *curM = [curTime substringFromIndex:3];
+    NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
+    //每天运动时间到达
+    if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1) && (self.daylyMotion.daylyIsSave == NO))
+    {
+        //上传今天的运动数据
+        self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
+        [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:nil];
+        if([self.curUserParam.userType isEqualToString:@"7"]) {
+        } else {
+            //天运动量过量
+            if(self.daylyMotion.daylyTotal
+               > [self.curUserParam.dayValueMaxParam intValue]){
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"4"
+                                    startTime:curTime
+                                  MotionStart:@""
+                                  singleTotal:0.0
+                                   daylyTotal:self.daylyMotion.daylyTotal
+                 
+                                  maxValueNum:0.0
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 
+                 ];
+                [MBProgressHUD showError:@"今天运动时间过量"];
+                
+            }
+            //天运动量每到量
+            if(self.daylyMotion.daylyTotal
+               < [self.curUserParam.dayValueMinParam intValue]){
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"3"
+                                    startTime:curTime
+                                  MotionStart:@""
+                                  singleTotal:0.0
+                                   daylyTotal:self.daylyMotion.daylyTotal
+                 
+                                  maxValueNum:0.0
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [MBProgressHUD showError:@"今天运动时间没到量"];
+                
+            }
+        }
+    }
+}
+- (void)getHardInfo {
+    static int blueToothCount = 0;
+    blueToothCount ++;
+    int flag = [[BlueToothUtil getBlueToothInstance]getConnectFlag];
+    if(blueToothCount == 10000) {
+        blueToothCount = 0;
+    }
+    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
+    if(!(flag == CBPeripheralStateConnecting || CBPeripheralStateConnected == flag)) {
+        if(name.length > 0){
+            if((blueToothCount % 3) == 0) {
+                [[BlueToothUtil getBlueToothInstance] reScan];
+                [MBProgressHUD showError:[NSString stringWithFormat:@"蓝牙:%@未连接，正在连接",name]];
+            }
+        } else {
+            if((blueToothCount % 5) == 0) {
+                [MBProgressHUD showError:@"蓝牙未绑定，请在蓝牙设置界面绑定"];
+            }
+        }
+    } else if(CBPeripheralStateConnected == flag) {
+        if(![[BlueToothUtil getBlueToothInstance]isBlueToothConnected]) {
+            [[BlueToothUtil getBlueToothInstance] reScan];
+            [MBProgressHUD showError:[NSString stringWithFormat:@"%@不是指定设备",name]];
+        }
+    }
+    if(!self.curUser.deviceID18) {
+        [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
+            self.curUser.deviceID18 = name;
+        }];
+    }
+    if(!self.softEdition) {
+        [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
+            self.softEdition = softEdition;
+        }];
+    }
+    if(!self.hardWareEdition) {
+        [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
+            self.hardWareEdition = hardWareEdition;
+        }];
+    }
+}
+- (void)getParam {
+    if([RequestUtil checkNetState]){
+        if([LoginViewController hasLogin]){
+            if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
+            {
+                [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
+                    self.curUserParam = [[userParam alloc]initWithDict:dict];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
+                        self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
+                    });
+                    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+                }];
+            }
+            
+            if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
+                if([RequestUtil getUserName].length >0){
+                    [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                            [RequestUtil setCurrentUser:item];
+                            self.curUser = item;
+                        });
+                    }];
+                }
+            }
+            [self uploadHistoryData:self.historyListDict];
+        }
     } else {
-        [[BlueToothUtil getBlueToothInstance]stopScan];
+        self.curUserParam = [userParam readFromDefault];
     }
 }
 - (void)intervalTimerAction {
@@ -575,19 +624,19 @@
         [self.intervalTimer invalidate];
     }
 }
-- (void)getHardInfo
-{
-    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
-        self.curUser.deviceID18 = name;
-    }];
-    [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
-        self.softEdition = softEdition;
-    }];
-    [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
-        self.hardWareEdition = hardWareEdition;
-    }];
-    
-}
+//- (void)getHardInfo
+//{
+//    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
+//        self.curUser.deviceID18 = name;
+//    }];
+//    [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
+//        self.softEdition = softEdition;
+//    }];
+//    [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
+//        self.hardWareEdition = hardWareEdition;
+//    }];
+//    
+//}
 #pragma  mark  心跳包
 - (void)heartBeatAction {
         [RequestUtil keepHeartBeat:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSString *cmdStr) {

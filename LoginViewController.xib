@@ -178,7 +178,13 @@
                         <constraint firstAttribute="height" constant="64" id="Y4s-hv-QmG"/>
                     </constraints>
                     <items>
-                        <navigationItem title="动起来" id="2gC-kJ-X6J"/>
+                        <navigationItem title="动起来" id="2gC-kJ-X6J">
+                            <barButtonItem key="leftBarButtonItem" title="返回" id="aaT-ou-NQj">
+                                <connections>
+                                    <action selector="backToMain:" destination="-1" id="HOu-cc-Sq8"/>
+                                </connections>
+                            </barButtonItem>
+                        </navigationItem>
                     </items>
                 </navigationBar>
             </subviews>

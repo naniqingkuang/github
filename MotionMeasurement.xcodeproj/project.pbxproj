@@ -27,6 +27,8 @@
 		7D8AA3AE1BAD8A60002E265C /* FeedBackListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D8AA3AC1BAD8A60002E265C /* FeedBackListViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		7D8AA3B71BAD93F9002E265C /* FeedBackDetialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8AA3B51BAD93F9002E265C /* FeedBackDetialViewController.m */; settings = {ASSET_TAGS = (); }; };
 		7D8AA3B81BAD93F9002E265C /* FeedBackDetialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D8AA3B61BAD93F9002E265C /* FeedBackDetialViewController.xib */; settings = {ASSET_TAGS = (); }; };
+		7D8E73B11BD5E3CB00648A4E /* record.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D8E73B01BD5E3CB00648A4E /* record.gif */; settings = {ASSET_TAGS = (); }; };
+		7D8E73B31BD5E5FA00648A4E /* voice.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D8E73B21BD5E5FA00648A4E /* voice.jpg */; settings = {ASSET_TAGS = (); }; };
 		7D93E9FB1BABF2C200750FEB /* UpdatePasswdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D93E9F91BABF2C200750FEB /* UpdatePasswdViewController.m */; settings = {ASSET_TAGS = (); }; };
 		7D93E9FC1BABF2C200750FEB /* UpdatePasswdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D93E9FA1BABF2C200750FEB /* UpdatePasswdViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		7DAA2AC41B9BE4460017CD12 /* RequestUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA2AC31B9BE4460017CD12 /* RequestUtil.m */; };
@@ -164,6 +166,8 @@
 		7D8AA3B41BAD93F9002E265C /* FeedBackDetialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackDetialViewController.h; sourceTree = "<group>"; };
 		7D8AA3B51BAD93F9002E265C /* FeedBackDetialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackDetialViewController.m; sourceTree = "<group>"; };
 		7D8AA3B61BAD93F9002E265C /* FeedBackDetialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FeedBackDetialViewController.xib; sourceTree = "<group>"; };
+		7D8E73B01BD5E3CB00648A4E /* record.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = record.gif; path = ../record.gif; sourceTree = "<group>"; };
+		7D8E73B21BD5E5FA00648A4E /* voice.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = voice.jpg; sourceTree = "<group>"; };
 		7D93E9F81BABF2C200750FEB /* UpdatePasswdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdatePasswdViewController.h; sourceTree = "<group>"; };
 		7D93E9F91BABF2C200750FEB /* UpdatePasswdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdatePasswdViewController.m; sourceTree = "<group>"; };
 		7D93E9FA1BABF2C200750FEB /* UpdatePasswdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdatePasswdViewController.xib; sourceTree = "<group>"; };
@@ -354,6 +358,8 @@
 		7D28DAF41BA15C1100EED6A8 /* FeedBack */ = {
 			isa = PBXGroup;
 			children = (
+				7D8E73B21BD5E5FA00648A4E /* voice.jpg */,
+				7D8E73B01BD5E3CB00648A4E /* record.gif */,
 				7D28DAF51BA15C3400EED6A8 /* FeedBackViewController.h */,
 				7D28DAF61BA15C3400EED6A8 /* FeedBackViewController.m */,
 				7D28DAF71BA15C3400EED6A8 /* FeedBackViewController.xib */,
@@ -814,11 +820,13 @@
 				7DC7C68B1BD0C50D00677469 /* delete_photo@3x.png in Resources */,
 				7DC7C6821BD0C4E200677469 /* Contents.json in Resources */,
 				7DD89E151B9D338500037C75 /* RegisterViewController.xib in Resources */,
+				7D8E73B11BD5E3CB00648A4E /* record.gif in Resources */,
 				7D3981911BC003E70017806B /* DaylyDataViewController.xib in Resources */,
 				7DC7C6281BD0A10B00677469 /* photoMaskHigh@2x.png in Resources */,
 				7D93E9FC1BABF2C200750FEB /* UpdatePasswdViewController.xib in Resources */,
 				7D3279DD1BC8F0AF00F91566 /* police.png in Resources */,
 				7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */,
+				7D8E73B31BD5E5FA00648A4E /* voice.jpg in Resources */,
 				7D8572821B9E8B5A00A33803 /* TableViewCell2.xib in Resources */,
 				7DC7C6291BD0A10B00677469 /* photoMaskNormal.png in Resources */,
 				7DC7C68A1BD0C50D00677469 /* delete_photo@2x.png in Resources */,

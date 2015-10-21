@@ -113,7 +113,7 @@
         NSData *data = [NSData dataWithContentsOfURL:self.recoderFileUrlTemp];
         self.player = [[AVAudioPlayer alloc]initWithData:data error:&err];
         _player.volume = 1.0;
-        _player.numberOfLoops = 1;
+        _player.numberOfLoops = 0;
         _player.currentTime = 0.0;
         [_player prepareToPlay];
         [_player play];

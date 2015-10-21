@@ -130,12 +130,13 @@
                     </connections>
                 </collectionView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U7N-uI-lfM">
-                    <rect key="frame" x="0.0" y="480" width="600" height="120"/>
+                    <rect key="frame" x="250" y="480" width="100" height="120"/>
                     <color key="backgroundColor" red="0.15732703789999999" green="0.47450980390000003" blue="0.063523310259999993" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="120" id="bpY-F3-Rwk"/>
+                        <constraint firstAttribute="height" constant="120" id="Cwr-zS-bmK"/>
+                        <constraint firstAttribute="width" constant="100" id="Ke5-Kd-ugQ"/>
                     </constraints>
-                    <state key="normal" title="录音"/>
+                    <state key="normal" title="录音" backgroundImage="record.gif"/>
                     <connections>
                         <action selector="startRecordAction:" destination="-1" eventType="touchDown" id="aQ8-Nu-Pnl"/>
                         <action selector="stopRecordAction:" destination="-1" eventType="touchUpInside" id="54w-ni-bA5"/>
@@ -147,21 +148,23 @@
                 <constraint firstItem="NaM-Fo-Rts" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="5ZO-Uc-xc2"/>
                 <constraint firstItem="jaE-YI-s8K" firstAttribute="top" secondItem="joO-kN-54w" secondAttribute="bottom" constant="10" id="7nr-fy-GO4"/>
                 <constraint firstAttribute="trailing" secondItem="8cO-vh-xhH" secondAttribute="trailing" id="Czf-Xo-79U"/>
-                <constraint firstItem="U7N-uI-lfM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="D8Q-Ao-Okp"/>
                 <constraint firstItem="8cO-vh-xhH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="E6m-VH-Tqe"/>
                 <constraint firstItem="joO-kN-54w" firstAttribute="top" secondItem="NaM-Fo-Rts" secondAttribute="bottom" id="IdY-O1-cN1"/>
                 <constraint firstItem="joO-kN-54w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Lf5-Kr-HVf"/>
-                <constraint firstAttribute="bottom" secondItem="U7N-uI-lfM" secondAttribute="bottom" id="Of6-Zw-WWX"/>
                 <constraint firstItem="8cO-vh-xhH" firstAttribute="top" secondItem="joO-kN-54w" secondAttribute="bottom" constant="130" id="P3m-zz-gg3"/>
                 <constraint firstItem="jaE-YI-s8K" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="28" id="Pmh-EW-C7w"/>
+                <constraint firstAttribute="bottom" secondItem="U7N-uI-lfM" secondAttribute="bottom" id="cjV-VQ-0cO"/>
                 <constraint firstAttribute="trailing" secondItem="NaM-Fo-Rts" secondAttribute="trailing" id="egh-eh-2Uj"/>
                 <constraint firstAttribute="trailing" secondItem="jaE-YI-s8K" secondAttribute="trailing" constant="28" id="jLS-C5-5pC"/>
                 <constraint firstAttribute="trailing" secondItem="joO-kN-54w" secondAttribute="trailing" id="lP6-nC-j3K"/>
-                <constraint firstAttribute="trailing" secondItem="U7N-uI-lfM" secondAttribute="trailing" id="lsB-zY-CZd"/>
+                <constraint firstItem="U7N-uI-lfM" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="mCM-a4-4wn"/>
                 <constraint firstItem="NaM-Fo-Rts" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ne6-k2-bsV"/>
                 <constraint firstItem="8cO-vh-xhH" firstAttribute="top" secondItem="jaE-YI-s8K" secondAttribute="bottom" id="sKe-ie-mdt"/>
                 <constraint firstItem="8cO-vh-xhH" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="wZX-hs-XmR"/>
             </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="record.gif" width="128" height="128"/>
+    </resources>
 </document>

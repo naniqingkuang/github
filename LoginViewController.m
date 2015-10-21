@@ -135,6 +135,9 @@ static BOOL logoFlag;
     self.view.frame = frame;
     [UIView commitAnimations];
 }
+- (IBAction)backToMain:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)keboardHide{
     CGRect frame = self.view.frame;
     frame.origin.y +=  100;

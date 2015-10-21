@@ -70,7 +70,7 @@
             cell.textLabel.text=@"信息修改";
             break;
         case 3:
-            cell.textLabel.text = @"退出登录";
+            cell.textLabel.text = @"登录";
             break;
         case 4:
             cell.textLabel.text = @"密码修改";

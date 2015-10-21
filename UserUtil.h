@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@interface userParam : NSObject
+@interface userParam : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *actflag;
 @property (nonatomic, copy) NSString *acttime;
 @property (nonatomic, copy) NSString *dayValueMaxParam;
@@ -29,6 +29,8 @@
 - (NSString *) checkType;
 - (instancetype)initWithDict:(NSDictionary *)dict;
 - (void)checkAndAvoidNull;
++ (void)writeToDefault:(userParam *)data;
++ (userParam *)readFromDefault;
 @end
 
 @interface UserUtil : NSObject
@@ -55,4 +57,5 @@
 - (NSString *) checkType;
 - (instancetype)initWithDict:(NSDictionary *)dict;
 - (void)checkAndAvoidNull;
+
 @end

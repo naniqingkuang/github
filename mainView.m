@@ -50,12 +50,12 @@
     float radius =  width > height ? ((height)/2) *2/3: ((width )/2 *2/3);
     _trackLayer = [CAShapeLayer layer];
     _trackLayer.frame = self.bounds;
-    _trackLayer.fillColor = [[UIColor clearColor]CGColor];
+    _trackLayer.fillColor = [[UIColor whiteColor]CGColor];
     _trackLayer.strokeColor =[[UIColor colorWithRed:249.0/255.0 green:249.0/255.0 blue:249.0/255.0 alpha:100.0]CGColor];
     _trackLayer.opacity = 1;
-    _trackLayer.shadowColor = [[UIColor blackColor]CGColor];
-    _trackLayer.shadowOffset = CGSizeMake(4, 4);
-    _trackLayer.shadowRadius = 4;
+    //_trackLayer.shadowColor = [[UIColor blackColor]CGColor];
+    //_trackLayer.shadowOffset = CGSizeMake(4, 4);
+   // _trackLayer.shadowRadius = 4;
     
     //进度条，遮挡层
     _progressLayer = [CAShapeLayer layer];
@@ -101,7 +101,7 @@
     //内环，
     _progressLayer1 = [CAShapeLayer layer];
     _progressLayer1.frame = self.bounds;
-    _progressLayer1.fillColor =  [[UIColor clearColor] CGColor];
+    _progressLayer1.fillColor =  [[UIColor whiteColor] CGColor];
     _progressLayer1.strokeColor  = [[UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:100.0]CGColor];
     _progressLayer1.lineCap = kCALineCapRound;
     _progressLayer1.opacity = 1;
@@ -112,10 +112,10 @@
     _layerShandow = [CALayer layer];
     _layerShandow.backgroundColor = [[UIColor blackColor] CGColor];
     _layerShandow.shadowColor = [UIColor blackColor].CGColor;
-    _layerShandow.shadowOffset = CGSizeMake(-1,2);
+    _layerShandow.shadowOffset = CGSizeMake(1,2);
     _layerShandow.shadowOpacity = 0.8;
     _layerShandow.shadowRadius = 5.0;
-   // _layerShandow.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake((width-radius*2)/2, (height-radius*2)/2, radius*2, radius*2) cornerRadius:radius].CGPath;
+    _layerShandow.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake((width-radius*2)/2, (height-radius*2)/2, radius*2, radius*2) cornerRadius:radius].CGPath;
     
     //动画
 //    _webView = [[UIWebView alloc]init];

@@ -10,16 +10,7 @@
 #import "UserUtil.h"
 
 static UserUtil *g_CurrentUser;
-@interface SingleMotion : NSObject
-@property (nonatomic, copy) NSString *date;
-@property (nonatomic, copy) NSString *startTime; // 单次运动的时间
-@property (nonatomic, assign) int maxNum;  //超过上限的次数
-@property (nonatomic, assign) double singleTotalNum; //单次运动总量
-@property (nonatomic, assign) int index;
-@property (nonatomic, copy) NSString *endTime;
-@property (nonatomic, assign)BOOL isSave;
-@property (atomic, assign) int  alertCount;
-@end
+
 @interface DaylyMotion : NSObject
 @property (nonatomic, strong)NSString *thisDayDate;
 @property (assign, atomic) double  daylyTotal;  //一天的总和

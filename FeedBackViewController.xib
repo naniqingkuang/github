@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedBackViewController">
@@ -136,7 +136,7 @@
                         <constraint firstAttribute="height" constant="120" id="Cwr-zS-bmK"/>
                         <constraint firstAttribute="width" constant="100" id="Ke5-Kd-ugQ"/>
                     </constraints>
-                    <state key="normal" title="录音" backgroundImage="record.gif"/>
+                    <state key="normal" title="录音" backgroundImage="record.jpg"/>
                     <connections>
                         <action selector="startRecordAction:" destination="-1" eventType="touchDown" id="aQ8-Nu-Pnl"/>
                         <action selector="stopRecordAction:" destination="-1" eventType="touchUpInside" id="54w-ni-bA5"/>
@@ -165,6 +165,6 @@
         </view>
     </objects>
     <resources>
-        <image name="record.gif" width="128" height="128"/>
+        <image name="record.jpg" width="220" height="220"/>
     </resources>
 </document>

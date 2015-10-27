@@ -20,9 +20,9 @@
 #import "MBProgressHUD+Util.h"
 #import "DaylyDataViewController.h"
 #import "SqlRequestUtil.h"
+#import "EveryDataUtil.h"
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
-@implementation SingleMotion
-@end
+
 @implementation DaylyMotion
 - (instancetype)init
 {
@@ -56,7 +56,7 @@
 @property (copy, atomic) NSString *hardWareEdition;
 @property (strong, nonatomic) NSTimer *mainThreadTimer;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
-@property (strong, atomic)  SingleMotion *curMotion;   //单次运动
+@property (strong, atomic)  EveryDataUtil *curMotion;   //单次运动
 @property (assign, atomic) int count;   //计数器，用于判断每次运动
 @property (assign, atomic) int  typeSevVenConunt;  //
 @property (strong, nonatomic) NSTimer *intervalTimer;
@@ -77,6 +77,7 @@
     [super viewDidLoad];
     [self initData];
     [self setUp];
+    int i=5;
 }
 -(void)setUp
 {
@@ -212,9 +213,9 @@
     [self getHardInfo];
     self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
 }
-- (void)todayDataSave:(SingleMotion *)data {
+- (void)todayDataSave:(EveryDataUtil *)data {
     if(data && self.todayData) {
-        SingleMotion *item = [[SingleMotion alloc]init];
+        EveryDataUtil *item = [[EveryDataUtil alloc]init];
         item.startTime = data.startTime;
         item.endTime = data.endTime;
         item.maxNum = data.maxNum;
@@ -223,7 +224,7 @@
         item.alertCount = data.alertCount;
         item.date = data.date;
         item.isSave = data.isSave;
-        [self.sql insertSingleMotionData:item];
+        [self.sql insertEveryDataUtilData:item];
         [self.todayData addObject:item];
     }
 }
@@ -261,14 +262,14 @@
     self.count = 0;
     self.curMotion.maxNum = 0;
     self.firstGoFlag = NO;
-    self.curMotion = [[SingleMotion alloc]init];
+    self.curMotion = [[EveryDataUtil alloc]init];
     self.curMotion.isSave = YES;
     self.dateFormatter = [[NSDateFormatter alloc]init];
     self.todayData = [[NSMutableArray alloc]initWithCapacity:20];
     [self.dateFormatter setDateFormat:@"MM-dd"];
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
     [self initSqlTodayData];
-    [self initSqlSingleMotionTemp];
+    [self initSqlEveryDataUtilTemp];
     [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"0"];
     [self.TodayMeasurementView setCurrentSum:@"0%"];
     self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%d%@",0,@"%"];
@@ -294,8 +295,8 @@
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM-dd"];
     if(arr.count){
-        SingleMotion *motion = arr[0]; //是今天的数据
-        for (SingleMotion *item in arr) {
+        EveryDataUtil *motion = arr[0]; //是今天的数据
+        for (EveryDataUtil *item in arr) {
             if([motion.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
                 [self.todayData addObject:item];
             } else {
@@ -312,18 +313,18 @@
         
     }
 }
-- (void)initSqlSingleMotionTemp {
-    SingleMotion *data = [self.sql readSingleDataTemp];
+- (void)initSqlEveryDataUtilTemp {
+    EveryDataUtil *data = [self.sql readSingleDataTemp];
     if(data && data.date.length > 0) {
         [self.dateFormatter setDateFormat:@"MM-dd"];
         if(![data.date isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]]){
-            [self.sql updateSingleMotionTempData:self.curMotion date:data.date];
+            [self   .sql updateEveryDataUtilTempData:self.curMotion date:data.date];
         } else {
             self.curMotion = data;
             self.frequecyNum = self.curMotion.index;
         }
     } else {
-        [self.sql insertSingleMotionTempData:self.curMotion];
+        [self.sql insertEveryDataUtilTempData:self.curMotion];
     }
 }
 - (void)uploadHistoryData:(NSDictionary *)dict {
@@ -334,7 +335,7 @@
     if(keys.count){
         for (NSString *date in keys) {
             NSArray *data = [dict objectForKey:date];
-            for (SingleMotion *item in data) {
+            for (EveryDataUtil *item in data) {
                 maxVlue +=item.maxNum;
                 alert +=item.alertCount;
                 total +=item.singleTotalNum;
@@ -354,7 +355,7 @@
     //数据库数据保存
     if(self.sql) {
         [self.sql updateDayData:self.daylyMotion];
-        [self.sql updateSingleMotionTempData:self.curMotion date:self.curMotion.date];
+        [self.sql updateEveryDataUtilTempData:self.curMotion date:self.curMotion.date];
     }
     if(self.curUserParam)
     {
@@ -524,10 +525,12 @@
         if(name.length > 0){
             if((blueToothCount % 3) == 0) {
                 [[BlueToothUtil getBlueToothInstance] reScan];
-                [MBProgressHUD showError:[NSString stringWithFormat:@"蓝牙:%@未连接，正在连接",name]];
+                if((blueToothCount %10) == 0){
+                    [MBProgressHUD showError:[NSString stringWithFormat:@"蓝牙:%@未连接，正在连接",name]];
+                }
             }
         } else {
-            if((blueToothCount % 5) == 0) {
+            if((blueToothCount % 10) == 0) {
                 [MBProgressHUD showError:@"蓝牙未绑定，请在蓝牙设置界面绑定"];
             }
         }
@@ -563,6 +566,7 @@
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
                         self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
+                        [userParam writeToDefault:self.curUserParam];
                     });
                     self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
                 }];
@@ -580,9 +584,17 @@
                 }
             }
             [self uploadHistoryData:self.historyListDict];
+        } else {
+            self.curUserParam = [userParam readFromDefault];
+            [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
+            self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
+            [userParam writeToDefault:self.curUserParam];
         }
     } else {
         self.curUserParam = [userParam readFromDefault];
+        [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
+        self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
+        [userParam writeToDefault:self.curUserParam];
     }
 }
 - (void)intervalTimerAction {

@@ -28,22 +28,22 @@
 }
 - (void)test {
     [self clearSingleData];
-    SingleMotion *data = [[SingleMotion alloc]init];
+    EveryDataUtil *data = [[EveryDataUtil alloc]init];
     data.date = @"11-10";
     
-    [self insertSingleMotionData:data];
-    data = [[SingleMotion alloc]init];
+    [self insertEveryDataUtilData:data];
+    data = [[EveryDataUtil alloc]init];
     data.index = 1;
     data.singleTotalNum = 20.0;
     data.date = @"11-10";
-    [self insertSingleMotionData:data];
+    [self insertEveryDataUtilData:data];
     [self readSingleDataByDate:@"11-10"];
     [self readSingleData];
-    data = [[SingleMotion alloc]init];
+    data = [[EveryDataUtil alloc]init];
     data.index = 1;
     data.singleTotalNum = 20.0;
     data.date = @"11-11";
-    [self insertSingleMotionData:data];
+    [self insertEveryDataUtilData:data];
     [self readSingleDataByDate:@"11-10"];
     [self readSingleDataByDate:@"11-11"];
     [self readSingleData];
@@ -66,7 +66,7 @@
     }
 }
 /**
- @interface SingleMotion : NSObject
+ @interface EveryDataUtil : NSObject
  @property (nonatomic, copy) NSString *date;
  @property (nonatomic, copy) NSString *startTime; // 单次运动的时间
  @property (nonatomic, assign) int maxNum;  //超过上限的次数
@@ -137,13 +137,13 @@
     }
 }
 
-- (void)insertSingleMotionData:(SingleMotion *)data {
+- (void)insertEveryDataUtilData:(EveryDataUtil *)data {
     if([db open]) {
         [db executeUpdate:@"insert into SingleData (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
         [db close];
     }
 }
-- (void)updateSingleMotionData:(SingleMotion *)data {
+- (void)updateEveryDataUtilData:(EveryDataUtil *)data {
     if ([db open]) {
         NSString *updateSql = [NSString stringWithFormat:
                                @"UPDATE SingleData SET date = '%@',startTime = '%@',maxNum = '%@',singleTotalNum = '%@',mIndex = '%@',endTime = '%@', isSave = '%@',alertCount = '%@' WHERE mIndex = '%@'",
@@ -157,13 +157,13 @@
         
     }
 }
-- (void)insertSingleMotionTempData:(SingleMotion *)data {
+- (void)insertEveryDataUtilTempData:(EveryDataUtil *)data {
     if([db open]) {
         [db executeUpdate:@"insert into SingleDataTemp (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
         [db close];
     }
 }
-- (void)updateSingleMotionTempData:(SingleMotion *)data date:(NSString *)date {
+- (void)updateEveryDataUtilTempData:(EveryDataUtil *)data date:(NSString *)date {
     if ([db open]) {
         NSString *updateSql = [NSString stringWithFormat:
                                @"UPDATE SingleDataTemp SET date = '%@',startTime = '%@',maxNum = '%@',singleTotalNum = '%@',mIndex = '%@',endTime = '%@', isSave = '%@',alertCount = '%@' WHERE date = '%@'",
@@ -172,7 +172,7 @@
         if (!res) {
             NSLog(@"error when update db table");
         } else {
-          // SingleMotion *data = [self readSingleDataTemp];
+          // EveryDataUtil *data = [self readSingleDataTemp];
            // NSLog(@"%@",data);
         }
         [db close];
@@ -193,7 +193,7 @@
         NSMutableArray *arr = [[NSMutableArray alloc]initWithCapacity:10];
         FMResultSet * rs = [db executeQuery:sql];
         while ([rs next]) {
-            SingleMotion *data = [[SingleMotion alloc]init];
+            EveryDataUtil *data = [[EveryDataUtil alloc]init];
             data.date = [rs stringForColumn:@"date"];
             data.startTime = [rs stringForColumn:@"startTime"];
             data.maxNum =[rs intForColumn:@"maxNum"];
@@ -216,7 +216,7 @@
         NSMutableArray *arr = [[NSMutableArray alloc]initWithCapacity:10];
         FMResultSet * rs = [db executeQuery:sql];
         while ([rs next]) {
-            SingleMotion *data = [[SingleMotion alloc]init];
+            EveryDataUtil *data = [[EveryDataUtil alloc]init];
             data.date = [rs stringForColumn:@"date"];
             data.startTime = [rs stringForColumn:@"startTime"];
             data.maxNum =[rs intForColumn:@"maxNum"];
@@ -233,11 +233,11 @@
     return nil;
 }
 
-- (SingleMotion *)readSingleDataTemp {
+- (EveryDataUtil *)readSingleDataTemp {
     if ([db open]) {
         NSString * sql = [NSString stringWithFormat:
                           @"SELECT * FROM %@",@"SingleDataTemp"];
-        SingleMotion *data = [[SingleMotion alloc]init];
+        EveryDataUtil *data = [[EveryDataUtil alloc]init];
         FMResultSet * rs = [db executeQuery:sql];
         while ([rs next]) {
             data.date = [rs stringForColumn:@"date"];

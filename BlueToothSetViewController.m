@@ -62,6 +62,7 @@
    // [self.connectBlueTooth  readValueForCharacteristic:self.connectCharacristic];
 }
 - (IBAction)backToSetting:(UIBarButtonItem *)sender {
+    [self dismissViewControllerAnimated:NO completion:nil];
     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
 }
 

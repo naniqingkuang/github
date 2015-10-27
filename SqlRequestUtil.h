@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "FMDB.h"
 #import "HomeViewController.h"
-
+#import "EveryDataUtil.h"
 @interface SqlRequestUtil : NSObject
-- (void)insertSingleMotionData:(SingleMotion *)data;
+- (void)insertEveryDataUtilData:(EveryDataUtil *)data;
 - (void)insertDaylyData:(DaylyMotion *)data;
 - (NSArray *)readSingleData;
 - (NSArray *)readSingleDataByDate:(NSString *)date;
@@ -19,8 +19,8 @@
 - (void)updateDayData:(DaylyMotion *)data;
 - (void)clearSingleData;
 -(void)clearSingleDataByDate:(NSString *)date;
-- (void)updateSingleMotionData:(SingleMotion *)data;
-- (SingleMotion *)readSingleDataTemp;
-- (void)updateSingleMotionTempData:(SingleMotion *)data date:(NSString *)date;
-- (void)insertSingleMotionTempData:(SingleMotion *)data;
+- (void)updateEveryDataUtilData:(EveryDataUtil *)data;
+- (EveryDataUtil *)readSingleDataTemp;
+- (void)updateEveryDataUtilTempData:(EveryDataUtil *)data date:(NSString *)date;
+- (void)insertEveryDataUtilTempData:(EveryDataUtil *)data;
 @end

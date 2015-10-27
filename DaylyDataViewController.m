@@ -9,6 +9,7 @@
 #import "DaylyDataViewController.h"
 #import "HomePageTableViewCell.h"
 #import "HomeViewController.h"
+#import "EveryDataUtil.h"
 @interface DaylyDataViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
@@ -43,7 +44,7 @@
     if(!cell) {
         cell = (HomePageTableViewCell *)[[[NSBundle mainBundle]loadNibNamed:@"HomePageTableViewCell" owner:nil options:nil]lastObject];
     }
-    SingleMotion *data = [self.daylyData objectAtIndex:indexPath.row];
+    EveryDataUtil *data = [self.daylyData objectAtIndex:indexPath.row];
     cell.singleTotalLB.text =[NSString stringWithFormat:@"%6.2f",data.singleTotalNum];
     cell.alertNumLB.text = [NSString stringWithFormat:@"%d",data.alertCount];
     cell.overNumLB.text = [NSString stringWithFormat:@"%d",data.maxNum];

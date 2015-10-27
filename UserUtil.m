@@ -54,7 +54,7 @@
 {
     self = [super init];
     if (self) {
-        self.myID = [[coder decodeObjectForKey:@"id"]copy ];
+        self.myID = [[coder decodeObjectForKey:@"myID"]copy ];
         self.actflag = [[coder decodeObjectForKey:@"actflag"]copy];
         self.acttime = [[coder decodeObjectForKey:@"acttime"]copy];
         self.dayValueMaxParam = [[coder decodeObjectForKey:@"dayValueMaxParam"]copy];
@@ -78,24 +78,24 @@
 }
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder setValue:self.myID forKey:@"id"];
-    [coder setValue:self.actflag forKey:@"actflag"];
-    [coder setValue: self.acttime forKey:@"acttime"];
-    [coder setValue: self.dayValueMaxParam forKey:@"dayValueMaxParam"];
-    [coder setValue: self.dayValueMinParam forKey:@"dayValueMinParam"];
-    [coder setValue: [NSNumber numberWithInt:self.intervalTimeParam] forKey:@"intervalTimeParam"];
-    [coder setValue:self.intervalTimeTypeParam forKey:@"intervalTimeTypeParam"];
-    [coder setValue:self.isrtime forKey:@"isrtime"];
-    [coder setValue:[NSNumber numberWithInt:self.maxValueNumParam] forKey:@"maxValueNumParam"];
-    [coder setValue:self.maxValueParam forKey:@"maxValueParam"];
-    [coder setValue:self.sportsBeginTimeParam forKey:@"sportsBeginTimeParam"];
-    [coder setValue:self.singleValueMaxParam forKey:@"singleValueMaxParam"];
-    [coder setValue:self.singleValueMinParam forKey:@"singleValueMinParam"];
-    [coder setValue:self.sportsEndTimeParam forKey:@"sportsEndTimeParam"];
-    [coder setValue:self.userType forKey:@"userType"];
-    [coder setValue:self.weightValueParam forKey:@"weightValueParam"];
-    [coder setValue:self.status forKey:@"status"];
-    [coder setValue:self.userName forKey:@"userName"];
+    [coder encodeObject:self.myID forKey:@"myID"];
+    [coder encodeObject:self.actflag forKey:@"actflag"];
+    [coder encodeObject: self.acttime forKey:@"acttime"];
+    [coder encodeObject: self.dayValueMaxParam forKey:@"dayValueMaxParam"];
+    [coder encodeObject: self.dayValueMinParam forKey:@"dayValueMinParam"];
+    [coder encodeObject: [NSNumber numberWithInt:self.intervalTimeParam] forKey:@"intervalTimeParam"];
+    [coder encodeObject:self.intervalTimeTypeParam forKey:@"intervalTimeTypeParam"];
+    [coder encodeObject:self.isrtime forKey:@"isrtime"];
+    [coder encodeObject:[NSNumber numberWithInt:self.maxValueNumParam] forKey:@"maxValueNumParam"];
+    [coder encodeObject:self.maxValueParam forKey:@"maxValueParam"];
+    [coder encodeObject:self.sportsBeginTimeParam forKey:@"sportsBeginTimeParam"];
+    [coder encodeObject:self.singleValueMaxParam forKey:@"singleValueMaxParam"];
+    [coder encodeObject:self.singleValueMinParam forKey:@"singleValueMinParam"];
+    [coder encodeObject:self.sportsEndTimeParam forKey:@"sportsEndTimeParam"];
+    [coder encodeObject:self.userType forKey:@"userType"];
+    [coder encodeObject:self.weightValueParam forKey:@"weightValueParam"];
+    [coder encodeObject:self.status forKey:@"status"];
+    [coder encodeObject:self.userName forKey:@"userName"];
     
 }
 + (void)writeToDefault:(userParam *)data {

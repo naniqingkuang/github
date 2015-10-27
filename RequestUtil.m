@@ -199,7 +199,7 @@ static NSString *userName;
             else
             {
                 NSString *err = [dict objectForKey:@"reason"];
-                [MBProgressHUD showError: err];
+                
             }
         }
         
@@ -228,7 +228,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
 
     }];
@@ -252,7 +252,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
         
     }];
@@ -281,7 +281,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }
@@ -307,7 +307,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }
@@ -330,7 +330,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }
@@ -374,7 +374,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
 
     }];
@@ -390,7 +390,7 @@ static NSString *userName;
 //        else
 //        {
 //            NSString *err = [dict objectForKey:@"reason"];
-//            [MBProgressHUD showError: err];
+//            
 //        }
 //    }];
 }
@@ -430,7 +430,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
         
     }];
@@ -447,14 +447,15 @@ static NSString *userName;
     int alertCount = 0;
     NSMutableArray *mulArr = [[NSMutableArray alloc]initWithCapacity:arr.count];
     for (EveryDataUtil *item in arr) {
-        NSDictionary *dict = @{ @"sportSerialNum":[NSNumber numberWithInt:item.sportSerialNum],
+        [item checkAndAvoidNull];
+        NSDictionary *dict = @{ @"sportSerialNum":[NSNumber numberWithInt:item.index],
                                 @"startTime":item.startTime,
                                 @"endTime":item.endTime,
-                                @"singleTotal":[NSNumber numberWithDouble:item.singleTotal],
-                                @"maxValueNum":[NSNumber numberWithInt:item.maxValueNum]
+                                @"singleTotal":[NSNumber numberWithDouble:item.singleTotalNum],
+                                @"maxValueNum":[NSNumber numberWithInt:item.maxNum]
                                 };
-        count += item.maxValueNum;
-        alertCount += item.alertNum;
+        count += item.maxNum;
+        alertCount += item.alertCount;
         [mulArr addObject:dict];
     }
     NSDictionary *dataDict = @{@"everyData":mulArr};
@@ -478,7 +479,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }
@@ -501,7 +502,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }
@@ -523,7 +524,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 
@@ -552,7 +553,7 @@ static NSString *userName;
         else
         {
             NSString *err = [dict objectForKey:@"reason"];
-            [MBProgressHUD showError: err];
+            
         }
     }];
 }

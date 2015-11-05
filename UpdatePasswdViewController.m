@@ -36,9 +36,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)backToSettingClicked:(id)sender {
-    //[[SliderViewController sharedSliderController]leftItemClick];
-    [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-
+    [[SliderViewController sharedSliderController]leftItemClickToMain];
 }
 - (IBAction)updatePassedClicked:(id)sender {
     if(![self.aNewPassed.text isEqualToString:self.confirmPassed.text]){

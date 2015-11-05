@@ -318,11 +318,7 @@
     return res;
 }
 - (IBAction)backButtonClicked:(id)sender {
-//    [self dismissViewControllerAnimated:YES completion:^{
-//        [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-//    }];
-     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-   // [[SliderViewController sharedSliderController]leftItemClick];
+    [[SliderViewController sharedSliderController]leftItemClickToMain];
 }
 - (IBAction)updateCommit:(id)sender {
     [self getDataFromCell];

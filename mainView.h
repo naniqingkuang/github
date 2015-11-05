@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 @interface mainView : UIView
-- (void)setPersentMaskOfCircle:(CGFloat)value;
+- (void)setPersentMaskOfCircle:(CGFloat)value color:(CGColorRef)color;
 - (void)setLineWidth:(float)bigCircleLineWidth AndOffset:(float)smallCircleLineWidth;
 - (void)setUp;
 - (void)setTitle:(NSString *)title andTarget:(NSString *)targetSum;
-- (void)setCurrentSum:(NSString *)curSum;
+//- (void)setCurrentSum:(NSString *)curSum;
 - (void)aninationStart;
 @end

@@ -43,7 +43,6 @@
 @property (strong, nonatomic) IBOutlet UINavigationItem *dateNavigationItem;
 @property (strong, nonatomic) UIView *loginView;
 @property (strong, nonatomic) IBOutlet UIProgressView *daylyTotalProgress;
-@property (strong, nonatomic) IBOutlet UILabel *daylyTotalParamLB;
 @property (strong, nonatomic) IBOutlet UILabel *percentDaylyTotalParamLB;
 @property (strong, nonatomic) IBOutlet UIImageView *chargeImageView;
 @property (strong, nonatomic) BlueToothUtil *blueTooth;
@@ -77,27 +76,31 @@
     [super viewDidLoad];
     [self initData];
     [self setUp];
-    int i=5;
 }
 -(void)setUp
 {
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.TodayMeasurementView setPersentMaskOfCircle:0];
     [self.TodayMeasurementView setLineWidth:22 AndOffset:10];
     [self.TodayMeasurementView setUp];
+    [self.TodayMeasurementView setPersentMaskOfCircle:0 color:[UIColor redColor].CGColor];
+    [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:@"0"];
+    self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
+    [self.daylyTotalProgress setProgress:0.0];
     self.curUser = [RequestUtil getCurrentUser];
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM月dd日"];
-    NSString *dateStr =[format stringFromDate:[NSDate date]];
-    self.dateNavigationItem.title= dateStr;
+    //self.dateNavigationItem.title= [NSString stringWithFormat:@"蓝牙未连接，已登录"];
     self.blueTooth = [BlueToothUtil getBlueToothInstance];
     if(![RequestUtil checkNetState]) {
         [MBProgressHUD showError:@"网络未连接，不能实现数据同步"];
     }
+
     //电量
+    self.chargeImageView.image = [UIImage imageNamed:@"1.jpg"];
     [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
         NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
         self.chargeImageView.image = [UIImage imageNamed:str];
+        //self.rightBarButton.image = [UIImage imageNamed:str];
     }];
     //实时数据
     [[BlueToothUtil getBlueToothInstance]readCurrentMotionMeasurement:^(float equivalent, float inpulse) {
@@ -212,6 +215,7 @@
     }];
     [self getHardInfo];
     self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
+    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
 }
 - (void)todayDataSave:(EveryDataUtil *)data {
     if(data && self.todayData) {
@@ -230,25 +234,56 @@
 }
 - (void)showToUser {
     //界面显示
-    CGFloat percent = 0;
-    percent = self.curMotion.singleTotalNum/[self.curUserParam.singleValueMaxParam doubleValue];
-    if(percent > 1.0) {
-        percent = 1.0;
+    if(![self.curUserParam.userType isEqualToString:@"7"]){
+        CGFloat percent = 0;
+        double num = self.curMotion.singleTotalNum;
+        percent = self.curMotion.singleTotalNum/[self.curUserParam.singleValueMaxParam doubleValue];
+        if(percent > 1.0) {
+            percent = 1.0;
+        }
+        if([self.curUserParam.singleValueMinParam doubleValue] - num >= 0.01) {
+            [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:nil];
+            [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+            
+        } else if(num - [self.curUserParam.singleValueMinParam doubleValue] >= 0.01 && [self.curUserParam.singleValueMaxParam doubleValue] - num >= 0.01){
+            [self.TodayMeasurementView setTitle:@"本次已达标" andTarget:nil];
+            [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
+
+        } else if(num - [self.curUserParam.singleValueMaxParam doubleValue] >= 0.01) {
+            [self.TodayMeasurementView setTitle:@"本次超标" andTarget:nil];
+            [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+        }
+        percent = self.daylyMotion.daylyTotal
+        /[self.curUserParam.dayValueMaxParam doubleValue];
+        if(percent > 1.0) {
+            percent = 1.0;
+        }
+        [self.daylyTotalProgress setProgress:percent];
+        num = self.daylyMotion.daylyTotal;
+        if([self.curUserParam.dayValueMinParam doubleValue] - num >= 0.01) {
+            self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
+            self.daylyTotalProgress.tintColor = [UIColor redColor];
+        } else if (num - [self.curUserParam.dayValueMinParam doubleValue] >= 0.01 && [self.curUserParam.dayValueMaxParam doubleValue] - num >= 0.01 ){
+            self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已达标"];
+            self.daylyTotalProgress.tintColor = [UIColor greenColor];
+        } else if(num - [self.curUserParam.dayValueMaxParam doubleValue] >= 0.01) {
+            self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已超标"];
+            self.daylyTotalProgress.tintColor = [UIColor redColor];
+        }
+
+    } else {
+        CGFloat percent = 0.0;
+        percent = self.curMotion.maxNum / self.curUserParam.maxValueNumParam;
+        if(1.0 - percent >0.01){
+            [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+            [self.TodayMeasurementView setTitle:@"未达标" andTarget:nil];
+        } else {
+            percent = 1.0;
+            [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
+            [self.TodayMeasurementView setTitle:@"已达标" andTarget:nil];
+        }
+        self.percentDaylyTotalParamLB.text = @"";
     }
-    [self.TodayMeasurementView setPersentMaskOfCircle:(percent)];
-    percent = self.curMotion.singleTotalNum/[self.curUserParam.singleValueMaxParam doubleValue];
-    if (percent > 1.0) {
-        percent = 1.0;
-    }
-    [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%2.0f%@",percent *100,@"%"]];
-    percent = self.daylyMotion.daylyTotal
-    /[self.curUserParam.dayValueMaxParam doubleValue];
-    if(percent > 1.0) {
-        percent = 1.0;
-    }
-    self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%2.0lf%@",(percent*100),@"%"];
-    [self.daylyTotalProgress setProgress:self.daylyMotion.daylyTotal
-     /[self.curUserParam.dayValueMaxParam doubleValue]];
 }
 - (void)initData {
     _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
@@ -270,10 +305,6 @@
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
     [self initSqlTodayData];
     [self initSqlEveryDataUtilTemp];
-    [self.TodayMeasurementView setTitle:@"本次运动" andTarget:@"0"];
-    [self.TodayMeasurementView setCurrentSum:@"0%"];
-    self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%d%@",0,@"%"];
-    [self.daylyTotalProgress setProgress:0.0];
 }
 - (void)initSqlDaylyData {
     NSArray *arr = [self.sql readDaylyData];
@@ -349,9 +380,28 @@
         }
     }
 }
+- (void)statusCheck {
+    NSMutableString *statusStr = [[NSMutableString alloc]initWithString:@""];
+    if(CBPeripheralStateConnected == [[BlueToothUtil getBlueToothInstance]getConnectFlag]){
+        [statusStr appendFormat:@"蓝牙已连接"];
+    } else if(CBPeripheralStateConnecting == [[BlueToothUtil getBlueToothInstance]getConnectFlag]){
+        [statusStr appendFormat:@"蓝牙正在连接"];
+    } else if(CBPeripheralStateDisconnected == [[BlueToothUtil getBlueToothInstance]getConnectFlag]) {
+        [statusStr appendFormat:@"蓝牙已断开"];
+    }else if(CBPeripheralStateDisconnecting == [[BlueToothUtil getBlueToothInstance]getConnectFlag]) {
+        [statusStr appendFormat:@"蓝牙已断开"];
+    }
+    if([LoginViewController hasLogin]) {
+        [statusStr appendFormat:@",用户已登录"];
+    }else {
+        [statusStr appendFormat:@",用户未登录"];
+    }
+    self.dateNavigationItem.title = statusStr;
+}
 - (void)mainThread {
     [self getHardInfo];
     [self getParam];  //通过网络获取数据
+    [self statusCheck];
     //数据库数据保存
     if(self.sql) {
         [self.sql updateDayData:self.daylyMotion];
@@ -401,6 +451,8 @@
                 }
             }
         }
+    } else {
+        
     }
 }
 - (void)singleEndAction {
@@ -486,7 +538,6 @@
                                         block:^{
                                             self.curMotion.alertCount ++;
                                         }
-                 
                  ];
                 [MBProgressHUD showError:@"今天运动时间过量"];
                 
@@ -525,19 +576,11 @@
         if(name.length > 0){
             if((blueToothCount % 3) == 0) {
                 [[BlueToothUtil getBlueToothInstance] reScan];
-                if((blueToothCount %10) == 0){
-                    [MBProgressHUD showError:[NSString stringWithFormat:@"蓝牙:%@未连接，正在连接",name]];
-                }
-            }
-        } else {
-            if((blueToothCount % 10) == 0) {
-                [MBProgressHUD showError:@"蓝牙未绑定，请在蓝牙设置界面绑定"];
             }
         }
     } else if(CBPeripheralStateConnected == flag) {
         if(![[BlueToothUtil getBlueToothInstance]isBlueToothConnected]) {
             [[BlueToothUtil getBlueToothInstance] reScan];
-            [MBProgressHUD showError:[NSString stringWithFormat:@"%@不是指定设备",name]];
         }
     }
     if(!self.curUser.deviceID18) {
@@ -557,44 +600,32 @@
     }
 }
 - (void)getParam {
-    if([RequestUtil checkNetState]){
-        if([LoginViewController hasLogin]){
-            if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
-            {
-                [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
-                    self.curUserParam = [[userParam alloc]initWithDict:dict];
+    if([LoginViewController hasLogin]){
+        if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
+        {
+            [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
+                self.curUserParam = [[userParam alloc]initWithDict:dict];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [userParam writeToDefault:self.curUserParam];
+                });
+            }];
+        }
+        
+        if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
+            if([RequestUtil getUserName].length >0){
+                [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
-                        self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
-                        [userParam writeToDefault:self.curUserParam];
+                        UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                        [RequestUtil setCurrentUser:item];
+                        self.curUser = item;
                     });
-                    self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
                 }];
             }
-            
-            if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
-                if([RequestUtil getUserName].length >0){
-                    [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            UserUtil *item = [[UserUtil alloc]initWithDict:dict];
-                            [RequestUtil setCurrentUser:item];
-                            self.curUser = item;
-                        });
-                    }];
-                }
-            }
-            [self uploadHistoryData:self.historyListDict];
-        } else {
-            self.curUserParam = [userParam readFromDefault];
-            [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
-            self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
-            [userParam writeToDefault:self.curUserParam];
         }
+        [self uploadHistoryData:self.historyListDict];
     } else {
+        [LoginViewController tryToLogin];
         self.curUserParam = [userParam readFromDefault];
-        [self.TodayMeasurementView setTitle:@"本次运动" andTarget:self.curUserParam.singleValueMaxParam];
-        self.daylyTotalParamLB.text = self.curUserParam.dayValueMaxParam;
-        [userParam writeToDefault:self.curUserParam];
     }
 }
 - (void)intervalTimerAction {
@@ -636,19 +667,7 @@
         [self.intervalTimer invalidate];
     }
 }
-//- (void)getHardInfo
-//{
-//    [[BlueToothUtil getBlueToothInstance]readDeviceID:^(NSString *name) {
-//        self.curUser.deviceID18 = name;
-//    }];
-//    [[BlueToothUtil getBlueToothInstance]readSoftEdition:^(NSString *softEdition) {
-//        self.softEdition = softEdition;
-//    }];
-//    [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
-//        self.hardWareEdition = hardWareEdition;
-//    }];
-//    
-//}
+
 #pragma  mark  心跳包
 - (void)heartBeatAction {
         [RequestUtil keepHeartBeat:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSString *cmdStr) {
@@ -715,10 +734,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSDateFormatter *format = [[NSDateFormatter alloc]init];
-    [format setDateFormat:@"MM月dd日"];
-    NSString *dateStr =[format stringFromDate:[NSDate date]];
-    self.dateNavigationItem.title = dateStr;
     [self getHardInfo];
 }
 - (void)didReceiveMemoryWarning {
@@ -774,11 +789,7 @@
     lab.text = @"本次运动量";
     return lab;
 }
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    NSString *str = [NSString stringWithFormat:@"2.jpg"];
-//    self.chargeImageView.image = [UIImage imageNamed:str];
-//}
+
 - (IBAction)detailButtonClicked:(id)sender {
     DaylyDataViewController *vc = [[DaylyDataViewController alloc]initWithNibName:@"DaylyDataViewController" bundle:nil];
     vc.daylyData = self.todayData;
@@ -788,26 +799,48 @@
 ;
     [self presentViewController:vc animated:YES completion:nil];
 }
-//- (void)startPlay:(NSString *)url {
-//    NSError *err = nil;
-//    NSString *filePath = [[NSBundle mainBundle] pathForResource:url ofType:@"caf"];
-//    NSData *data = [NSData dataWithContentsOfFile:filePath];
-//    self.player = [[AVAudioPlayer alloc]initWithData:data error:&err];
-//    _player.volume = 1.0;
-//    _player.numberOfLoops = 0;
-//    _player.currentTime = 0.0;
-//    [_player prepareToPlay];
-//    [_player play];
-//}
-//- (void)endPlay {
-//    if(_player) {
-//        [_player stop];
-//    }
-//}
 
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-//{
-//    [self playSound];
-//    [self vibrate];
-//}
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    static CGFloat percent;
+    static CGFloat percent1;
+    static double num;
+    static double num1;
+    
+    //测试,猪猪
+    num += 100;
+    percent += 0.1;
+    if(percent > 1.0) {
+        percent = 1.0;
+    }
+    
+    if([self.curUserParam.singleValueMinParam doubleValue] - num >= 0.01) {
+        [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:nil];
+        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+        
+    } else if(num - [self.curUserParam.singleValueMinParam doubleValue] >= 0.01 && [self.curUserParam.singleValueMaxParam doubleValue] - num >= 0.01){
+        [self.TodayMeasurementView setTitle:@"本次已达标" andTarget:nil];
+        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
+        
+    } else if(num - [self.curUserParam.singleValueMaxParam doubleValue] >= 0.01) {
+        [self.TodayMeasurementView setTitle:@"本次已超标" andTarget:nil];
+        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+    }
+    percent1 += 0.05;
+    if(percent1 > 1.0) {
+        percent1 = 1.0;
+    }
+    num1 += 200;
+    [self.daylyTotalProgress setProgress:percent1];
+    if([self.curUserParam.dayValueMinParam doubleValue] - num1 >= 0.01) {
+        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
+        self.daylyTotalProgress.tintColor = [UIColor redColor];
+    } else if (num1 - [self.curUserParam.dayValueMinParam doubleValue] >= 0.01 && [self.curUserParam.dayValueMaxParam doubleValue] - num1 >= 0.01 ){
+        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已达标"];
+        self.daylyTotalProgress.tintColor = [UIColor greenColor];
+    } else if(num1 - [self.curUserParam.dayValueMaxParam doubleValue] >= 0.01) {
+        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已超标"];
+        self.daylyTotalProgress.tintColor = [UIColor redColor];
+    }
+}
 @end

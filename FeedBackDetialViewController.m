@@ -53,6 +53,7 @@
                     NSString *str = [filePath objectAtIndex:i];
                     str = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
                     NSURL *url = [NSURL URLWithString:str];
+                   // NSLog(@"%@ \n %@",url.scheme,url.port);
                     NSURLRequest *req = [NSURLRequest requestWithURL:url];
                     [NSURLConnection sendAsynchronousRequest:req queue:[[NSOperationQueue alloc]init] completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
                         if([str hasSuffix:@".jpg"]){

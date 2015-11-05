@@ -34,5 +34,6 @@
 - (void)showContentControllerWithModel:(NSString*)className;
 - (void)leftItemClick;
 - (void)rightItemClick;
+- (void)leftItemClickToMain;
 
 @end

@@ -17,6 +17,7 @@ static BOOL logoFlag;
 @interface LoginViewController ()<UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *nameText;
 @property (strong, nonatomic) IBOutlet UITextField *passedText;
+@property (strong, nonatomic) IBOutlet UIImageView *rememberPWImageView;
 @property (strong, nonatomic) IBOutlet UIButton *loginButton;
 @property (strong, nonatomic) IBOutlet UIImageView *logoImageView;
 @end
@@ -34,8 +35,24 @@ static BOOL logoFlag;
     self.passedText.delegate = self;
     self.loginButton.layer.masksToBounds = YES;
     logoFlag = NO;
+    BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+    if(flag) {
+        self.rememberPWImageView.image = [UIImage imageNamed:@"select.png"];
+    } else {
+        self.rememberPWImageView.image = [UIImage imageNamed:@"notSelect.png"];
+    }
     // Do any additional setup after loading the view from its nib.
     NSLog(@"%s",__FUNCTION__);
+}
+- (IBAction)rememberPasswd:(id)sender {
+    BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+    if(flag) {
+        self.rememberPWImageView.image = [UIImage imageNamed:@"notSelect.png"];
+        [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithBool:NO] forKey:@"rememberPassWd"];
+    } else {
+        self.rememberPWImageView.image = [UIImage imageNamed:@"select.png"];
+        [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithBool:YES] forKey:@"rememberPassWd"];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,11 +69,30 @@ static BOOL logoFlag;
     // Pass the selected object to the new view controller.
 }
 */
++ (void)tryToLogin {
+    if(![self hasLogin]) {
+        BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+        NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+        NSString *passwd = [[NSUserDefaults standardUserDefaults]objectForKey:@"passwd"];
+        if(flag && userName.length >0 && passwd.length >0) {
+            [RequestUtil userLogin:userName passwd:passwd block:^(bool flag) {
+                if(flag){
+                    [RequestUtil setUserName:userName];
+                    [RequestUtil getUserinfo:userName block:^(NSDictionary *dict) {
+                        UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                        [RequestUtil setCurrentUser:item];
+                        logoFlag = YES;
+                    }];
+                }
+            }];
+        }
+    }
+}
 - (IBAction)loginButtonClicked:(id)sender {
    // [self dismissViewControllerAnimated:YES completion:nil];
     
     if(!self.nameText.text || self.passedText.text.length != 6) {
-        [MBProgressHUD showError:@"用户名或者密码格式不正确，密码要去六位"];
+        [MBProgressHUD showError:@"用户名或者密码格式不正确，密码要求六位"];
         return;
     }
     [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag) {
@@ -82,51 +118,7 @@ static BOOL logoFlag;
 + (BOOL)hasLogin {
     return logoFlag;
 }
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keboardShow:) name:UIKeyboardDidShowNotification object:nil];
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keboardHide:) name:UIKeyboardDidHideNotification object:nil];
-//
-//}
-//- (void)viewWillDisappear:(BOOL)animated {
-//    [super viewWillDisappear:animated];
-//    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:UIKeyboardDidHideNotification];
-//    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:UIKeyboardDidShowNotification];
-//
-//}
-//- (void)keboardShow:(NSNotification *)notification {
-//    static double y = 0.0;
-//    NSDictionary *userInfo = [notification userInfo];
-//    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect keyboardRect = [aValue CGRectValue];
-//    NSTimeInterval animationDurat = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]doubleValue];
-//    CGRect frame = self.view.frame;
-//    if(y - keyboardRect.size.height > 0.1 || keyboardRect.size.height - y> 0.1){
-//        frame.origin.y += y-100;
-//        frame.origin.y -= keyboardRect.size.height -100;
-//    }
-//    y = keyboardRect.size.height;
-//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-//    [UIView setAnimationDuration:animationDurat];
-//    self.view.frame = frame;
-//    [UIView commitAnimations];
-//}
-//- (void)keboardHide:(NSNotification *)notification {
-//    static double y = 0.0;
-//    NSDictionary *userInfo = [notification userInfo];
-//    NSValue *aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect keyboardRect = [aValue CGRectValue];
-//    CGRect frame = self.view.frame;
-//    if(y - keyboardRect.size.height > 0.1 || keyboardRect.size.height - y> 0.1){
-//        frame.origin.y -= y -100;
-//        frame.origin.y += keyboardRect.size.height -100;
-//    }
-//    y = keyboardRect.size.height;    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-//    NSTimeInterval animationDurat = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey]doubleValue];
-//    [UIView setAnimationDuration:animationDurat];
-//    self.view.frame = frame;
-//    [UIView commitAnimations];
-//}
+
 - (void)keboardShow{
     CGRect frame = self.view.frame;
     frame.origin.y -=  100;
@@ -149,6 +141,11 @@ static BOOL logoFlag;
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     [self keboardHide];
+    BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+    if(flag) {
+        [[NSUserDefaults standardUserDefaults]setObject:self.passedText.text forKey:@"passwd"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     return YES;
 }
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {

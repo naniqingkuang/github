@@ -61,7 +61,7 @@
     _progressLayer = [CAShapeLayer layer];
     _progressLayer.frame = self.bounds;
     _progressLayer.fillColor =  [[UIColor clearColor] CGColor];
-    _progressLayer.strokeColor  = [[UIColor blueColor] CGColor];
+   // _progressLayer.strokeColor  = [[UIColor blueColor] CGColor];
     _progressLayer.lineCap = kCALineCapRound;
     _progressLayer.opacity = 1;
     _progressLayer.strokeStart = 0.0;
@@ -103,6 +103,7 @@
     _progressLayer1.frame = self.bounds;
     _progressLayer1.fillColor =  [[UIColor whiteColor] CGColor];
     _progressLayer1.strokeColor  = [[UIColor colorWithRed:240.0/255.0 green:240.0/255.0 blue:240.0/255.0 alpha:100.0]CGColor];
+    //_progressLayer1.strokeColor = [UIColor redColor].CGColor;
     _progressLayer1.lineCap = kCALineCapRound;
     _progressLayer1.opacity = 1;
     _progressLayer1.strokeStart = 0.0;
@@ -130,11 +131,12 @@
     _todaySumLB = [[UILabel alloc]init];
     [_todaySumLB setTextAlignment:NSTextAlignmentCenter];
     [_todaySumLB setFont:[UIFont systemFontOfSize:26]];
-    _todaySumLB.frame =CGRectMake(0, rectWidth/2, rectWidth,rectWidth /2);
     _titleNameLB = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, rectWidth,rectWidth/4)];
     _titleNameLB.textAlignment = NSTextAlignmentCenter;
-    _titleNameLB.font = [UIFont systemFontOfSize:16];
+    _titleNameLB.font = [UIFont systemFontOfSize:13];
     _titleNameLB.textColor = [UIColor grayColor];
+    _titleNameLB.frame =CGRectMake(0, rectWidth/3, rectWidth,rectWidth /2);
+
 //    _targetSumLB = [[UILabel alloc]init];
 //    _targetSumLB.frame = CGRectMake(0, rectWidth*3/4, rectWidth,rectWidth /4);
 //    _targetSumLB.font = [UIFont systemFontOfSize:16];
@@ -148,18 +150,19 @@
     _circleHeadLayer = [[CALayer alloc]init];
     _circleHeadLayer.masksToBounds = YES;
     _circleHeadLayer.backgroundColor = [UIColor clearColor].CGColor;
-    _circleHeadLayer.cornerRadius = lineWidth;
+    _circleHeadLayer.cornerRadius = lineWidth *1.4/2;
     _circleHeadLayer.contents = (id)[UIImage imageNamed:@"police"].CGImage;
     _circleHeadLayer.opacity = 1;
     _circleHeadLayer.anchorPoint = CGPointMake(0.5, 0.5);
-    _circleHeadLayer.frame = CGRectMake(width/2 + (radius - lineWidth/2) * sin(0.15+(percent)*(2*M_PI - 0.30)), height/2 - ((radius - lineWidth/2) * cos(0.15+(percent)*(2*M_PI - 0.30))), lineWidth*2, lineWidth*2);
+    _circleHeadLayer.frame = CGRectMake(width/2 + (radius - lineWidth/2) * sin(0.15+(percent)*(2*M_PI - 0.30)), height/2 - ((radius - lineWidth/2) * cos(0.15+(percent)*(2*M_PI - 0.30))), lineWidth*1.4, lineWidth*1.4);
     //层次加载
     gradientLayer.mask = _progressLayer;
-    [gradientLayer addSublayer:gradientLayer1];
-    [gradientLayer addSublayer:gradientLayer2];
+    //[gradientLayer addSublayer:gradientLayer1];
+   // [gradientLayer addSublayer:gradientLayer2];
     [self.layer addSublayer:_layerShandow];
     [self.layer addSublayer:_trackLayer];
-    [self.layer addSublayer:gradientLayer];
+    [self.layer addSublayer:_progressLayer];
+   // [self.layer addSublayer:gradientLayer];
     [self.layer addSublayer:_progressLayer1];
     [self.layer addSublayer:pngLayer];
     [self.layer addSublayer:_circleHeadLayer];
@@ -200,6 +203,7 @@
         _progressLayer.lineWidth = lineWidth;
         UIBezierPath *path1 = [UIBezierPath bezierPathWithArcCenter:CGPointMake(width/2, height/2) radius:(radius - lineWidth/2) startAngle:M_PI*3/2 + 0.15 endAngle:M_PI*3/2 - 0.15 clockwise:YES];
         _progressLayer.strokeEnd = percent;
+        //_progressLayer.strokeColor = [UIColor blueColor].CGColor;
         _progressLayer.path = [path1 CGPath];
     }
    // 内环
@@ -221,7 +225,7 @@
 //        _webView.layer.cornerRadius = radius - lineWidth - offSet;
 //    }
     //进度条的头部
-    _circleHeadLayer.position = CGPointMake(width/2 + (radius - lineWidth/2) * sin(0.15+(percent)*(2*M_PI - 0.30)), height/2 - ((radius - lineWidth/2) * cos(0.15+(percent)*(2*M_PI - 0.30))));
+    _circleHeadLayer.position = CGPointMake(width/2 + (radius - lineWidth/2 ) * sin(0.15+(percent)*(2*M_PI - 0.30)), height/2 - ((radius - lineWidth/2) * cos(0.15+(percent)*(2*M_PI - 0.30))));
     
     //小圆
     pngLayer.frame = CGRectMake((width/2 - radius + lineWidth+offSet), (height/2-radius + lineWidth+offSet), (radius*2 - lineWidth*2 - 2*offSet)   , (radius*2 - lineWidth*2 - 2*offSet));
@@ -237,16 +241,28 @@
         _titleNameLB.text = _title;
 
     }
+    if(_circleHeadLayer){
+        if(percent < 0.25 || percent > 0.75) {
+            _circleHeadLayer.contents = (id)[UIImage imageNamed:@"police1"].CGImage;
+        } else if(percent < 0.75 && percent > 0.25){
+            _circleHeadLayer.contents = (id)[UIImage imageNamed:@"police"].CGImage;
+        }
+    }
 //    if(![_targetSumLB.text isEqual:_targetSum])
 //    {
 //        _targetSumLB.text = _targetSum;
 //    }
 }
-- (void)setPersentMaskOfCircle:(CGFloat)value
+- (void)setPersentMaskOfCircle:(CGFloat)value color:(CGColorRef)color
 {
-    if (value != percent) {
-        percent = value;
-        [self setNeedsDisplay];
+//    if (value != percent) {
+//        percent = value;
+//        [self setNeedsDisplay];
+//    }
+    percent = value;
+    [self setNeedsDisplay];
+    if(color) {
+        _progressLayer.strokeColor = color;
     }
     return;
 }
@@ -260,9 +276,9 @@
 {
     _title = title;
     _targetSum = targetSum;
+    _targetSum = @"";
 }
-- (void)setCurrentSum:(NSString *)curSum
-{
+- (void)setCurrentSum:(NSString *)curSum {
     _curSum = curSum;
 }
 - (void)aninationStart {

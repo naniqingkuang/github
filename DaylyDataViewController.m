@@ -10,6 +10,7 @@
 #import "HomePageTableViewCell.h"
 #import "HomeViewController.h"
 #import "EveryDataUtil.h"
+#import "SliderViewController.h"
 @interface DaylyDataViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
@@ -27,7 +28,7 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)backButtonClicked:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [[SliderViewController sharedSliderController]leftItemClickToMain];
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;

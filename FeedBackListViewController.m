@@ -65,9 +65,7 @@
     [self presentViewController:FDVC animated:YES completion:nil];
 }
 - (IBAction)backButtonClicked:(id)sender {
-    //[[SliderViewController sharedSliderController]leftItemClick];
-    [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
-
+    [[SliderViewController sharedSliderController]leftItemClickToMain];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataList.count;

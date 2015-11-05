@@ -181,6 +181,22 @@ typedef NS_ENUM(NSInteger, RMoveDirection) {
     self.MainVC=controller;
 }
 
+- (void)leftItemClickToMain
+{
+    CGAffineTransform conT = [self transformWithDirection:RMoveDirectionRight];
+    
+    [self.view sendSubviewToBack:_rightSideView];
+    [self configureViewShadowWithDirection:RMoveDirectionRight];
+    
+    [UIView animateWithDuration:0.1
+                     animations:^{
+                         _mainContentView.transform = conT;
+                     }
+                     completion:^(BOOL finished) {
+                         _tapGestureRec.enabled = YES;
+                         [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+                     }];
+}
 - (void)leftItemClick
 {
     CGAffineTransform conT = [self transformWithDirection:RMoveDirectionRight];

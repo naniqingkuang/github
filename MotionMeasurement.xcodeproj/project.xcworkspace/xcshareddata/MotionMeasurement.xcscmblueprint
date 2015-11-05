@@ -1,23 +1,23 @@
 {
   "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
-    "e2391257-57d8-704c-aa19-c67db33402c2++7580" : {
+    "dc66acda-0b09-4303-9233-bf4dfb44af07++3082" : {
 
     },
-    "dc66acda-0b09-4303-9233-bf4dfb44af07++6973" : {
+    "e2391257-57d8-704c-aa19-c67db33402c2++7580" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
     "e2391257-57d8-704c-aa19-c67db33402c2++7580" : 0,
     "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2" : 0,
-    "dc66acda-0b09-4303-9233-bf4dfb44af07++6973" : 0
+    "dc66acda-0b09-4303-9233-bf4dfb44af07++3082" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6F046B50-DDFF-47F9-B330-F942911688D9",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
     "e2391257-57d8-704c-aa19-c67db33402c2++7580" : "AndEduiOS",
     "EBCFBC0AD4E32321949A674C373A7D8DFF2135E2" : "github",
-    "dc66acda-0b09-4303-9233-bf4dfb44af07++6973" : "AndEducationTeacherClient\/"
+    "dc66acda-0b09-4303-9233-bf4dfb44af07++3082" : "AndEducationTeacherClient\/"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "MotionMeasurement",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -31,7 +31,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/192.168.11.4\/zdyy\/AndEducation",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "dc66acda-0b09-4303-9233-bf4dfb44af07++6973"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "dc66acda-0b09-4303-9233-bf4dfb44af07++3082"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/111.47.111.130\/svn\/CMCC_Repository",

@@ -63,7 +63,7 @@
 }
 - (IBAction)backToSetting:(UIBarButtonItem *)sender {
     [self dismissViewControllerAnimated:NO completion:nil];
-    [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
+    [[SliderViewController sharedSliderController]leftItemClickToMain];
 }
 
 

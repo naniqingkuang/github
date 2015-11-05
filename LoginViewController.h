@@ -11,4 +11,5 @@ typedef void(^Login_block) (void);
 @interface LoginViewController : UIViewController
 @property (copy , nonatomic)Login_block my_block;
 + (BOOL)hasLogin;
++ (void)tryToLogin;
 @end

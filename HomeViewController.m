@@ -21,6 +21,7 @@
 #import "DaylyDataViewController.h"
 #import "SqlRequestUtil.h"
 #import "EveryDataUtil.h"
+#import <AudioToolbox/AudioToolbox.h>
 #define COLOR_TRANSLATE(x)  ((float)(x)/(255.0))
 
 @implementation DaylyMotion
@@ -37,7 +38,7 @@
     return self;
 }
 @end
-@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface HomeViewController ()<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet mainView *TodayMeasurementView;  //园环
 @property (strong, nonatomic) IBOutlet UINavigationItem *dateNavigationItem;
@@ -68,6 +69,9 @@
 @property (strong, atomic) DaylyMotion *daylyMotion;
 @property (strong, atomic) SqlRequestUtil *sql;
 @property (strong, nonatomic) NSMutableDictionary *historyListDict;
+@property (strong, nonatomic) UIAlertView *alertView;
+@property (assign, atomic) BOOL alertFlag;
+@property (strong, nonatomic)NSTimer *alertTime;
 @end
 
 @implementation HomeViewController
@@ -76,10 +80,19 @@
     [super viewDidLoad];
     [self initData];
     [self setUp];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginScucess) name:USER_LOGIN_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logoutScucess) name:USER_LOGOUT_SUCCESS object:nil];
+
+}
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGIN_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGOUT_SUCCESS object:nil];
+
 }
 -(void)setUp
 {
     self.view.backgroundColor = [UIColor whiteColor];
+    self.alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
     [self.TodayMeasurementView setLineWidth:22 AndOffset:10];
     [self.TodayMeasurementView setUp];
     [self.TodayMeasurementView setPersentMaskOfCircle:0 color:[UIColor redColor].CGColor];
@@ -162,7 +175,7 @@
 ];
                         
                     };
-                    [MBProgressHUD showError:@"你没有在规定时间内运动，请停止运动"];
+                    [self showAlertMeg:@"你没有在规定时间内运动，请停止运动"];
                 } else {  //在规定运动时间内
                         //病人运动量过大
                         if(equivalent > [self.curUserParam.maxValueParam intValue]) {
@@ -181,7 +194,7 @@
 ];
                                 
                             };
-                            [MBProgressHUD showError:@"你的运动量过大，请停止运动"];
+                            [self showAlertMeg:@"你的运动量过大，请停止运动"];
                         } else {  //达到最低要求,将结果显示出来
                             
                         }
@@ -209,13 +222,28 @@
                                             self.curMotion.alertCount ++;
                                         }
                  ];
-                [MBProgressHUD showError:@"本次已经过量，请停止运动"];
+                [self showAlertMeg:@"本次已经过量，请停止运动"];
             }
         }
     }];
     [self getHardInfo];
     self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
     self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+}
+- (void)loginScucess {
+    if(self.mainThreadTimer == nil){
+        self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
+    }
+    
+    NSLog(@"login sucecced");
+}
+- (void)logoutScucess {
+    if(self.mainThreadTimer){
+        [self.mainThreadTimer invalidate];
+        self.mainThreadTimer = nil;
+    }
+    self.curUserParam = nil;
+    NSLog(@"logout sucecced");
 }
 - (void)todayDataSave:(EveryDataUtil *)data {
     if(data && self.todayData) {
@@ -230,6 +258,14 @@
         item.isSave = data.isSave;
         [self.sql insertEveryDataUtilData:item];
         [self.todayData addObject:item];
+    }
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1){
+        if(self.alertTime) {
+            [self.alertTime invalidate];
+        }
+        self.alertFlag = NO;
     }
 }
 - (void)showToUser {
@@ -287,6 +323,7 @@
 }
 - (void)initData {
     _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
+    self.alertFlag = NO;
     self.sql = [[SqlRequestUtil alloc]init];
     self.typeSevVenConunt = 0;
     self.frequecyNum = 0;
@@ -305,6 +342,7 @@
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
     [self initSqlTodayData];
     [self initSqlEveryDataUtilTemp];
+    [LoginViewController tryToLogin];
 }
 - (void)initSqlDaylyData {
     NSArray *arr = [self.sql readDaylyData];
@@ -398,6 +436,7 @@
     }
     self.dateNavigationItem.title = statusStr;
 }
+#pragma mark  主线程
 - (void)mainThread {
     [self getHardInfo];
     [self getParam];  //通过网络获取数据
@@ -409,6 +448,7 @@
     }
     if(self.curUserParam)
     {
+        //[self showAlertMeg:[NSString stringWithFormat:@"%d",self.count]];
         [self showToUser];
         [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.singleTotalNum / [self.curUserParam.singleValueMaxParam doubleValue] block:nil];
         
@@ -446,7 +486,7 @@
                                                 self.curMotion.alertCount ++;
                                             }
                      ];
-                    [MBProgressHUD showError:@"今天运动量未达到"];
+                    [self showAlertMeg:@"今天运动量未达到"];
                     
                 }
             }
@@ -484,7 +524,7 @@
                                         self.curMotion.alertCount ++;
                                     }
              ];
-            [MBProgressHUD showError:@"本次运动未完成"];
+            [self showAlertMeg:@"本次运动未完成"];
             
         }
         //单词完成过量
@@ -502,7 +542,7 @@
                                         self.curMotion.alertCount ++;
                                     }
              ];
-            [MBProgressHUD showError:@"本次运动过量"];
+            [self showAlertMeg:@"本次运动过量"];
             
         }
         self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
@@ -523,7 +563,7 @@
         [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:nil];
         if([self.curUserParam.userType isEqualToString:@"7"]) {
         } else {
-            //天运动量过量
+            //天运动量过量 猪猪
             if(self.daylyMotion.daylyTotal
                > [self.curUserParam.dayValueMaxParam intValue]){
                 [RequestUtil uploadAlertEvent:self.curUser.userName32
@@ -539,7 +579,7 @@
                                             self.curMotion.alertCount ++;
                                         }
                  ];
-                [MBProgressHUD showError:@"今天运动时间过量"];
+                [self showAlertMeg:@"今天运动时间过量"];
                 
             }
             //天运动量每到量
@@ -558,7 +598,7 @@
                                             self.curMotion.alertCount ++;
                                         }
                  ];
-                [MBProgressHUD showError:@"今天运动时间没到量"];
+                [self showAlertMeg:@"今天运动时间没到量"];
                 
             }
         }
@@ -600,32 +640,53 @@
     }
 }
 - (void)getParam {
-    if([LoginViewController hasLogin]){
-        if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
-        {
-            [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
-                self.curUserParam = [[userParam alloc]initWithDict:dict];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [userParam writeToDefault:self.curUserParam];
-                });
-            }];
-        }
-        
-        if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
-            if([RequestUtil getUserName].length >0){
-                [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        UserUtil *item = [[UserUtil alloc]initWithDict:dict];
-                        [RequestUtil setCurrentUser:item];
-                        self.curUser = item;
-                    });
+    static BOOL flag = NO;
+    if(!self.curUserParam){
+        if([LoginViewController hasLogin]){
+            if(!self.curUserParam && self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0)
+            {
+                [RequestUtil doloadPatam:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSDictionary *dict) {
+                    userParam *oldParam = [userParam readFromDefault];
+                    self.curUserParam = [[userParam alloc]initWithDict:dict];
+                    if(![oldParam checkTheSame:self.curUserParam]) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [userParam writeToDefault:self.curUserParam];
+                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您的处方已更新" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                            [alertView show];
+                        });
+                    } else {
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您的处方没有变" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        [alertView show];
+                    }
                 }];
             }
+            
+            if(!(self.curUser.userName32.length >0) || !self.curUser.userName32) {
+                if([RequestUtil getUserName].length >0){
+                    [RequestUtil getUserinfo:[RequestUtil getUserName] block:^(NSDictionary *dict) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                            [RequestUtil setCurrentUser:item];
+                            self.curUser = item;
+                        });
+                    }];
+                }
+            }
+            [self uploadHistoryData:self.historyListDict];
+        } else {
+            self.curUserParam = [userParam readFromDefault];
+            if(self.curUserParam ==nil){
+                if(!flag){
+                    flag = YES;
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"没有配置参数，程序无法使用" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alertView show];
+                }
+            } else {
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"没有登录，无法获取处方，继续使用上次的处方" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [alertView show];
+            }
         }
-        [self uploadHistoryData:self.historyListDict];
-    } else {
-        [LoginViewController tryToLogin];
-        self.curUserParam = [userParam readFromDefault];
+
     }
 }
 - (void)intervalTimerAction {
@@ -646,7 +707,7 @@
                                     self.curMotion.alertCount ++;
                                 }
 ];
-        [MBProgressHUD showError:@"当时间到了还没有运动"];
+        [self showAlertMeg:@"当时间到了还没有运动"];
         [self.intervalTimer invalidate];
     }
     //还没到时间就运动  （前提：count 已经大于30了）
@@ -663,7 +724,7 @@
                                     self.curMotion.alertCount ++;
                                 }
 ];
-        [MBProgressHUD showError:@"还没到时间就运动"];
+        [self showAlertMeg:@"还没到时间就运动"];
         [self.intervalTimer invalidate];
     }
 }
@@ -789,7 +850,29 @@
     lab.text = @"本次运动量";
     return lab;
 }
-
+- (void)showAlertMeg:(NSString *)msg {
+    if(!self.alertFlag) {
+        self.alertFlag = YES;
+        if(self.alertView) {
+            _alertView.title = msg;
+            [_alertView show];
+        }
+        if(self.alertTime){
+            [self.alertTime invalidate];
+        }
+        self.alertTime = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(alertTimeAction) userInfo:nil repeats:YES];
+    }
+}
+- (void)alertTimeAction {
+    [self playSound];
+    [self vibrate];
+}
+- (void)playSound {
+    AudioServicesPlaySystemSound(1007);
+}
+- (void)vibrate {
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+}
 - (IBAction)detailButtonClicked:(id)sender {
     DaylyDataViewController *vc = [[DaylyDataViewController alloc]initWithNibName:@"DaylyDataViewController" bundle:nil];
     vc.daylyData = self.todayData;
@@ -800,47 +883,47 @@
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    static CGFloat percent;
-    static CGFloat percent1;
-    static double num;
-    static double num1;
-    
-    //测试,猪猪
-    num += 100;
-    percent += 0.1;
-    if(percent > 1.0) {
-        percent = 1.0;
-    }
-    
-    if([self.curUserParam.singleValueMinParam doubleValue] - num >= 0.01) {
-        [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:nil];
-        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
-        
-    } else if(num - [self.curUserParam.singleValueMinParam doubleValue] >= 0.01 && [self.curUserParam.singleValueMaxParam doubleValue] - num >= 0.01){
-        [self.TodayMeasurementView setTitle:@"本次已达标" andTarget:nil];
-        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
-        
-    } else if(num - [self.curUserParam.singleValueMaxParam doubleValue] >= 0.01) {
-        [self.TodayMeasurementView setTitle:@"本次已超标" andTarget:nil];
-        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
-    }
-    percent1 += 0.05;
-    if(percent1 > 1.0) {
-        percent1 = 1.0;
-    }
-    num1 += 200;
-    [self.daylyTotalProgress setProgress:percent1];
-    if([self.curUserParam.dayValueMinParam doubleValue] - num1 >= 0.01) {
-        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
-        self.daylyTotalProgress.tintColor = [UIColor redColor];
-    } else if (num1 - [self.curUserParam.dayValueMinParam doubleValue] >= 0.01 && [self.curUserParam.dayValueMaxParam doubleValue] - num1 >= 0.01 ){
-        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已达标"];
-        self.daylyTotalProgress.tintColor = [UIColor greenColor];
-    } else if(num1 - [self.curUserParam.dayValueMaxParam doubleValue] >= 0.01) {
-        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已超标"];
-        self.daylyTotalProgress.tintColor = [UIColor redColor];
-    }
-}
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    static CGFloat percent;
+//    static CGFloat percent1;
+//    static double num;
+//    static double num1;
+//    
+//    //测试,猪猪
+//    num += 100;
+//    percent += 0.1;
+//    if(percent > 1.0) {
+//        percent = 1.0;
+//    }
+//    
+//    if([self.curUserParam.singleValueMinParam doubleValue] - num >= 0.01) {
+//        [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:nil];
+//        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+//        
+//    } else if(num - [self.curUserParam.singleValueMinParam doubleValue] >= 0.01 && [self.curUserParam.singleValueMaxParam doubleValue] - num >= 0.01){
+//        [self.TodayMeasurementView setTitle:@"本次已达标" andTarget:nil];
+//        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
+//        
+//    } else if(num - [self.curUserParam.singleValueMaxParam doubleValue] >= 0.01) {
+//        [self.TodayMeasurementView setTitle:@"本次已超标" andTarget:nil];
+//        [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
+//    }
+//    percent1 += 0.05;
+//    if(percent1 > 1.0) {
+//        percent1 = 1.0;
+//    }
+//    num1 += 200;
+//    [self.daylyTotalProgress setProgress:percent1];
+//    if([self.curUserParam.dayValueMinParam doubleValue] - num1 >= 0.01) {
+//        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
+//        self.daylyTotalProgress.tintColor = [UIColor redColor];
+//    } else if (num1 - [self.curUserParam.dayValueMinParam doubleValue] >= 0.01 && [self.curUserParam.dayValueMaxParam doubleValue] - num1 >= 0.01 ){
+//        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已达标"];
+//        self.daylyTotalProgress.tintColor = [UIColor greenColor];
+//    } else if(num1 - [self.curUserParam.dayValueMaxParam doubleValue] >= 0.01) {
+//        self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日已超标"];
+//        self.daylyTotalProgress.tintColor = [UIColor redColor];
+//    }
+//}
 @end

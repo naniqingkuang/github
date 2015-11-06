@@ -12,7 +12,6 @@
 #import "UserUtil.h"
 #import <objc/runtime.h>
 #import "EveryDataUtil.h"
-#import <AudioToolbox/AudioToolbox.h>
 static UserUtil *g_currentUser;
 static NSString *userName;
 @implementation RequestUtil
@@ -403,8 +402,6 @@ static NSString *userName;
               daylyTotal:(double )daylyTotal
              maxValueNum:(int)value
                    block:(void(^)()) aBlock {
-    [self playSound];
-    [self vibrate];
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_ALERT_EVENT];
     if(!name) name = @"";
     if(!deviceID) deviceID = @"";
@@ -582,10 +579,5 @@ static NSString *userName;
     userName = name;
     [[NSUserDefaults standardUserDefaults]setObject:userName forKey:@"userName"];
 }
-+ (void)playSound {
-    AudioServicesPlaySystemSound(1007);
-}
-+ (void)vibrate {
-    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-}
+
 @end

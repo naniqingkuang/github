@@ -31,6 +31,7 @@
 - (void)checkAndAvoidNull;
 + (void)writeToDefault:(userParam *)data;
 + (userParam *)readFromDefault;
+- (BOOL)checkTheSame:(userParam *)param;
 @end
 
 @interface UserUtil : NSObject

@@ -13,7 +13,7 @@
 #import "ModifyViewController.h"
 #import "SliderViewController.h"
 #define screenHeight  ([UIScreen mainScreen].bounds.size.height)
-static BOOL logoFlag;
+static  BOOL logoFlag;
 @interface LoginViewController ()<UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *nameText;
 @property (strong, nonatomic) IBOutlet UITextField *passedText;
@@ -49,7 +49,7 @@ static BOOL logoFlag;
     if(flag) {
         self.rememberPWImageView.image = [UIImage imageNamed:@"notSelect.png"];
         [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithBool:NO] forKey:@"rememberPassWd"];
-    } else {
+    } else if(!flag){
         self.rememberPWImageView.image = [UIImage imageNamed:@"select.png"];
         [[NSUserDefaults standardUserDefaults]setObject:[NSNumber numberWithBool:YES] forKey:@"rememberPassWd"];
     }
@@ -82,6 +82,7 @@ static BOOL logoFlag;
                         UserUtil *item = [[UserUtil alloc]initWithDict:dict];
                         [RequestUtil setCurrentUser:item];
                         logoFlag = YES;
+                        [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGIN_SUCCESS object:nil]];
                     }];
                 }
             }];
@@ -102,13 +103,19 @@ static BOOL logoFlag;
                 UserUtil *item = [[UserUtil alloc]initWithDict:dict];
                 [RequestUtil setCurrentUser:item];
                 logoFlag = YES;
+                [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGIN_SUCCESS object:nil]];
                 [self dismissViewControllerAnimated:YES completion:^{
                     [[NSUserDefaults standardUserDefaults] setObject:self.nameText.text forKey:@"loginUser"];
+                    BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+                    if(flag) {
+                        [[NSUserDefaults standardUserDefaults]setObject:self.passedText.text forKey:@"passwd"];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
+                    }
                     [[NSUserDefaults standardUserDefaults] synchronize];
                     [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
                 }];
             }];
-        }
+        } 
     }];
 }
 - (IBAction)registerAcount:(UIButton *)sender {
@@ -142,10 +149,6 @@ static BOOL logoFlag;
 {
     [self keboardHide];
     BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
-    if(flag) {
-        [[NSUserDefaults standardUserDefaults]setObject:self.passedText.text forKey:@"passwd"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
     return YES;
 }
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {

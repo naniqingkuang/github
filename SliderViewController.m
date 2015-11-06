@@ -7,7 +7,7 @@
 //
 
 #import "SliderViewController.h"
-
+#import "LeftViewController.h"
 typedef NS_ENUM(NSInteger, RMoveDirection) {
     RMoveDirectionLeft = 0,
     RMoveDirectionRight
@@ -180,14 +180,17 @@ typedef NS_ENUM(NSInteger, RMoveDirection) {
     }
     self.MainVC=controller;
 }
-
+- (void)leftTableViewReload {
+    LeftViewController *leftViewController = (LeftViewController *)self.LeftVC;
+    [leftViewController reloadTableView];
+}
 - (void)leftItemClickToMain
 {
     CGAffineTransform conT = [self transformWithDirection:RMoveDirectionRight];
     
     [self.view sendSubviewToBack:_rightSideView];
     [self configureViewShadowWithDirection:RMoveDirectionRight];
-    
+    [self leftTableViewReload];
     [UIView animateWithDuration:0.1
                      animations:^{
                          _mainContentView.transform = conT;
@@ -203,13 +206,14 @@ typedef NS_ENUM(NSInteger, RMoveDirection) {
     
     [self.view sendSubviewToBack:_rightSideView];
     [self configureViewShadowWithDirection:RMoveDirectionRight];
-    
+    [self leftTableViewReload];
     [UIView animateWithDuration:_LeftSOpenDuration
                      animations:^{
                          _mainContentView.transform = conT;
                      }
                      completion:^(BOOL finished) {
                          _tapGestureRec.enabled = YES;
+                         
                      }];
 }
 

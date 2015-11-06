@@ -104,6 +104,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     LoginViewController *loginVC = nil;
+    UITableViewCell* cell = nil;
     switch (indexPath.row) {
         case 0:
             [[SliderViewController sharedSliderController] showContentControllerWithModel:@"HomeViewController"];
@@ -117,6 +118,10 @@
 //            [self presentViewController:modifyVC animated:YES completion:nil];
             break;
         case 3:
+             cell = [tableView cellForRowAtIndexPath:indexPath];
+            if([cell.textLabel.text isEqualToString:@"退出登录"]) {
+                [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGOUT_SUCCESS object:nil]];
+            }
             loginVC = [[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
             [self presentViewController:loginVC animated:NO completion:nil];
             break;
@@ -134,6 +139,6 @@
     }
 }
 - (void)reloadTableView {
-    [tableV reloadData];
+    [tableV reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForItem:3 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 @end

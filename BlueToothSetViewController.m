@@ -125,9 +125,7 @@
 - (IBAction)refreshBlueToothList:(id)sender {
    // [self resScanBlutTooth];
     NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
-    if(name.length == 0) {
-        [[BlueToothUtil getBlueToothInstance]reScan];
-    }
+    [[BlueToothUtil getBlueToothInstance]reScan];
     if(!self.timer) {
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
     }

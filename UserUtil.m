@@ -36,6 +36,7 @@
             self.status = [dict objectForKey:@"status"];
             self.userName = [dict objectForKey:@"userName"];
         }
+    [self checkAndAvoidNull];
         return self;
     return self;
 }
@@ -49,6 +50,35 @@
             [self setValue:@"" forKey:str];
         }
     }
+}
+- (BOOL)checkTheSame:(userParam *)param {
+    unsigned int count = 0;
+    BOOL res = YES;
+    NSString *str = nil;
+    if (param == nil) {
+        return NO;
+    }
+    id obj = nil;
+    objc_property_t *ivar = class_copyPropertyList([self class], &count);
+    for (int i=0; i < count; i++) {
+        str = [NSString stringWithUTF8String:property_getName(ivar[i])];
+        if(nil != [self valueForKey:str]){
+            obj = [self valueForKey:str];
+            if([obj isKindOfClass:[NSString class]] || [obj isKindOfClass:[NSMutableString class]]){
+                if(![[self valueForKey:str] isEqualToString:[param valueForKey:str]]){
+                    res = NO;
+                    break;
+                }
+            } else {
+                if([self valueForKey:str] != [param valueForKey:str]){
+                    res = NO;
+                    break;
+                }
+            }
+            
+        }
+    }
+    return res;
 }
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -107,6 +137,7 @@
     userParam *param = nil;
     if(data){
         param = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [param checkAndAvoidNull];
     } else {
         
     }

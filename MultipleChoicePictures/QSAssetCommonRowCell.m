@@ -10,7 +10,7 @@
 #import "QSAssetCommonRowCell.h"
 #import "NetHttpActivity.h"
 #import "UIColor+extended.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 @interface QSAssetCommonRowCell () {
     UIImageView *assetOneImageView;
     UIImageView *assetTwoImageView;

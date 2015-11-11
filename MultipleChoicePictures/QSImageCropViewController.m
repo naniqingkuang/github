@@ -10,7 +10,7 @@
 #import "QSImageCropViewController.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImageView+WebCache.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 @interface UIImage (ImageCrop_Addition)
 - (UIImage *)fixOrientationOfCropImage;
 - (UIImage *)cropImageForRect:(CGRect)cropedRect;

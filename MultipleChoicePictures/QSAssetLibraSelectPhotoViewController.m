@@ -11,7 +11,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <objc/runtime.h>
 #import "UIView+StringTag.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 #import "XPhotoView.h"
 
 #define kOriginalImageView      @"originalImageView"

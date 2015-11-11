@@ -9,7 +9,7 @@
 #import "xPhotoViewController.h"
 #import "UIImageView+WebCache.h"
 #import "UIView+StringTag.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 #import "XPhotoView.h"
 #define spacing  10
 #define kSelectionLabKey        @"selectionLabKey"

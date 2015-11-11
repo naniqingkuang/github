@@ -7,7 +7,7 @@
 //
 
 #import "XPhotoView.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 #import "UIImage+Util.h"
 #import "UIView+StringTag.h"
 #pragma mark class xPhotoView

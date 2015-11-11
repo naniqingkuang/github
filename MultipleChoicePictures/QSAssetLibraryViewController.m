@@ -13,7 +13,7 @@
 #import "UIView+StringTag.h"
 #import "UIImage+RenderedImage.h"
 #import "UIColor+extended.h"
-#import "AECConfig.h"
+#import "AssetConfig.h"
 #import <objc/runtime.h>
 #import "QSAssetLibraSelectPhotoViewController.h"
 

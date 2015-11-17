@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "QSAssetCommonRowCell.h"
-#import "AECAbstractViewController.h"
+#import "AssetViewController.h"
 
 typedef void(^finishSelectPhotoPathsBlock)(NSMutableArray* selectArray);
 
-@interface QSAssetLibraSelectPhotoViewController : AECAbstractViewController
+@interface QSAssetLibraSelectPhotoViewController : AssetViewController
 
 @property(nonatomic,strong) NSMutableArray *photoPaths;
 @property(nonatomic,assign) NSInteger index;

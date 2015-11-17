@@ -92,10 +92,10 @@ static  BOOL logoFlag;
 - (IBAction)loginButtonClicked:(id)sender {
    // [self dismissViewControllerAnimated:YES completion:nil];
     
-    if(!self.nameText.text || self.passedText.text.length != 6) {
-        [MBProgressHUD showError:@"用户名或者密码格式不正确，密码要求六位"];
-        return;
-    }
+//    if(!self.nameText.text || self.passedText.text.length != 6) {
+//        [MBProgressHUD showError:@"用户名或者密码格式不正确，密码要求六位"];
+//        return;
+//    }
     [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag) {
         if(flag){
             [RequestUtil setUserName:self.nameText.text];

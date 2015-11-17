@@ -30,6 +30,12 @@
 		7D8E73B31BD5E5FA00648A4E /* voice.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7D8E73B21BD5E5FA00648A4E /* voice.jpg */; };
 		7D93E9FB1BABF2C200750FEB /* UpdatePasswdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D93E9F91BABF2C200750FEB /* UpdatePasswdViewController.m */; };
 		7D93E9FC1BABF2C200750FEB /* UpdatePasswdViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D93E9FA1BABF2C200750FEB /* UpdatePasswdViewController.xib */; };
+		7DA107E81BF9687500645651 /* libGeTuiSdk-1.3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107E71BF9687500645651 /* libGeTuiSdk-1.3.0.a */; };
+		7DA107EA1BF96A0700645651 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107E91BF96A0700645651 /* libz.tbd */; };
+		7DA107EC1BF96A1400645651 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107EB1BF96A1400645651 /* CFNetwork.framework */; };
+		7DA107EE1BF96A5800645651 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107ED1BF96A5800645651 /* SystemConfiguration.framework */; };
+		7DA107F21BF9812D00645651 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107F11BF9812D00645651 /* CoreLocation.framework */; };
+		7DA107F31BF9813C00645651 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA107EF1BF96A6C00645651 /* CoreTelephony.framework */; };
 		7DA8D6261BEAF93100B35E8B /* police1.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA8D6251BEAF93100B35E8B /* police1.png */; };
 		7DA8D6281BEB35EF00B35E8B /* notSelect.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA8D6271BEB35EF00B35E8B /* notSelect.png */; };
 		7DA8D62A1BEB35FA00B35E8B /* select.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DA8D6291BEB35FA00B35E8B /* select.png */; };
@@ -92,7 +98,7 @@
 		7DC7C6671BD0A12D00677469 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7C6591BD0A12D00677469 /* UIView+WebCacheOperation.m */; };
 		7DC7C66E1BD0A20700677469 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7C6691BD0A20700677469 /* UIImage+ImageEffects.m */; };
 		7DC7C66F1BD0A20700677469 /* UIImage+Scaling.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7C66B1BD0A20700677469 /* UIImage+Scaling.m */; };
-		7DC7C6731BD0A2A500677469 /* AECAbstractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7C6721BD0A2A500677469 /* AECAbstractViewController.m */; };
+		7DC7C6731BD0A2A500677469 /* AssetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DC7C6721BD0A2A500677469 /* AssetViewController.m */; };
 		7DCD38B41BF342C300E979C7 /* xPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DCD38A11BF342C300E979C7 /* xPhotoViewController.m */; };
 		7DCD38B51BF342C300E979C7 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 7DCD38A41BF342C300E979C7 /* Contents.json */; };
 		7DCD38B61BF342C300E979C7 /* delete_photo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7DCD38A51BF342C300E979C7 /* delete_photo@2x.png */; };
@@ -173,6 +179,13 @@
 		7D93E9F81BABF2C200750FEB /* UpdatePasswdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdatePasswdViewController.h; sourceTree = "<group>"; };
 		7D93E9F91BABF2C200750FEB /* UpdatePasswdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdatePasswdViewController.m; sourceTree = "<group>"; };
 		7D93E9FA1BABF2C200750FEB /* UpdatePasswdViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UpdatePasswdViewController.xib; sourceTree = "<group>"; };
+		7DA107E61BF9687500645651 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
+		7DA107E71BF9687500645651 /* libGeTuiSdk-1.3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.3.0.a"; sourceTree = "<group>"; };
+		7DA107E91BF96A0700645651 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		7DA107EB1BF96A1400645651 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		7DA107ED1BF96A5800645651 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7DA107EF1BF96A6C00645651 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		7DA107F11BF9812D00645651 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7DA8D6251BEAF93100B35E8B /* police1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = police1.png; sourceTree = "<group>"; };
 		7DA8D6271BEB35EF00B35E8B /* notSelect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notSelect.png; sourceTree = "<group>"; };
 		7DA8D6291BEB35FA00B35E8B /* select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select.png; sourceTree = "<group>"; };
@@ -280,8 +293,8 @@
 		7DC7C6691BD0A20700677469 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "AssetsLibrary/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		7DC7C66A1BD0A20700677469 /* UIImage+Scaling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Scaling.h"; path = "AssetsLibrary/UIImage+Scaling.h"; sourceTree = "<group>"; };
 		7DC7C66B1BD0A20700677469 /* UIImage+Scaling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Scaling.m"; path = "AssetsLibrary/UIImage+Scaling.m"; sourceTree = "<group>"; };
-		7DC7C6711BD0A2A500677469 /* AECAbstractViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AECAbstractViewController.h; sourceTree = "<group>"; };
-		7DC7C6721BD0A2A500677469 /* AECAbstractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AECAbstractViewController.m; sourceTree = "<group>"; };
+		7DC7C6711BD0A2A500677469 /* AssetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetViewController.h; sourceTree = "<group>"; };
+		7DC7C6721BD0A2A500677469 /* AssetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssetViewController.m; sourceTree = "<group>"; };
 		7DC7C6751BD0A45200677469 /* AssetConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssetConfig.h; sourceTree = "<group>"; };
 		7DC7F8941BCCE9F600D02D6F /* MotionMeasurement.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MotionMeasurement.entitlements; sourceTree = "<group>"; };
 		7DCD38A01BF342C300E979C7 /* xPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xPhotoViewController.h; sourceTree = "<group>"; };
@@ -345,9 +358,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DEF2A471BD4C668007D4BE2 /* CoreAudio.framework in Frameworks */,
-				7DEF2A451BD4C4EB007D4BE2 /* AVFoundation.framework in Frameworks */,
+				7DA107F31BF9813C00645651 /* CoreTelephony.framework in Frameworks */,
+				7DA107F21BF9812D00645651 /* CoreLocation.framework in Frameworks */,
 				7DC7C58E1BCE789800677469 /* libsqlite3.tbd in Frameworks */,
+				7DEF2A451BD4C4EB007D4BE2 /* AVFoundation.framework in Frameworks */,
+				7DA107EE1BF96A5800645651 /* SystemConfiguration.framework in Frameworks */,
+				7DA107EC1BF96A1400645651 /* CFNetwork.framework in Frameworks */,
+				7DA107EA1BF96A0700645651 /* libz.tbd in Frameworks */,
+				7DEF2A471BD4C668007D4BE2 /* CoreAudio.framework in Frameworks */,
+				7DA107E81BF9687500645651 /* libGeTuiSdk-1.3.0.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,9 +425,23 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		7DA107E51BF967D600645651 /* APNS */ = {
+			isa = PBXGroup;
+			children = (
+				7DA107E61BF9687500645651 /* GeTuiSdk.h */,
+				7DA107E71BF9687500645651 /* libGeTuiSdk-1.3.0.a */,
+			);
+			name = APNS;
+			sourceTree = "<group>";
+		};
 		7DC718D11B855B090068253C = {
 			isa = PBXGroup;
 			children = (
+				7DA107F11BF9812D00645651 /* CoreLocation.framework */,
+				7DA107EF1BF96A6C00645651 /* CoreTelephony.framework */,
+				7DA107ED1BF96A5800645651 /* SystemConfiguration.framework */,
+				7DA107EB1BF96A1400645651 /* CFNetwork.framework */,
+				7DA107E91BF96A0700645651 /* libz.tbd */,
 				7DEF2A461BD4C668007D4BE2 /* CoreAudio.framework */,
 				7DEF2A441BD4C4EB007D4BE2 /* AVFoundation.framework */,
 				7DC7C58D1BCE789800677469 /* libsqlite3.tbd */,
@@ -503,6 +536,7 @@
 		7DC7191B1B855BED0068253C /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				7DA107E51BF967D600645651 /* APNS */,
 				7DCD389D1BF342C300E979C7 /* XphotoViewController */,
 				7DCD38A21BF342C300E979C7 /* SelectAndShowXphotoCommon */,
 				7DC7C6071BD0A10B00677469 /* MultipleChoicePictures */,
@@ -566,8 +600,8 @@
 		7DC7C6071BD0A10B00677469 /* MultipleChoicePictures */ = {
 			isa = PBXGroup;
 			children = (
-				7DC7C6711BD0A2A500677469 /* AECAbstractViewController.h */,
-				7DC7C6721BD0A2A500677469 /* AECAbstractViewController.m */,
+				7DC7C6711BD0A2A500677469 /* AssetViewController.h */,
+				7DC7C6721BD0A2A500677469 /* AssetViewController.m */,
 				7DC7C63C1BD0A12D00677469 /* SDWebImage */,
 				7DC7C6081BD0A10B00677469 /* AssetsLibrary */,
 				7DC7C6751BD0A45200677469 /* AssetConfig.h */,
@@ -775,7 +809,7 @@
 				TargetAttributes = {
 					7DC718D91B855B090068253C = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 395Q23NHPD;
+						DevelopmentTeam = 7AGJCU75EU;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
@@ -789,10 +823,14 @@
 							com.apple.Maps.iOS = {
 								enabled = 0;
 							};
+							com.apple.Push = {
+								enabled = 0;
+							};
 						};
 					};
 					7DC718F51B855B090068253C = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 7AGJCU75EU;
 						TestTargetID = 7DC718D91B855B090068253C;
 					};
 				};
@@ -892,7 +930,7 @@
 				7DCD38BC1BF342C300E979C7 /* UIImage+Util.m in Sources */,
 				7D357C321B87181C001024A4 /* HomePageTableViewCell.m in Sources */,
 				7D28DAF21BA0153400EED6A8 /* ModifyViewController.m in Sources */,
-				7DC7C6731BD0A2A500677469 /* AECAbstractViewController.m in Sources */,
+				7DC7C6731BD0A2A500677469 /* AssetViewController.m in Sources */,
 				7DC7C6381BD0A10B00677469 /* QSImageCropViewController.m in Sources */,
 				7DC718E61B855B090068253C /* MotionMeasurement.xcdatamodeld in Sources */,
 				7D8572811B9E8B5A00A33803 /* TableViewCell2.m in Sources */,
@@ -1003,7 +1041,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ming Zhu Luo (2223ZP42S5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ming Zhu Luo (2223ZP42S5)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1023,9 +1062,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1047,7 +1087,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ming Zhu Luo (2223ZP42S5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ming Zhu Luo (2223ZP42S5)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -1060,8 +1101,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1071,16 +1113,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MotionMeasurement/MotionMeasurement.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MotionMeasurement/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yidong2.MotionMeasurement;
+				"OTHER_CODE_SIGN_FLAGS[sdk=iphoneos*]" = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushzhuzhu.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1089,16 +1135,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MotionMeasurement/MotionMeasurement.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MotionMeasurement/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yidong2.MotionMeasurement;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pushzhuzhu.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -1107,6 +1156,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1117,8 +1168,9 @@
 				);
 				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yidong.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhuzhu.-$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};
 			name = Debug;
@@ -1127,14 +1179,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = MotionMeasurementTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yidong.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zhuzhu.-$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};
 			name = Release;

@@ -82,12 +82,21 @@
     [self setUp];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginScucess) name:USER_LOGIN_SUCCESS object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logoutScucess) name:USER_LOGOUT_SUCCESS object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(APNSNotification:) name:APNS_NOTIFICATION object:nil];
 
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    if(self.mainThreadTimer == nil){
+        self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
+    }
+    [super viewDidAppear:animated];
+}
+
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGIN_SUCCESS object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGOUT_SUCCESS object:nil];
-
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:APNS_NOTIFICATION object:nil];
 }
 -(void)setUp
 {
@@ -732,60 +741,68 @@
 #pragma  mark  心跳包
 - (void)heartBeatAction {
         [RequestUtil keepHeartBeat:self.curUser.userName32 device:self.curUser.deviceID18 block:^(NSString *cmdStr) {
-        int cmd = [[cmdStr substringToIndex:1]intValue];
-        switch (cmd) {
-            case 0:
-                NSLog(@"心跳消息：消息为空");
+            [self remoteDataManager:cmdStr];
+           }];
+}
+- (void)APNSNotification:(NSNotification *)msg {
+    NSString *msgStr = msg.object;
+    [self remoteDataManager:msgStr];
+    NSLog(@"APNSNotification:%@",msg.object);
+}
+- (void)remoteDataManager:(NSString * )cmdstr {
+    int cmd = [[cmdstr substringToIndex:1]intValue];
+    switch (cmd) {
+        case 0:
+            NSLog(@"心跳消息：消息为空");
             break;
-            case 1:  //VIP用户的反馈数据有最新回复
-                
-                break;
-            case 2: //上传实时数据
-                if(self.curUser.userName32 && self.curUser.deviceID18 && self.equivalent && self.inpulse) {
-                    [RequestUtil uploadCurrentData:self.curUser.userName32
-                                          deviceID:self.curUser.deviceID18
-                                          sportsDL:[NSString stringWithFormat:@"%6.2f",self.equivalent]
-                                          sportsCL:[NSString stringWithFormat:@"%6.2f",self.inpulse]
-                                             block:nil];
-                }
-                break;
-            case 3:
-                
-                break;
-            case 4: //上传设备信息
-                if(self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0 && self.softEdition && self.hardWareEdition)
-                {
-                   [RequestUtil uploadHardWareParam:self.curUser.userName32 device:self.curUser.deviceID18 app:@"1.0.0" soft:self.softEdition hardWare:self.hardWareEdition block:nil];
-                }
-                else
-                {
-                    self.curUser = [RequestUtil getCurrentUser];
-                }
-                break;
-            case 5:  //关闭心跳包
-                [self.heartBeatTimer invalidate];
-                self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
-                break;
-            case 7:
-                [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
-                break;
-            case 8:
-                break;
-            case 6:  //更改心跳间隔
-                [self.heartBeatTimer invalidate];
-                NSString *timeVal = [cmdStr substringFromIndex:[cmdStr rangeOfComposedCharacterSequenceAtIndex:3].location];
-                int timeValInt = [timeVal intValue];
-                if(timeValInt <1)
-                {
-                    timeValInt = 1;
-                }
-                self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:timeValInt target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
-                break;
-        }
-    }];
+        case 1:  //VIP用户的反馈数据有最新回复
+            
+            break;
+        case 2: //上传实时数据
+            if(self.curUser.userName32 && self.curUser.deviceID18 && self.equivalent && self.inpulse) {
+                [RequestUtil uploadCurrentData:self.curUser.userName32
+                                      deviceID:self.curUser.deviceID18
+                                      sportsDL:[NSString stringWithFormat:@"%6.2f",self.equivalent]
+                                      sportsCL:[NSString stringWithFormat:@"%6.2f",self.inpulse]
+                                         block:nil];
+            }
+            break;
+        case 3:
+            
+            break;
+        case 4: //上传设备信息
+            if(self.curUser.userName32.length >0 && self.curUser.deviceID18.length>0 && self.softEdition && self.hardWareEdition)
+            {
+                [RequestUtil uploadHardWareParam:self.curUser.userName32 device:self.curUser.deviceID18 app:@"1.0.0" soft:self.softEdition hardWare:self.hardWareEdition block:nil];
+            }
+            else
+            {
+                self.curUser = [RequestUtil getCurrentUser];
+            }
+            break;
+        case 5:  //关闭心跳包
+            [self.heartBeatTimer invalidate];
+            self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+            break;
+        case 7:
+            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
+            break;
+        case 8:
+            break;
+        case 6:  //更改心跳间隔
+            [self.heartBeatTimer invalidate];
+            NSString *timeVal = [cmdstr substringFromIndex:[cmdstr rangeOfComposedCharacterSequenceAtIndex:3].location];
+            int timeValInt = [timeVal intValue];
+            if(timeValInt <1)
+            {
+                timeValInt = 1;
+            }
+            self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:timeValInt target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
+            break;
+    }
 }
 - (void)toLoginVC
-{ 
+{
     //弹出登录界面
     LoginViewController *loginVC=[[LoginViewController alloc]initWithNibName:@"LoginViewController" bundle:nil];
     

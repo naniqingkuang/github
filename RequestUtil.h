@@ -30,7 +30,7 @@
 #define USER_KEEP_HEART_BEAT                    @"receiveHeartbeatInfo"
 #define USER_UPLOAD_PROGRESS                    @"receiveProgress"
 #define USER_UPLOAD_OTHER_DATA                  @"receiveOtherData"
-
+#define APNS_NOTIFICATION                       @"APNS_NOTIFICATION"
 @interface RequestUtil : NSObject
 
 + (void)setCurrentUser:(UserUtil *)item;

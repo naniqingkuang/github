@@ -6,11 +6,11 @@
 //  Copyright (c) 2015年 com. All rights reserved.
 //
 
-#import "AECAbstractViewController.h"
+#import "AssetViewController.h"
 
 typedef void (^ImageCropCompletedBlock) (NSString *imagePathOfCropped, UIImage *thumbnailImage,UIImage *cropedImage);
 
-@interface QSImageCropViewController : AECAbstractViewController
+@interface QSImageCropViewController : AssetViewController
 @property (nonatomic, copy) NSString *imageURL;
 @property (nonatomic, assign) BOOL shouldNotAnimation;
 @property (nonatomic, copy) ImageCropCompletedBlock cropCompletedBlock;

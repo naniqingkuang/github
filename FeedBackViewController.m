@@ -221,7 +221,7 @@
                 ALAsset *asset = [assetArr objectAtIndex:i];
                 UIImage *image = [[UIImage alloc] initWithCGImage:[[asset  defaultRepresentation] fullScreenImage]];
                 //by haijian
-                UIImage *scaledImage=[image scaleToSize:CGSizeMake(320, 320)];
+                UIImage *scaledImage=[image scaleToSize:CGSizeMake(200, 200)];
                 [weakSelf addImage:scaledImage];
             }
             [self.collectionView reloadData];

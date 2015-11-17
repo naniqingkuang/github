@@ -6,13 +6,13 @@
 //  Copyright (c) 2015年 com. All rights reserved.
 //
 
-#import "AECAbstractViewController.h"
+#import "AssetViewController.h"
 
 #import <AssetsLibrary/AssetsLibrary.h>
 
 typedef void (^completeSelectAssetsBlock) (NSArray *);
 typedef void (^singleSelectImageBlock) (UIImage *imageOfCropped);
-@interface QSAssetLibraryViewController : AECAbstractViewController
+@interface QSAssetLibraryViewController : AssetViewController
 
 @property (nonatomic, assign) NSUInteger numberOfSelectingAssets;
 @property (nonatomic, assign) NSUInteger numberOfCouldSelectAssets;

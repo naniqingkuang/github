@@ -24,7 +24,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
+//    self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
+    [self refreshBlueToothList:nil];
     self.isSelectedName = [[NSUserDefaults standardUserDefaults]objectForKey:@"blueToothName"];
 }
 - (void)didReceiveMemoryWarning {
@@ -124,9 +125,12 @@
 }
 - (IBAction)refreshBlueToothList:(id)sender {
    // [self resScanBlutTooth];
-    NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
+  //  NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:@"blueToothName"];
     [[BlueToothUtil getBlueToothInstance]reScan];
     if(!self.timer) {
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
+    }else {
+        [self.timer invalidate];
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(resScanBlutTooth) userInfo:nil repeats:YES];
     }
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
@@ -145,7 +149,6 @@
             [[BlueToothUtil getBlueToothInstance]stopScan];
         }
     }
-    [[BlueToothUtil getBlueToothInstance]reScan];
     self.bluetoothNameList = [[BlueToothUtil getBlueToothInstance]getNameOfBlueToothList];
     [self.tableView reloadData];
 }

@@ -7,12 +7,20 @@
 //
 
 #import "SqlRequestUtil.h"
+static SqlRequestUtil *static_sqlRequst;
+
 @interface SqlRequestUtil ()
 {
     FMDatabase *db;
 }
 @end
 @implementation SqlRequestUtil
++(SqlRequestUtil *)shareInstance {
+    if (static_sqlRequst == nil) {
+        static_sqlRequst = [[SqlRequestUtil alloc]init];
+    }
+    return static_sqlRequst;
+}
 - (instancetype)init
 {
     self = [super init];
@@ -136,7 +144,23 @@
         NSLog(@"fail to open");
     }
 }
+- (void)deleteAllTableData{
+    if ([db open]) {
+        if ([db tableExists:@"DaylyData"]) {
+            [db executeUpdate:@"delete from DaylyData"];
+        }
+        if ([db tableExists:@"SingleDataTemp"]) {
+            [db executeUpdate:@"delete from SingleDataTemp"];
+        }
+        if ([db tableExists:@"SingleData"]) {
+            [db executeUpdate:@"delete from SingleData"];
+        }
+        [db close];
+    }else{
+        NSLog(@"fail to open");
+    }
 
+}
 - (void)insertEveryDataUtilData:(EveryDataUtil *)data {
     if([db open]) {
         [db executeUpdate:@"insert into SingleData (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];

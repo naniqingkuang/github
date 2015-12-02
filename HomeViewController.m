@@ -233,6 +233,26 @@
                  ];
                 [self showAlertMeg:@"本次已经过量，请停止运动"];
             }
+            
+            if(self.daylyMotion.daylyTotal
+               > [self.curUserParam.dayValueMaxParam intValue]){
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"4"
+                                    startTime:curTime
+                                  MotionStart:@""
+                                  singleTotal:0.0
+                                   daylyTotal:self.daylyMotion.daylyTotal
+                 
+                                  maxValueNum:0.0
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [self showAlertMeg:@"今天运动过量"];
+                
+            }
+
         }
     }];
     [self getHardInfo];
@@ -240,6 +260,8 @@
     self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
 }
 - (void)loginScucess {
+//    [[SqlRequestUtil shareInstance]deleteAllTableData];
+//    [self initData];
     if(self.mainThreadTimer == nil){
         self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
     }
@@ -333,7 +355,7 @@
 - (void)initData {
     _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
     self.alertFlag = NO;
-    self.sql = [[SqlRequestUtil alloc]init];
+    self.sql = [SqlRequestUtil shareInstance];
     self.typeSevVenConunt = 0;
     self.frequecyNum = 0;
     self.inpulse = 0.0;
@@ -507,16 +529,17 @@
 - (void)singleEndAction {
     [self.dateFormatter setDateFormat:@"HH:mm"];
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
-    if(self.firstGoFlag)
-    {
+   // if(self.firstGoFlag)
+   // {
         self.count ++;
-    }
+    //}
     //单词运动判断
     if(self.count >60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
         if(!self.curMotion.isSave) {
             self.curMotion.isSave = YES;
             self.curMotion.endTime = curTime;
             [self todayDataSave:self.curMotion];
+            self.curMotion = [[EveryDataUtil alloc]init];;
         }
         //单词未完成
         if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
@@ -554,6 +577,7 @@
             [self showAlertMeg:@"本次运动过量"];
             
         }
+        
         self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
         self.intervalTime = self.curUserParam.intervalTimeParam * 60;
         
@@ -588,7 +612,7 @@
                                             self.curMotion.alertCount ++;
                                         }
                  ];
-                [self showAlertMeg:@"今天运动时间过量"];
+                [self showAlertMeg:@"今天运动过量"];
                 
             }
             //天运动量每到量
@@ -607,7 +631,7 @@
                                             self.curMotion.alertCount ++;
                                         }
                  ];
-                [self showAlertMeg:@"今天运动时间没到量"];
+                [self showAlertMeg:@"今天运动没到量"];
                 
             }
         }
@@ -661,6 +685,7 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [userParam writeToDefault:self.curUserParam];
                             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您的处方已更新" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                            [self alertTimeAction];
                             [alertView show];
                         });
                     } else {
@@ -877,7 +902,21 @@
         if(self.alertTime){
             [self.alertTime invalidate];
         }
+        [self alertTimeAction];
         self.alertTime = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(alertTimeAction) userInfo:nil repeats:YES];
+    } else {
+        if(![_alertView.title isEqualToString:msg]){
+            self.alertFlag = YES;
+            if(self.alertView) {
+                _alertView.title = msg;
+                [_alertView show];
+            }
+            if(self.alertTime){
+                [self.alertTime invalidate];
+            }
+            [self alertTimeAction];
+            self.alertTime = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(alertTimeAction) userInfo:nil repeats:YES];
+        }
     }
 }
 - (void)alertTimeAction {

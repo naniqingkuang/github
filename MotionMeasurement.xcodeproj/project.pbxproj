@@ -1126,7 +1126,7 @@
 				"OTHER_CODE_SIGN_FLAGS[sdk=iphoneos*]" = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.pushzhuzhu.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1147,7 +1147,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pushzhuzhu.MotionMeasurement;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Release;

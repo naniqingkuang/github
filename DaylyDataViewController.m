@@ -11,6 +11,7 @@
 #import "HomeViewController.h"
 #import "EveryDataUtil.h"
 #import "SliderViewController.h"
+#import "SqlRequestUtil.h"
 @interface DaylyDataViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
@@ -19,10 +20,19 @@
 @implementation DaylyDataViewController
 
 - (void)viewDidLoad {
+    [self initData];
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 }
-
+- (void)initData {
+    self.daylyData = [[SqlRequestUtil shareInstance]readSingleData];
+    [self.tableView reloadData];
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self initData];
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

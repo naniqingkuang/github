@@ -11,6 +11,7 @@
 #import "HomeViewController.h"
 #import "EveryDataUtil.h"
 @interface SqlRequestUtil : NSObject
++ (SqlRequestUtil *)shareInstance;
 - (void)insertEveryDataUtilData:(EveryDataUtil *)data;
 - (void)insertDaylyData:(DaylyMotion *)data;
 - (NSArray *)readSingleData;
@@ -23,4 +24,5 @@
 - (EveryDataUtil *)readSingleDataTemp;
 - (void)updateEveryDataUtilTempData:(EveryDataUtil *)data date:(NSString *)date;
 - (void)insertEveryDataUtilTempData:(EveryDataUtil *)data;
+- (void)deleteAllTableData;
 @end

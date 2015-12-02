@@ -12,6 +12,7 @@
 #import "RegisterViewController.h"
 #import "ModifyViewController.h"
 #import "SliderViewController.h"
+#import "SqlRequestUtil.h"
 #define screenHeight  ([UIScreen mainScreen].bounds.size.height)
 static  BOOL logoFlag;
 @interface LoginViewController ()<UITextFieldDelegate>
@@ -103,6 +104,9 @@ static  BOOL logoFlag;
                 UserUtil *item = [[UserUtil alloc]initWithDict:dict];
                 [RequestUtil setCurrentUser:item];
                 logoFlag = YES;
+                if(![[[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"] isEqualToString:self.nameText.text]) {
+                    [[SqlRequestUtil shareInstance]deleteAllTableData];
+                }
                 [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGIN_SUCCESS object:nil]];
                 [self dismissViewControllerAnimated:YES completion:^{
                     [[NSUserDefaults standardUserDefaults] setObject:self.nameText.text forKey:@"loginUser"];

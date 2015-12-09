@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DaylyDataViewController : UIViewController
-@property (nonatomic, strong) NSArray *daylyData;
+@property (nonatomic, strong) NSMutableArray *daylyData;
 @property (nonatomic, assign) double daylyTotal;
 @property (nonatomic, assign) double maxDaylyTotal;
 @property (nonatomic, assign) double maxsingleTotal;

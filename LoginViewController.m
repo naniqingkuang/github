@@ -85,11 +85,33 @@ static  BOOL logoFlag;
                         logoFlag = YES;
                         [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGIN_SUCCESS object:nil]];
                     }];
+                } else {
+                    [MBProgressHUD showError:@"用户先登录，否则无法使用"];
                 }
             }];
         }
     }
 }
++ (void)tryHeartBeatLogin {
+        BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
+        NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+        NSString *passwd = [[NSUserDefaults standardUserDefaults]objectForKey:@"passwd"];
+        if(flag && userName.length >0 && passwd.length >0) {
+            [RequestUtil userLogin:userName passwd:passwd block:^(bool flag) {
+                if(flag){
+                    [RequestUtil setUserName:userName];
+                    [RequestUtil getUserinfo:userName block:^(NSDictionary *dict) {
+                        UserUtil *item = [[UserUtil alloc]initWithDict:dict];
+                        [RequestUtil setCurrentUser:item];
+                        logoFlag = YES;
+                    }];
+                } else {
+                    [MBProgressHUD showError:@"已断开与服务器连接"];
+                }
+            }];
+        }
+}
+
 - (IBAction)loginButtonClicked:(id)sender {
    // [self dismissViewControllerAnimated:YES completion:nil];
     

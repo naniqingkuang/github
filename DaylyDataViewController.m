@@ -25,7 +25,7 @@
     // Do any additional setup after loading the view from its nib.
 }
 - (void)initData {
-    self.daylyData = [[SqlRequestUtil shareInstance]readSingleData];
+    [self initSqlTodayData];
     [self.tableView reloadData];
 }
 - (void)viewWillAppear:(BOOL)animated {
@@ -33,6 +33,26 @@
     [self initData];
     
 }
+- (void)initSqlTodayData {
+    NSArray *arr = [[SqlRequestUtil shareInstance] readSingleData];
+    NSDateFormatter *format = [[NSDateFormatter alloc]init];
+    [format setDateFormat:@"MM-dd"];
+    if(self.daylyData) {
+        [self.daylyData removeAllObjects];
+    }
+    if(arr.count){
+        for (EveryDataUtil *item in arr) {
+            if([item.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
+                if(!self.daylyData){
+                    self.daylyData = [[NSMutableArray alloc]initWithCapacity:20];
+                }
+                [self.daylyData addObject:item];
+            }
+        }
+        
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -24,5 +24,7 @@
 - (EveryDataUtil *)readSingleDataTemp;
 - (void)updateEveryDataUtilTempData:(EveryDataUtil *)data date:(NSString *)date;
 - (void)insertEveryDataUtilTempData:(EveryDataUtil *)data;
+- (void)clearEveryDataUtilTempData;
 - (void)deleteAllTableData;
+- (void)clearDaylyData;
 @end

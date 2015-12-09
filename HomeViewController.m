@@ -384,9 +384,11 @@
         if([motion.thisDayDate isEqualToString:[format stringFromDate:[NSDate date]]]) {
             self.daylyMotion = motion;
         } else { //更新为现在的数据
-            [self.sql updateDayData:self.daylyMotion];
+            [self.sql clearDaylyData];
+            [self.sql insertDaylyData:self.daylyMotion];
         }
     } else {
+        [self.sql clearDaylyData];
         [self.sql insertDaylyData:self.daylyMotion];
     }
 }
@@ -397,7 +399,7 @@
     if(arr.count){
         EveryDataUtil *motion = arr[0]; //是今天的数据
         for (EveryDataUtil *item in arr) {
-            if([motion.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
+            if([item.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
                 [self.todayData addObject:item];
             } else {
                 NSArray *keys = [_historyListDict allKeys];
@@ -418,12 +420,14 @@
     if(data && data.date.length > 0) {
         [self.dateFormatter setDateFormat:@"MM-dd"];
         if(![data.date isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]]){
-            [self   .sql updateEveryDataUtilTempData:self.curMotion date:data.date];
+            [self.sql clearEveryDataUtilTempData];
+            [self.sql insertEveryDataUtilTempData:self.curMotion];
         } else {
             self.curMotion = data;
             self.frequecyNum = self.curMotion.index;
         }
     } else {
+        [self.sql insertEveryDataUtilTempData:self.curMotion];
         [self.sql insertEveryDataUtilTempData:self.curMotion];
     }
 }
@@ -456,9 +460,9 @@
     } else if(CBPeripheralStateConnecting == [[BlueToothUtil getBlueToothInstance]getConnectFlag]){
         [statusStr appendFormat:@"蓝牙正在连接"];
     } else if(CBPeripheralStateDisconnected == [[BlueToothUtil getBlueToothInstance]getConnectFlag]) {
-        [statusStr appendFormat:@"蓝牙已断开"];
+        [statusStr appendFormat:@"蓝牙未连接"];
     }else if(CBPeripheralStateDisconnecting == [[BlueToothUtil getBlueToothInstance]getConnectFlag]) {
-        [statusStr appendFormat:@"蓝牙已断开"];
+        [statusStr appendFormat:@"蓝牙未连接"];
     }
     if([LoginViewController hasLogin]) {
         [statusStr appendFormat:@",用户已登录"];
@@ -489,13 +493,13 @@
         NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
         if(![self.curUserParam.userType isEqualToString:@"7"]) { //用户不为7
             if(self.overFloerBlock) {  //超过了最大值告警
-                if(self.count %30 == 0) {  //半分钟会收到一个警告
+                if(self.count %5 == 0) {  //半分钟会收到一个警告
                     self.overFloerBlock();
                     self.overFloerBlock = nil;
                 }
             }
             if(self.notInParamTimeBlock) {  //不在规定时间内告警
-                if(self.count %30 == 0) {   //半分钟会收到一个警告
+                if(self.count %5 == 0) {   //半分钟会收到一个警告
                     self.notInParamTimeBlock();
                     self.notInParamTimeBlock = nil;
                 }
@@ -527,6 +531,7 @@
     }
 }
 - (void)singleEndAction {
+    
     [self.dateFormatter setDateFormat:@"HH:mm"];
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
    // if(self.firstGoFlag)
@@ -534,53 +539,71 @@
         self.count ++;
     //}
     //单词运动判断
-    if(self.count >60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
-        if(!self.curMotion.isSave) {
-            self.curMotion.isSave = YES;
-            self.curMotion.endTime = curTime;
-            [self todayDataSave:self.curMotion];
-            self.curMotion = [[EveryDataUtil alloc]init];;
-        }
-        //单词未完成
-        if(self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
-        {
-            [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                   device:self.curUser.deviceID18
-                                   reason:@"1"
-                                startTime:curTime
-                              MotionStart:self.curMotion.startTime
-                              singleTotal:self.curMotion.singleTotalNum
-                               daylyTotal:0.0
-                              maxValueNum:self.curMotion.maxNum
-                                    block:^{
-                                        self.curMotion.alertCount ++;
-                                    }
-             ];
-            [self showAlertMeg:@"本次运动未完成"];
+    if(!([curTime compare:self.curUserParam.sportsBeginTimeParam] == NSOrderedAscending || [curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending)) {
+        int interActionTime = 1;
+//        if(self.curUserParam.intervalTimeParam !=0) {
+//            interActionTime = self.curUserParam.intervalTimeParam;
+//        }
+        if(self.count >interActionTime * 60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
+            if(!self.curMotion.isSave) {
+                //保存这次数据
+                self.curMotion.isSave = YES;
+                self.curMotion.endTime = curTime;
+                [self todayDataSave:self.curMotion];
+                //清除数据
+                {
+                    self.curMotion = [[EveryDataUtil alloc]init];
+                    self.curMotion.maxNum = 0;
+                    self.curMotion.singleTotalNum = 0;
+                    self.curMotion.endTime = @"";
+                    self.curMotion.alertCount = 0;
+                    self.curMotion.isSave = YES;
+                    NSDateFormatter *format = [[NSDateFormatter alloc]init];
+                    [format setDateFormat:@"MM-dd"];
+                    self.curMotion.date = [format stringFromDate:[NSDate date]];
+                    [self.sql updateEveryDataUtilTempData:self.curMotion date:self.curMotion.date];
+                }
+            }
+            //单词未完成
+            if(self.curMotion.singleTotalNum >0 && self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
+            {
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"1"
+                                    startTime:curTime
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
+                                   daylyTotal:0.0
+                                  maxValueNum:self.curMotion.maxNum
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [self showAlertMeg:@"本次运动未完成"];
+                
+            }
+            //单词完成过量
+            if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
+            {
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"2"
+                                    startTime:curTime
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
+                                   daylyTotal:0.0
+                                  maxValueNum:self.curMotion.maxNum
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [self showAlertMeg:@"本次运动过量"];
+                
+            }
             
+            self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
+            self.intervalTime = self.curUserParam.intervalTimeParam * 60;
         }
-        //单词完成过量
-        if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
-        {
-            [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                   device:self.curUser.deviceID18
-                                   reason:@"2"
-                                startTime:curTime
-                              MotionStart:self.curMotion.startTime
-                              singleTotal:self.curMotion.singleTotalNum
-                               daylyTotal:0.0
-                              maxValueNum:self.curMotion.maxNum
-                                    block:^{
-                                        self.curMotion.alertCount ++;
-                                    }
-             ];
-            [self showAlertMeg:@"本次运动过量"];
-            
-        }
-        
-        self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
-        self.intervalTime = self.curUserParam.intervalTimeParam * 60;
-        
     }
 }
 - (void)todayEndTimeAction {
@@ -684,12 +707,12 @@
                     if(![oldParam checkTheSame:self.curUserParam]) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [userParam writeToDefault:self.curUserParam];
-                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您的处方已更新" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"经医生诊断，您的处方已更新，请按照新的处方运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                             [self alertTimeAction];
                             [alertView show];
                         });
                     } else {
-                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"您的处方没有变" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"经医生诊断，您的处方不许要更新，请按照原处方继续运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                         [alertView show];
                     }
                 }];
@@ -716,7 +739,7 @@
                     [alertView show];
                 }
             } else {
-                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"没有登录，无法获取处方，继续使用上次的处方" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"登陆失败，请按照原处方继续运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 [alertView show];
             }
         }
@@ -781,7 +804,8 @@
             NSLog(@"心跳消息：消息为空");
             break;
         case 1:  //VIP用户的反馈数据有最新回复
-            
+            _alertView.title = @"您提的问题有新的回复";
+            [_alertView show];
             break;
         case 2: //上传实时数据
             if(self.curUser.userName32 && self.curUser.deviceID18 && self.equivalent && self.inpulse) {

@@ -181,6 +181,22 @@ static SqlRequestUtil *static_sqlRequst;
         
     }
 }
+- (void)clearEveryDataUtilTempData {
+    if ([db open]) {
+        
+        NSString *deleteSql = [NSString stringWithFormat:
+                               @"delete from SingleDataTemp"];
+        BOOL res = [db executeUpdate:deleteSql];
+        
+        if (!res) {
+            NSLog(@"error when delete db table");
+        } else {
+            NSLog(@"success to delete db table");
+        }
+        [db close];
+        
+    }
+}
 - (void)insertEveryDataUtilTempData:(EveryDataUtil *)data {
     if([db open]) {
         [db executeUpdate:@"insert into SingleDataTemp (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
@@ -295,6 +311,24 @@ static SqlRequestUtil *static_sqlRequst;
         
     }
 }
+//清除本日数据
+- (void)clearDaylyData {
+    if ([db open]) {
+        
+        NSString *deleteSql = [NSString stringWithFormat:
+                               @"delete from DaylyData"];
+        BOOL res = [db executeUpdate:deleteSql];
+        
+        if (!res) {
+            NSLog(@"error when delete db table");
+        } else {
+            NSLog(@"success to delete db table");
+        }
+        [db close];
+        
+    }
+}
+
 -(void)clearSingleDataByDate:(NSString *)date {
     if ([db open]) {
         

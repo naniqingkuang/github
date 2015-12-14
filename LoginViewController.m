@@ -13,6 +13,7 @@
 #import "ModifyViewController.h"
 #import "SliderViewController.h"
 #import "SqlRequestUtil.h"
+#import "Reachability.h"
 #define screenHeight  ([UIScreen mainScreen].bounds.size.height)
 static  BOOL logoFlag;
 @interface LoginViewController ()<UITextFieldDelegate>
@@ -96,6 +97,10 @@ static  BOOL logoFlag;
         BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
         NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
         NSString *passwd = [[NSUserDefaults standardUserDefaults]objectForKey:@"passwd"];
+    if(![RequestUtil  checkNetState]) {
+        logoFlag = NO;
+        return ;
+    }
         if(flag && userName.length >0 && passwd.length >0) {
             [RequestUtil userLogin:userName passwd:passwd block:^(bool flag) {
                 if(flag){
@@ -106,7 +111,7 @@ static  BOOL logoFlag;
                         logoFlag = YES;
                     }];
                 } else {
-                    [MBProgressHUD showError:@"已断开与服务器连接"];
+                    logoFlag = NO;
                 }
             }];
         }

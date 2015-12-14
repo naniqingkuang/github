@@ -14,4 +14,5 @@ typedef void(^Login_block) (void);
 @property (copy , nonatomic)Login_block my_block;
 + (BOOL)hasLogin;
 + (void)tryToLogin;
++ (void)tryHeartBeatLogin;
 @end

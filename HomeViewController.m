@@ -57,13 +57,14 @@
 @property (strong, nonatomic) NSTimer *mainThreadTimer;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, atomic)  EveryDataUtil *curMotion;   //单次运动
-@property (assign, atomic) int count;   //计数器，用于判断每次运动
 @property (assign, atomic) int  typeSevVenConunt;  //
 @property (strong, nonatomic) NSTimer *intervalTimer;
+@property (strong,nonatomic)NSTimer *singleTimer;
 @property (assign, nonatomic) int intervalTime;
 @property (assign, nonatomic) BOOL firstGoFlag;
 @property (copy, atomic) void (^notInParamTimeBlock)();
 @property (copy, atomic) void (^overFloerBlock)();
+@property (assign, nonatomic) double singleEndData;
 @property (strong, nonatomic) NSMutableArray *todayData;  //今天的运动数据
 @property (assign, atomic) int frequecyNum; //纪录今天运动的次数
 @property (strong, atomic) DaylyMotion *daylyMotion;
@@ -79,6 +80,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initData];
+    [LoginViewController tryToLogin];
     [self setUp];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loginScucess) name:USER_LOGIN_SUCCESS object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logoutScucess) name:USER_LOGOUT_SUCCESS object:nil];
@@ -100,6 +102,7 @@
 }
 -(void)setUp
 {
+    __weak HomeViewController *weakSelf = self;
     self.view.backgroundColor = [UIColor whiteColor];
     self.alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
     [self.TodayMeasurementView setLineWidth:22 AndOffset:10];
@@ -126,67 +129,93 @@
     }];
     //实时数据
     [[BlueToothUtil getBlueToothInstance]readCurrentMotionMeasurement:^(float equivalent, float inpulse) {
-        
+        NSDateFormatter *datefomattersportsEndTimeParam =[[NSDateFormatter alloc]init];
+        [datefomattersportsEndTimeParam setDateFormat:@"HH:mm"];
+        NSString *curTime = [datefomattersportsEndTimeParam stringFromDate:[NSDate date]];
         self.equivalent = equivalent;  // 本次当量值
         self.inpulse = inpulse;  //
-        self.daylyMotion.daylyTotal += equivalent;    //今日总量
-        [format setDateFormat:@"HH:mm"];
-        NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
-        //单次数据清零
-        if(self.curMotion.isSave) {
-            self.curMotion.isSave = NO;
-            NSString *startTime= [format stringFromDate:[NSDate date]];
-            self.curMotion.startTime = startTime;
-            self.curMotion.maxNum = 0;
-            self.curMotion.singleTotalNum = 0;
-            self.curMotion.endTime = @"";
-            self.curMotion.alertCount = 0;
-            self.curMotion.index = ++self.frequecyNum;
-            [format setDateFormat:@"MM-dd"];
-            self.curMotion.date = [format stringFromDate:[NSDate date]];
-        }
-        //第二天数据清零
-        [self.dateFormatter setDateFormat:@"MM-dd"];
-        if(![self.daylyMotion.thisDayDate isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]] ) {
-            self.daylyMotion.daylyIsSave = NO;
-            self.daylyMotion.daylyTotal = 0;
-            self.daylyMotion.thisDayDate = [self.dateFormatter stringFromDate:[NSDate date]];
-        }
-        self.curMotion.singleTotalNum +=equivalent; //本次运动量
-        __weak HomeViewController *weakSelf = self;
-        [self.TodayMeasurementView aninationStart];
-        if(self.curUserParam) {
-            [self showToUser];
-            // 用户不为7
-            if(![self.curUserParam.userName isEqualToString:@"7"]) {
-                self.count = 0;
-                self.firstGoFlag = YES;
-                [self.dateFormatter setDateFormat:@"HH:ss"];
-                if(equivalent > [self.curUserParam.maxValueParam doubleValue]) {
-                    self.curMotion.maxNum ++;  //本次运动超过上限值
-                }
-
-                //告警不在时间内运动
-                if([curTime compare:self.curUserParam.sportsBeginTimeParam] == NSOrderedAscending || [curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending) {
-                    
-                    self.notInParamTimeBlock = ^{
-                        [RequestUtil uploadAlertEvent:weakSelf.curUser.userName32
-                                               device:weakSelf.curUser.deviceID18
-                                               reason:@"8"
-                                            startTime:curTime
-                                          MotionStart:@"0"
-                                          singleTotal:0.0f
-                                           daylyTotal:0.0f
-                                          maxValueNum:0
-                                                block:^{
-                                                    weakSelf.curMotion.alertCount ++;
-                                                }
-];
+        if(![self.curUserParam.userName isEqualToString:@"7"]) {
+            if([curTime compare:self.curUserParam.sportsEndTimeParam]== NSOrderedAscending && [curTime compare:self.curUserParam.sportsBeginTimeParam]== NSOrderedDescending)
+            {
+                //若今天的数据已经超出则，不计运动时间直接提示今日运动过量即可
+                if(self.daylyMotion.daylyTotal
+                   > [self.curUserParam.dayValueMaxParam intValue]){
+                    [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                           device:self.curUser.deviceID18
+                                           reason:@"4"
+                                        startTime:curTime
+                                      MotionStart:@""
+                                      singleTotal:0.0
+                                       daylyTotal:self.daylyMotion.daylyTotal
+                     
+                                      maxValueNum:0.0
+                                            block:^{
+                                                self.curMotion.alertCount ++;
+                                            }
+                     ];
+                    [self showAlertMeg:@"今天运动过量"];
+                } else {
+                    //运动间隔时间
+                    if(self.intervalTimer) {
+                        if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"2"] && self.intervalTime > 0){  //当时间到了 还没有运动，即count 还是比较大
+                            [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                                   device:self.curUser.deviceID18
+                                                   reason:@"6"
+                                                startTime:curTime
+                                              MotionStart:@""
+                                              singleTotal:0.0
+                                               daylyTotal:0.0
+                                              maxValueNum:0
+                                                    block:^{
+                                                    }
+                             ];
+                            [self showAlertMeg:@"时间间隔内运动"];
+                            [self.intervalTimer invalidate];
+                        }
+                    }
+                    self.daylyMotion.daylyTotal += equivalent;    //今日总量
+                    [format setDateFormat:@"HH:mm"];
+                    NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
+                    //单次数据清零，下一次开始了
+                    if(self.curMotion.isSave) {
+                        self.curMotion.isSave = NO;
+                        NSString *startTime= [format stringFromDate:[NSDate date]];
+                        self.curMotion.startTime = startTime;
+                        self.curMotion.maxNum = 0;
+                        self.curMotion.singleTotalNum = 0;
+                        self.curMotion.endTime = @"";
+                        self.curMotion.alertCount = 0;
+                        self.curMotion.index = ++self.frequecyNum;
+                        [format setDateFormat:@"MM-dd"];
+                        self.curMotion.date = [format stringFromDate:[NSDate date]];
+                    }
+                    //单次运动判断
+                    if(self.singleTimer) {
+                        [self.singleTimer invalidate];
+                        self.singleTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(singleEndAction) userInfo:nil repeats:YES];
                         
-                    };
-                    [self showAlertMeg:@"你没有在规定时间内运动，请停止运动"];
-                } else {  //在规定运动时间内
-                        //病人运动量过大
+                    } else {
+                        self.singleTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(singleEndAction) userInfo:nil repeats:YES];
+                    }
+                    
+                    //第二天数据清零
+                    [self.dateFormatter setDateFormat:@"MM-dd"];
+                    if(![self.daylyMotion.thisDayDate isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]] ) {
+                        self.daylyMotion.daylyIsSave = NO;
+                        self.daylyMotion.daylyTotal = 0;
+                        self.daylyMotion.thisDayDate = [self.dateFormatter stringFromDate:[NSDate date]];
+                    }
+                    self.curMotion.singleTotalNum +=equivalent; //本次运动量
+                    [self.TodayMeasurementView aninationStart];
+                    if(self.curUserParam) {
+                        [self showToUser];
+                        // 用户不为7
+                        [self.dateFormatter setDateFormat:@"HH:ss"];
+                        if(equivalent > [self.curUserParam.maxValueParam doubleValue]) {
+                            self.curMotion.maxNum ++;  //本次运动超过上限值
+                        }
+                        
+                        //运动量过大
                         if(equivalent > [self.curUserParam.maxValueParam intValue]) {
                             self.overFloerBlock = ^{
                                 [RequestUtil uploadAlertEvent:weakSelf.curUser.userName32
@@ -200,68 +229,56 @@
                                                         block:^{
                                                             weakSelf.curMotion.alertCount ++;
                                                         }
-];
+                                 ];
                                 
                             };
                             [self showAlertMeg:@"你的运动量过大，请停止运动"];
-                        } else {  //达到最低要求,将结果显示出来
                             
                         }
-                        
-                    }
-                
-            }  else  {//为用户为7的
-//                [self.TodayMeasurementView setPersentMaskOfCircle:((double)self.curMotion.maxNum/(double)self.curUserParam.maxValueNumParam )];
-//                [self.TodayMeasurementView setCurrentSum:[NSString stringWithFormat:@"%2.0lf%@",((double)self.curMotion.maxNum/(double)self.curUserParam.maxValueNumParam) * 100,@"%"]];
-//                self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"%2.0lf%@",((double)self.curMotion.maxNum/(double)self.curUserParam.maxValueNumParam *100),@"%"];
-//                [self.daylyTotalProgress setProgress:(double)self.curMotion.maxNum/(double)self.curUserParam.maxValueNumParam];
-            }
-            //用户单次已经过量没有停下来，也要警告
-            if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
-            {
-                [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                       device:self.curUser.deviceID18
-                                       reason:@"2"
+                        if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
+                        {
+                            [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                                   device:self.curUser.deviceID18
+                                                   reason:@"2"
+                                                startTime:curTime
+                                              MotionStart:self.curMotion.startTime
+                                              singleTotal:self.curMotion.singleTotalNum
+                                               daylyTotal:0.0
+                                              maxValueNum:self.curMotion.maxNum
+                                                    block: ^{
+                                                        self.curMotion.alertCount ++;
+                                                    }
+                             ];
+                            [self showAlertMeg:@"本次已经过量，请停止运动"];
+                        }
+                    }            //用户单次已经过量没有停下来，也要警告
+                }
+            } else {
+                [RequestUtil uploadAlertEvent:weakSelf.curUser.userName32
+                                       device:weakSelf.curUser.deviceID18
+                                       reason:@"8"
                                     startTime:curTime
-                                  MotionStart:self.curMotion.startTime
-                                  singleTotal:self.curMotion.singleTotalNum
-                                   daylyTotal:0.0
-                                  maxValueNum:self.curMotion.maxNum
-                                        block: ^{
-                                            self.curMotion.alertCount ++;
-                                        }
-                 ];
-                [self showAlertMeg:@"本次已经过量，请停止运动"];
-            }
-            
-            if(self.daylyMotion.daylyTotal
-               > [self.curUserParam.dayValueMaxParam intValue]){
-                [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                       device:self.curUser.deviceID18
-                                       reason:@"4"
-                                    startTime:curTime
-                                  MotionStart:@""
-                                  singleTotal:0.0
-                                   daylyTotal:self.daylyMotion.daylyTotal
-                 
-                                  maxValueNum:0.0
+                                  MotionStart:@"0"
+                                  singleTotal:0.0f
+                                   daylyTotal:0.0f
+                                  maxValueNum:0
                                         block:^{
-                                            self.curMotion.alertCount ++;
-                                        }
-                 ];
-                [self showAlertMeg:@"今天运动过量"];
-                
+                                            weakSelf.curMotion.alertCount ++;
+                                        }];
+                [self showAlertMeg:@"你没有在规定时间内运动，请停止运动"];
             }
-
+        } else {
+            if(self.equivalent > [self.curUserParam.maxValueParam doubleValue]) {
+                self.curMotion.maxNum ++;
+            }
         }
-    }];
+   }];
     [self getHardInfo];
     self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
     self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
 }
 - (void)loginScucess {
-//    [[SqlRequestUtil shareInstance]deleteAllTableData];
-//    [self initData];
+    [self initData];
     if(self.mainThreadTimer == nil){
         self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
     }
@@ -291,14 +308,7 @@
         [self.todayData addObject:item];
     }
 }
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1){
-        if(self.alertTime) {
-            [self.alertTime invalidate];
-        }
-        self.alertFlag = NO;
-    }
-}
+
 - (void)showToUser {
     //界面显示
     if(![self.curUserParam.userType isEqualToString:@"7"]){
@@ -362,7 +372,6 @@
     self.equivalent = 0.0;
     self.daylyMotion = [[DaylyMotion alloc]init];
     [self initSqlDaylyData];
-    self.count = 0;
     self.curMotion.maxNum = 0;
     self.firstGoFlag = NO;
     self.curMotion = [[EveryDataUtil alloc]init];
@@ -371,9 +380,12 @@
     self.todayData = [[NSMutableArray alloc]initWithCapacity:20];
     [self.dateFormatter setDateFormat:@"MM-dd"];
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
+    
     [self initSqlTodayData];
     [self initSqlEveryDataUtilTemp];
-    [LoginViewController tryToLogin];
+    if(self.curMotion.singleTotalNum > 0) {
+        self.singleTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(singleEndAction) userInfo:nil repeats:YES];
+    }
 }
 - (void)initSqlDaylyData {
     NSArray *arr = [self.sql readDaylyData];
@@ -383,12 +395,19 @@
         DaylyMotion *motion = arr[0];  //有数据且是今天
         if([motion.thisDayDate isEqualToString:[format stringFromDate:[NSDate date]]]) {
             self.daylyMotion = motion;
+            [format setDateFormat:@"HH:mm"];
+            if([[format stringFromDate:[NSDate date]] compare:self.curUserParam.sportsEndTimeParam] == NSOrderedAscending){
+                self.daylyMotion.daylyIsSave = NO;
+                [self.sql updateDayData:self.daylyMotion];
+            }
         } else { //更新为现在的数据
             [self.sql clearDaylyData];
+            self.daylyMotion = [[DaylyMotion alloc]init];
             [self.sql insertDaylyData:self.daylyMotion];
         }
     } else {
         [self.sql clearDaylyData];
+        self.daylyMotion = [[DaylyMotion alloc]init];
         [self.sql insertDaylyData:self.daylyMotion];
     }
 }
@@ -421,13 +440,15 @@
         [self.dateFormatter setDateFormat:@"MM-dd"];
         if(![data.date isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]]){
             [self.sql clearEveryDataUtilTempData];
+            self.curMotion = [[EveryDataUtil alloc]init];
             [self.sql insertEveryDataUtilTempData:self.curMotion];
         } else {
             self.curMotion = data;
             self.frequecyNum = self.curMotion.index;
         }
     } else {
-        [self.sql insertEveryDataUtilTempData:self.curMotion];
+        [self.sql clearEveryDataUtilTempData];
+        self.curMotion = [[EveryDataUtil alloc]init];
         [self.sql insertEveryDataUtilTempData:self.curMotion];
     }
 }
@@ -454,6 +475,7 @@
     }
 }
 - (void)statusCheck {
+    [LoginViewController tryHeartBeatLogin];
     NSMutableString *statusStr = [[NSMutableString alloc]initWithString:@""];
     if(CBPeripheralStateConnected == [[BlueToothUtil getBlueToothInstance]getConnectFlag]){
         [statusStr appendFormat:@"蓝牙已连接"];
@@ -483,32 +505,21 @@
     }
     if(self.curUserParam)
     {
-        //[self showAlertMeg:[NSString stringWithFormat:@"%d",self.count]];
         [self showToUser];
-        [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.singleTotalNum / [self.curUserParam.singleValueMaxParam doubleValue] block:nil];
-        
         [self.dateFormatter setDateFormat:@"HH:mm"];
         NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
         NSString *curM = [curTime substringFromIndex:3];
         NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
+        
         if(![self.curUserParam.userType isEqualToString:@"7"]) { //用户不为7
-            if(self.overFloerBlock) {  //超过了最大值告警
-                if(self.count %5 == 0) {  //半分钟会收到一个警告
-                    self.overFloerBlock();
-                    self.overFloerBlock = nil;
-                }
-            }
-            if(self.notInParamTimeBlock) {  //不在规定时间内告警
-                if(self.count %5 == 0) {   //半分钟会收到一个警告
-                    self.notInParamTimeBlock();
-                    self.notInParamTimeBlock = nil;
-                }
-            }
+            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
             [self todayEndTimeAction];
-            [self singleEndAction];
         } else { // 用户为7 天运动量没达到告警
+            static int type7Flag = NO;
+            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.maxNum / self.curUserParam.maxValueNumParam block:nil];
+            
             if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1)) {
-                if(self.curUserParam.maxValueNumParam > self.curMotion.maxNum) {
+                if(self.curUserParam.maxValueNumParam > self.daylyMotion.daylyTotal) {
                     [RequestUtil uploadAlertEvent:self.curUser.userName32
                                            device:self.curUser.deviceID18
                                            reason:@"3"
@@ -521,8 +532,8 @@
                                                 self.curMotion.alertCount ++;
                                             }
                      ];
+                    type7Flag = YES;
                     [self showAlertMeg:@"今天运动量未达到"];
-                    
                 }
             }
         }
@@ -531,20 +542,47 @@
     }
 }
 - (void)singleEndAction {
-    
+    self.singleEndData = self.curMotion.singleTotalNum;
     [self.dateFormatter setDateFormat:@"HH:mm"];
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
-   // if(self.firstGoFlag)
-   // {
-        self.count ++;
-    //}
     //单词运动判断
-    if(!([curTime compare:self.curUserParam.sportsBeginTimeParam] == NSOrderedAscending || [curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending)) {
-        int interActionTime = 1;
-//        if(self.curUserParam.intervalTimeParam !=0) {
-//            interActionTime = self.curUserParam.intervalTimeParam;
-//        }
-        if(self.count >interActionTime * 60 && self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
+        if(self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
+                        //单词完成过量
+            if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
+            {
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"2"
+                                    startTime:curTime
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
+                                   daylyTotal:0.0
+                                  maxValueNum:self.curMotion.maxNum
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [self showAlertMeg:@"本次运动过量"];
+                
+            }
+                       //单词未完成
+            if(self.curMotion.singleTotalNum >0 && self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
+            {
+                [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                       device:self.curUser.deviceID18
+                                       reason:@"1"
+                                    startTime:curTime
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
+                                   daylyTotal:0.0
+                                  maxValueNum:self.curMotion.maxNum
+                                        block:^{
+                                            self.curMotion.alertCount ++;
+                                        }
+                 ];
+                [self showAlertMeg:@"本次运动未完成"];
+                
+            }
             if(!self.curMotion.isSave) {
                 //保存这次数据
                 self.curMotion.isSave = YES;
@@ -564,47 +602,12 @@
                     [self.sql updateEveryDataUtilTempData:self.curMotion date:self.curMotion.date];
                 }
             }
-            //单词未完成
-            if(self.curMotion.singleTotalNum >0 && self.curMotion.singleTotalNum < [self.curUserParam.singleValueMinParam intValue])
-            {
-                [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                       device:self.curUser.deviceID18
-                                       reason:@"1"
-                                    startTime:curTime
-                                  MotionStart:self.curMotion.startTime
-                                  singleTotal:self.curMotion.singleTotalNum
-                                   daylyTotal:0.0
-                                  maxValueNum:self.curMotion.maxNum
-                                        block:^{
-                                            self.curMotion.alertCount ++;
-                                        }
-                 ];
-                [self showAlertMeg:@"本次运动未完成"];
-                
-            }
-            //单词完成过量
-            if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
-            {
-                [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                       device:self.curUser.deviceID18
-                                       reason:@"2"
-                                    startTime:curTime
-                                  MotionStart:self.curMotion.startTime
-                                  singleTotal:self.curMotion.singleTotalNum
-                                   daylyTotal:0.0
-                                  maxValueNum:self.curMotion.maxNum
-                                        block:^{
-                                            self.curMotion.alertCount ++;
-                                        }
-                 ];
-                [self showAlertMeg:@"本次运动过量"];
-                
-            }
-            
-            self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
+
+            [self.singleTimer invalidate];
             self.intervalTime = self.curUserParam.intervalTimeParam * 60;
+            self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
+            
         }
-    }
 }
 - (void)todayEndTimeAction {
     [self.dateFormatter setDateFormat:@"HH:mm"];
@@ -612,33 +615,13 @@
     NSString *curM = [curTime substringFromIndex:3];
     NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
     //每天运动时间到达
-    if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1) && (self.daylyMotion.daylyIsSave == NO))
+    if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedSame && (self.daylyMotion.daylyIsSave == NO))
     {
         //上传今天的运动数据
         self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
+        [self.sql updateDayData:self.daylyMotion];
         [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:nil];
-        if([self.curUserParam.userType isEqualToString:@"7"]) {
-        } else {
-            //天运动量过量 猪猪
-            if(self.daylyMotion.daylyTotal
-               > [self.curUserParam.dayValueMaxParam intValue]){
-                [RequestUtil uploadAlertEvent:self.curUser.userName32
-                                       device:self.curUser.deviceID18
-                                       reason:@"4"
-                                    startTime:curTime
-                                  MotionStart:@""
-                                  singleTotal:0.0
-                                   daylyTotal:self.daylyMotion.daylyTotal
-                 
-                                  maxValueNum:0.0
-                                        block:^{
-                                            self.curMotion.alertCount ++;
-                                        }
-                 ];
-                [self showAlertMeg:@"今天运动过量"];
-                
-            }
-            //天运动量每到量
+        //天运动量每到量
             if(self.daylyMotion.daylyTotal
                < [self.curUserParam.dayValueMinParam intValue]){
                 [RequestUtil uploadAlertEvent:self.curUser.userName32
@@ -657,6 +640,24 @@
                 [self showAlertMeg:@"今天运动没到量"];
                 
             }
+        
+        //若今天的数据已经超出则，不计运动时间直接提示今日运动过量即可
+        if(self.daylyMotion.daylyTotal
+           > [self.curUserParam.dayValueMaxParam intValue]){
+            [RequestUtil uploadAlertEvent:self.curUser.userName32
+                                   device:self.curUser.deviceID18
+                                   reason:@"4"
+                                startTime:curTime
+                              MotionStart:@""
+                              singleTotal:0.0
+                               daylyTotal:self.daylyMotion.daylyTotal
+             
+                              maxValueNum:0.0
+                                    block:^{
+                                        self.curMotion.alertCount ++;
+                                    }
+             ];
+            [self showAlertMeg:@"今天运动过量"];
         }
     }
 }
@@ -709,6 +710,13 @@
                             [userParam writeToDefault:self.curUserParam];
                             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"经医生诊断，您的处方已更新，请按照新的处方运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                             [self alertTimeAction];
+                            NSDateFormatter *format = [[NSDateFormatter alloc]init];
+                            [format setDateFormat:@"HH:mm"];
+                            if([[format stringFromDate:[NSDate date]] compare:self.curUserParam.sportsEndTimeParam] == NSOrderedAscending){
+                                self.daylyMotion.daylyIsSave = NO;
+                                [self.sql updateDayData:self.daylyMotion];
+                            }
+
                             [alertView show];
                         });
                     } else {
@@ -743,7 +751,12 @@
                 [alertView show];
             }
         }
-
+        NSDateFormatter *format = [[NSDateFormatter alloc]init];
+        [format setDateFormat:@"HH:mm"];
+        if([[format stringFromDate:[NSDate date]] compare:self.curUserParam.sportsEndTimeParam] == NSOrderedAscending){
+            self.daylyMotion.daylyIsSave = NO;
+            [self.sql updateDayData:self.daylyMotion];
+        }
     }
 }
 - (void)intervalTimerAction {
@@ -751,24 +764,8 @@
     [self.dateFormatter setDateFormat:@"HH:ss"];
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
     //第二次没有运动     （前提：count 已经大于30了）
-    if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"2"] && self.intervalTime < 0 && (self.curUserParam.intervalTimeParam *60 < self.count && self.count >30)){  //当时间到了 还没有运动，即count 还是比较大
-        [RequestUtil uploadAlertEvent:self.curUser.userName32
-                               device:self.curUser.deviceID18
-                               reason:@"6"
-                            startTime:curTime
-                          MotionStart:@""
-                          singleTotal:0.0
-                           daylyTotal:0.0
-                          maxValueNum:0
-                                block:^{
-                                    self.curMotion.alertCount ++;
-                                }
-];
-        [self showAlertMeg:@"当时间到了还没有运动"];
-        [self.intervalTimer invalidate];
-    }
-    //还没到时间就运动  （前提：count 已经大于30了）
-    if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"1"] && self.intervalTime >0 && (self.count < 30 )) {  //当时间未到，运动时count 置0
+    //没有运动  （前提：count 已经大于30了）
+    if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"1"] && self.intervalTime <0 && 0 == self.curMotion.singleTotalNum ) {  //当时间未到，运动时count 置0
         [RequestUtil uploadAlertEvent:self.curUser.userName32
                                device:self.curUser.deviceID18
                                reason:@"5"
@@ -778,10 +775,9 @@
                            daylyTotal:0.0
                           maxValueNum:0
                                 block:^{
-                                    self.curMotion.alertCount ++;
                                 }
 ];
-        [self showAlertMeg:@"还没到时间就运动"];
+        [self showAlertMeg:@"时间到了还没有就运动"];
         [self.intervalTimer invalidate];
     }
 }
@@ -916,32 +912,18 @@
     lab.text = @"本次运动量";
     return lab;
 }
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+//    if(buttonIndex == 1){
+//        if(self.alertTime) {
+//            [self.alertTime invalidate];
+//        }
+//        self.alertFlag = NO;
+//    }
+}
 - (void)showAlertMeg:(NSString *)msg {
-    if(!self.alertFlag) {
-        self.alertFlag = YES;
-        if(self.alertView) {
-            _alertView.title = msg;
-            [_alertView show];
-        }
-        if(self.alertTime){
-            [self.alertTime invalidate];
-        }
-        [self alertTimeAction];
-        self.alertTime = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(alertTimeAction) userInfo:nil repeats:YES];
-    } else {
-        if(![_alertView.title isEqualToString:msg]){
-            self.alertFlag = YES;
-            if(self.alertView) {
-                _alertView.title = msg;
-                [_alertView show];
-            }
-            if(self.alertTime){
-                [self.alertTime invalidate];
-            }
-            [self alertTimeAction];
-            self.alertTime = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(alertTimeAction) userInfo:nil repeats:YES];
-        }
-    }
+    _alertView.title = msg;
+    [_alertView show];
+    [self alertTimeAction];
 }
 - (void)alertTimeAction {
     [self playSound];

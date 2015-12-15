@@ -21,5 +21,21 @@
         }
     }
 }
-
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.isSave = NO;
+        NSDateFormatter *format = [[NSDateFormatter alloc]init];
+        self.startTime = @"";
+        self.maxNum = 0;
+        self.singleTotalNum = 0;
+        self.endTime = @"";
+        self.alertCount = 0;
+        self.index =0;
+        [format setDateFormat:@"MM-dd"];
+        self.date = [format stringFromDate:[NSDate date]];
+    }
+    return self;
+}
 @end

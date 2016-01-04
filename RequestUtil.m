@@ -76,6 +76,34 @@ static NSString *userName;
         NSLog(@"%@",operation);
     }];
 }
++ (void)requestPostWithJson:(NSString *)url withPara:(NSDictionary *)para completionBlock:(void (^)(NSDictionary *)) completionBlock
+{
+    if(![self checkNetState]){
+        return;
+    }
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.requestSerializer = [[AFJSONRequestSerializer alloc]init];
+    manager.responseSerializer = [[AFHTTPResponseSerializer alloc]init];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
+    [manager POST:url parameters:para success:^ void(AFHTTPRequestOperation * operation, id reponseObject) {
+        if(reponseObject != nil)
+        {
+            if(completionBlock)
+            {
+                NSError *err = nil;
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:reponseObject options:kNilOptions error:&err];
+                if(!err)
+                {
+                    completionBlock(dict);
+                }
+            }
+            
+        }
+    } failure:^ void(AFHTTPRequestOperation * operation, NSError * err) {
+        NSLog(@"%@",operation);
+    }];
+}
+
 + (NSString *)getFullPathUrl:(NSString *)url sub:(NSString *)subStr
 {
     return [NSString stringWithFormat:@"%@%@",url,subStr];
@@ -455,15 +483,16 @@ static NSString *userName;
         alertCount += item.alertCount;
         [mulArr addObject:dict];
     }
-    NSDictionary *dataDict = @{@"everyData":mulArr};
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_DALYY_DATA];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:mulArr options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"dayTotal":[NSNumber numberWithDouble:dayTotal],
                             @"dayMaxValueNum":[NSNumber numberWithInt:count],
                             @"dayAlarmNum":[NSNumber numberWithInt:alertCount],
                             @"daySportNum":[NSNumber numberWithInteger:daySportNum],
-                            @"everyData":dataDict
+                            @"everyData":str
                             };
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];

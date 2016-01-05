@@ -77,22 +77,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RequestUtil.m"
-            timestampString = "473219039.387203"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "459"
-            endingLineNumber = "459"
-            landmarkName = "+uploadAlertEvent:device:reason:startTime:MotionStart:singleTotal:daylyTotal:maxValueNum:block:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BlueToothUtil.m"
             timestampString = "473219119.111949"
             startingColumnNumber = "9223372036854775807"
@@ -101,6 +85,54 @@
             endingLineNumber = "182"
             landmarkName = "-peripheral:didUpdateValueForCharacteristic:error:"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RequestUtil.m"
+            timestampString = "473697016.578687"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
+            landmarkName = "+uploadAlertEvent:device:reason:startTime:MotionStart:singleTotal:daylyTotal:maxValueNum:block:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[RequestUtil uploadAlertEvent:device:reason:startTime:MotionStart:singleTotal:daylyTotal:maxValueNum:block:]"
+                  moduleName = "MotionMeasurement"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zhuzhu/github/RequestUtil.m"
+                  timestampString = "473697016.589536"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "447"
+                  endingLineNumber = "447"
+                  offsetFromSymbolStart = "944">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__109+[RequestUtil uploadAlertEvent:device:reason:startTime:MotionStart:singleTotal:daylyTotal:maxValueNum:block:]_block_invoke"
+                  moduleName = "MotionMeasurement"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/zhuzhu/github/RequestUtil.m"
+                  timestampString = "473697016.590038"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "447"
+                  endingLineNumber = "447"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -441,8 +441,8 @@ static NSString *userName;
                             @"alarmReson":aReason,
                             @"alarmTime":startTime,
                             @"startTime":motionStartTime,
-                            @"singleTotal":[NSNumber numberWithDouble:singleTotal],
-                            @"dayTotal":[NSNumber numberWithDouble:daylyTotal],
+                            @"singleTotal":[NSNumber numberWithInt:singleTotal],
+                            @"dayTotal":[NSNumber numberWithInt:daylyTotal],
                             @"maxValueNum":[NSNumber numberWithInt:value]};
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];

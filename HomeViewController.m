@@ -141,11 +141,11 @@
                             [RequestUtil uploadAlertEvent:self.curUser.userName32
                                                    device:self.curUser.deviceID18
                                                    reason:@"5"
-                                                startTime:curTime
-                                              MotionStart:@""
-                                              singleTotal:0.0
-                                               daylyTotal:0.0
-                                              maxValueNum:0
+                                                startTime:[self getCurrentDateOfDateAndTime]
+                                              MotionStart:self.curMotion.startTime
+                                              singleTotal:self.curMotion.singleTotalNum
+                                               daylyTotal:self.daylyMotion.daylyTotal
+                                              maxValueNum:self.curMotion.maxNum
                                                     block:^{
                                                     }
                              ];
@@ -205,11 +205,11 @@
                                 [RequestUtil uploadAlertEvent:weakSelf.curUser.userName32
                                                        device:weakSelf.curUser.deviceID18
                                                        reason:@"7"
-                                                    startTime:curTime
+                                                    startTime:[self getCurrentDateOfDateAndTime]
                                                   MotionStart:weakSelf.curMotion.startTime
-                                                  singleTotal:0.0
-                                                   daylyTotal:0.0
-                                                  maxValueNum:0
+                                                  singleTotal:weakSelf.curMotion.singleTotalNum
+                                                   daylyTotal:weakSelf.daylyMotion.daylyTotal
+                                                  maxValueNum:weakSelf.curMotion.maxNum
                                                         block:^{
                                                             weakSelf.curMotion.alertCount ++;
                                                         }
@@ -223,10 +223,10 @@
                             [RequestUtil uploadAlertEvent:self.curUser.userName32
                                                    device:self.curUser.deviceID18
                                                    reason:@"2"
-                                                startTime:curTime
+                                                startTime:[self getCurrentDateOfDateAndTime]
                                               MotionStart:self.curMotion.startTime
                                               singleTotal:self.curMotion.singleTotalNum
-                                               daylyTotal:0.0
+                                               daylyTotal:self.daylyMotion.daylyTotal
                                               maxValueNum:self.curMotion.maxNum
                                                     block: ^{
                                                         self.curMotion.alertCount ++;
@@ -240,12 +240,12 @@
                     [RequestUtil uploadAlertEvent:self.curUser.userName32
                                            device:self.curUser.deviceID18
                                            reason:@"4"
-                                        startTime:curTime
-                                      MotionStart:@""
-                                      singleTotal:0.0
+                                        startTime:[self getCurrentDateOfDateAndTime]
+                                      MotionStart:self.curMotion.startTime
+                                      singleTotal:self.curMotion.singleTotalNum
                                        daylyTotal:self.daylyMotion.daylyTotal
                      
-                                      maxValueNum:0.0
+                                      maxValueNum:self.curMotion.maxNum
                                             block:^{
                                                 self.curMotion.alertCount ++;
                                             }
@@ -259,15 +259,23 @@
                 [RequestUtil uploadAlertEvent:weakSelf.curUser.userName32
                                        device:weakSelf.curUser.deviceID18
                                        reason:@"8"
-                                    startTime:curTime
-                                  MotionStart:@"0"
-                                  singleTotal:0.0f
-                                   daylyTotal:0.0f
-                                  maxValueNum:0
+                                    startTime:[self getCurrentDateOfDateAndTime]
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
+                                   daylyTotal:self.daylyMotion.daylyTotal
+                                  maxValueNum:self.curMotion.maxNum
                                         block:^{
                                             weakSelf.curMotion.alertCount ++;
                                         }];
                 [self showAlertMeg:@"你没有在规定时间内运动，请停止运动"];
+                if (self.intervalTimer) {
+                    [self.intervalTimer invalidate];
+                    self.intervalTimer = nil;
+                }
+                if(self.singleTimer){
+                    [self.singleTimer invalidate];
+                    self.singleTimer = nil;
+                }
             }
         } else {
             if(self.equivalent > [self.curUserParam.maxValueParam doubleValue]) {
@@ -533,11 +541,11 @@
                     [RequestUtil uploadAlertEvent:self.curUser.userName32
                                            device:self.curUser.deviceID18
                                            reason:@"3"
-                                        startTime:curTime
+                                        startTime:[self getCurrentDateOfDateAndTime]
                                       MotionStart:self.curMotion.startTime
-                                      singleTotal:0.0
-                                       daylyTotal:self.curMotion.maxNum
-                                      maxValueNum:0.0
+                                      singleTotal:self.curMotion.singleTotalNum
+                                       daylyTotal:self.daylyMotion.daylyTotal
+                                      maxValueNum:self.curMotion.maxNum
                                             block:^{
                                                 self.curMotion.alertCount ++;
                                             }
@@ -563,10 +571,10 @@
                 [RequestUtil uploadAlertEvent:self.curUser.userName32
                                        device:self.curUser.deviceID18
                                        reason:@"2"
-                                    startTime:curTime
+                                    startTime:[self getCurrentDateOfDateAndTime]
                                   MotionStart:self.curMotion.startTime
                                   singleTotal:self.curMotion.singleTotalNum
-                                   daylyTotal:0.0
+                                   daylyTotal:self.daylyMotion.daylyTotal
                                   maxValueNum:self.curMotion.maxNum
                                         block:^{
                                             self.curMotion.alertCount ++;
@@ -581,10 +589,10 @@
                 [RequestUtil uploadAlertEvent:self.curUser.userName32
                                        device:self.curUser.deviceID18
                                        reason:@"1"
-                                    startTime:curTime
+                                    startTime:[self getCurrentDateOfDateAndTime]
                                   MotionStart:self.curMotion.startTime
                                   singleTotal:self.curMotion.singleTotalNum
-                                   daylyTotal:0.0
+                                   daylyTotal:self.daylyMotion.daylyTotal
                                   maxValueNum:self.curMotion.maxNum
                                         block:^{
                                             self.curMotion.alertCount ++;
@@ -628,21 +636,22 @@
     if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedSame && (self.daylyMotion.daylyIsSave == NO))
     {
         //上传今天的运动数据
-        self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
         [self.sql updateDayData:self.daylyMotion];
-        [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:nil];
+        [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.todayData.count daySportNum:self.todayData.count everyData:self.todayData block:^{
+            self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
+        }];
         //天运动量每到量
             if(self.daylyMotion.daylyTotal
                < [self.curUserParam.dayValueMinParam intValue]){
                 [RequestUtil uploadAlertEvent:self.curUser.userName32
                                        device:self.curUser.deviceID18
                                        reason:@"3"
-                                    startTime:curTime
-                                  MotionStart:@""
-                                  singleTotal:0.0
+                                    startTime:[self getCurrentDateOfDateAndTime]
+                                  MotionStart:self.curMotion.startTime
+                                  singleTotal:self.curMotion.singleTotalNum
                                    daylyTotal:self.daylyMotion.daylyTotal
                  
-                                  maxValueNum:0.0
+                                  maxValueNum:self.curMotion.maxNum
                                         block:^{
                                             self.curMotion.alertCount ++;
                                         }
@@ -657,12 +666,12 @@
             [RequestUtil uploadAlertEvent:self.curUser.userName32
                                    device:self.curUser.deviceID18
                                    reason:@"4"
-                                startTime:curTime
-                              MotionStart:@""
-                              singleTotal:0.0
+                                startTime:[self getCurrentDateOfDateAndTime]
+                              MotionStart:self.curMotion.startTime
+                              singleTotal:self.curMotion.singleTotalNum
                                daylyTotal:self.daylyMotion.daylyTotal
              
-                              maxValueNum:0.0
+                              maxValueNum:self.curMotion.maxNum
                                     block:^{
                                         self.curMotion.alertCount ++;
                                     }
@@ -779,11 +788,11 @@
         [RequestUtil uploadAlertEvent:self.curUser.userName32
                                device:self.curUser.deviceID18
                                reason:@"6"
-                            startTime:curTime
-                          MotionStart:@""
-                          singleTotal:0.0
-                           daylyTotal:0.0
-                          maxValueNum:0
+                            startTime:[self getCurrentDateOfDateAndTime]
+                          MotionStart:self.curMotion.startTime
+                          singleTotal:self.curMotion.singleTotalNum
+                           daylyTotal:self.daylyMotion.daylyTotal
+                          maxValueNum:self.curMotion.maxNum
                                 block:^{
                                 }
 ];
@@ -955,7 +964,11 @@
 ;
     [self presentViewController:vc animated:YES completion:nil];
 }
-
+- (NSString *)getCurrentDateOfDateAndTime {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateFormat:@"yyyyMMddHHmmss"];
+    return [dateFormatter stringFromDate:[NSDate date]];
+}
 //- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 //{
 //    static CGFloat percent;

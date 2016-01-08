@@ -25,7 +25,7 @@
 {
     self = [super init];
     if (self) {
-        self.isSave = NO;
+        self.isSave = YES;
         NSDateFormatter *format = [[NSDateFormatter alloc]init];
         self.startTime = @"";
         self.maxNum = 0;

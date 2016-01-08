@@ -222,10 +222,10 @@ static BlueToothUtil* blueTooth;
                         temp[2] = data[6];
                         temp[3] = data[7];
                         float *Fdata1 = (float*)&temp;
-                        temp[0] = data[4];
-                        temp[1] = data[5];
-                        temp[2] = data[6];
-                        temp[3] = data[7];
+                        temp[0] = data[8];
+                        temp[1] = data[9];
+                        temp[2] = data[10];
+                        temp[3] = data[11];
                         float *Fdata2 = (float*)&temp;
                         self.m_readCurrentMotionMeasurement(*Fdata1, *Fdata2);
                     }

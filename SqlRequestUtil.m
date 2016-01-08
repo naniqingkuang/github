@@ -130,7 +130,7 @@ static SqlRequestUtil *static_sqlRequst;
 - (void)createTableDaylyData {
     if ([db open]) {
         if (![db tableExists:@"DaylyData"]) {
-            if ([db  executeUpdate:@"CREATE TABLE DaylyData (thisDayDate text,daylyTotal REAL,daylyIsSave BLOB)"]) {
+            if ([db  executeUpdate:@"CREATE TABLE DaylyData (thisDayDate text,daylyTotal REAL,daylyIsSave BLOB,alertNum INT)"]) {
                 NSLog(@"create table success");
                 [db close];
             }else{
@@ -222,7 +222,7 @@ static SqlRequestUtil *static_sqlRequst;
 
 - (void)insertDaylyData:(DaylyMotion *)data {
     if([db open]) {
-        [db executeUpdate:@"insert into DaylyData (thisDayDate,daylyTotal,daylyIsSave) values(?,?,?)",data.thisDayDate,[NSNumber numberWithDouble:data.daylyTotal],[NSNumber numberWithBool:data.daylyIsSave],nil];
+        [db executeUpdate:@"insert into DaylyData (thisDayDate,daylyTotal,daylyIsSave,alertNum) values(?,?,?,?)",data.thisDayDate,[NSNumber numberWithDouble:data.daylyTotal],[NSNumber numberWithBool:data.daylyIsSave],[NSNumber numberWithInt:data.alertNum],nil];
         [db close];
     }
 }
@@ -357,6 +357,7 @@ static SqlRequestUtil *static_sqlRequst;
             data.thisDayDate = [rs stringForColumn:@"thisDayDate"];
             data.daylyTotal = [rs doubleForColumn:@"daylyTotal"];
             data.daylyIsSave =[rs boolForColumn:@"daylyIsSave"];
+            data.alertNum = [rs intForColumn:@"alertNum"];
             [arr addObject:data];
         }
         [db close];
@@ -368,8 +369,8 @@ static SqlRequestUtil *static_sqlRequst;
 - (void)updateDayData:(DaylyMotion *)data {
     if ([db open]) {
         NSString *updateSql = [NSString stringWithFormat:
-                               @"UPDATE DaylyData SET thisDayDate = '%@',daylyTotal = '%@',daylyIsSave = '%@' WHERE thisDayDate = '%@' ",
-                               data.thisDayDate,[NSNumber numberWithDouble:data.daylyTotal],[NSNumber numberWithBool:data.daylyIsSave] ,data.thisDayDate];
+                               @"UPDATE DaylyData SET thisDayDate = '%@',daylyTotal = '%@',daylyIsSave = '%@',alertNum = '%d' WHERE thisDayDate = '%@' ",
+                               data.thisDayDate,[NSNumber numberWithDouble:data.daylyTotal],[NSNumber numberWithBool:data.daylyIsSave],data.alertNum ,data.thisDayDate];
         BOOL res = [db executeUpdate:updateSql];
         if (!res) {
             NSLog(@"error when update db table");

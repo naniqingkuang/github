@@ -469,7 +469,6 @@ static NSString *userName;
               everyData:(NSArray *)arr
                   block:(void(^)()) aBlock {
     int count = 0;
-    int alertCount = 0;
     NSMutableArray *mulArr = [[NSMutableArray alloc]initWithCapacity:arr.count];
     for (EveryDataUtil *item in arr) {
         [item checkAndAvoidNull];
@@ -480,7 +479,6 @@ static NSString *userName;
                                 @"maxValueNum":[NSNumber numberWithInt:item.maxNum]
                                 };
         count += item.maxNum;
-        alertCount += item.alertCount;
         [mulArr addObject:dict];
     }
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_DALYY_DATA];
@@ -490,7 +488,7 @@ static NSString *userName;
                             @"deviceID":deviceID,
                             @"dayTotal":[NSNumber numberWithDouble:dayTotal],
                             @"dayMaxValueNum":[NSNumber numberWithInt:count],
-                            @"dayAlarmNum":[NSNumber numberWithInt:alertCount],
+                            @"dayAlarmNum":[NSNumber numberWithInt:dayAlarmNum],
                             @"daySportNum":[NSNumber numberWithInteger:daySportNum],
                             @"everyData":str
                             };

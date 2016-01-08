@@ -31,7 +31,7 @@ static  BOOL logoFlag;
     self.logoImageView.layer.cornerRadius = 10;
     self.logoImageView.layer.masksToBounds = YES;
     self.loginButton.layer.cornerRadius = 12;
-    NSString *str = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+    NSString *str = [RequestUtil getUserName];
     self.nameText.text = str;
     self.nameText.delegate = self;
     self.passedText.delegate = self;
@@ -74,12 +74,11 @@ static  BOOL logoFlag;
 + (void)tryToLogin {
     if(![self hasLogin]) {
         BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
-        NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+        NSString *userName = [RequestUtil getUserName];
         NSString *passwd = [[NSUserDefaults standardUserDefaults]objectForKey:@"passwd"];
         if(flag && userName.length >0 && passwd.length >0) {
             [RequestUtil userLogin:userName passwd:passwd block:^(bool flag) {
                 if(flag){
-                    [RequestUtil setUserName:userName];
                     [RequestUtil getUserinfo:userName block:^(NSDictionary *dict) {
                         UserUtil *item = [[UserUtil alloc]initWithDict:dict];
                         [RequestUtil setCurrentUser:item];
@@ -95,7 +94,7 @@ static  BOOL logoFlag;
 }
 + (void)tryHeartBeatLogin {
         BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
-        NSString *userName = [[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"];
+        NSString *userName = [RequestUtil getUserName];
         NSString *passwd = [[NSUserDefaults standardUserDefaults]objectForKey:@"passwd"];
     if(![RequestUtil  checkNetState]) {
         logoFlag = NO;
@@ -126,17 +125,18 @@ static  BOOL logoFlag;
 //    }
     [RequestUtil userLogin:self.nameText.text passwd:self.passedText.text block:^(bool flag) {
         if(flag){
-            [RequestUtil setUserName:self.nameText.text];
             [RequestUtil getUserinfo:self.nameText.text block:^(NSDictionary *dict) {
                 UserUtil *item = [[UserUtil alloc]initWithDict:dict];
                 [RequestUtil setCurrentUser:item];
                 logoFlag = YES;
-                if(![[[NSUserDefaults standardUserDefaults]objectForKey:@"loginUser"] isEqualToString:self.nameText.text]) {
+                NSString *sr = [RequestUtil getUserName];
+                NSString *st = self.nameText.text;
+                if(![[RequestUtil getUserName] isEqualToString:self.nameText.text]) {
                     [[SqlRequestUtil shareInstance]deleteAllTableData];
                 }
                 [[NSNotificationCenter defaultCenter]postNotification:[NSNotification notificationWithName:USER_LOGIN_SUCCESS object:nil]];
                 [self dismissViewControllerAnimated:YES completion:^{
-                    [[NSUserDefaults standardUserDefaults] setObject:self.nameText.text forKey:@"loginUser"];
+                    [RequestUtil setUserName:self.nameText.text];
                     BOOL flag = [[[NSUserDefaults standardUserDefaults]objectForKey:@"rememberPassWd"]boolValue];
                     if(flag) {
                         [[NSUserDefaults standardUserDefaults]setObject:self.passedText.text forKey:@"passwd"];

@@ -113,7 +113,6 @@
     [self.TodayMeasurementView setTitle:@"本次未达标" andTarget:@"0"];
     self.percentDaylyTotalParamLB.text = [NSString stringWithFormat:@"今日未达标"];
     [self.daylyTotalProgress setProgress:0.0];
-    self.curUser = [RequestUtil getCurrentUser];
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM月dd日"];
     //self.dateNavigationItem.title= [NSString stringWithFormat:@"蓝牙未连接，已登录"];
@@ -148,7 +147,7 @@
                                                daylyTotal:self.daylyMotion.daylyTotal
                                               maxValueNum:self.curMotion.maxNum
                                                     block:^{
-                                                        self.daylyMotion.alertNum ++;
+                                                        self.curMotion.alertCount ++;
                                                         self.daylyMotion.alertNum++;
                                                     }
                              ];
@@ -173,7 +172,7 @@
                         self.curMotion.singleTotalNum = 0;
                         self.curMotion.endTime = @"";
                         self.curMotion.alertCount = 0;
-                        self.curMotion.index = ++self.frequecyNum;
+                        self.curMotion.index = self.todayData.count+1;
                         [format setDateFormat:@"MM-dd"];
                         self.curMotion.date = [format stringFromDate:[NSDate date]];
                     }
@@ -298,7 +297,6 @@
     if(self.mainThreadTimer == nil){
         self.mainThreadTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(mainThread) userInfo:nil repeats:YES];
     }
-    
     NSLog(@"login sucecced");
 }
 - (void)logoutScucess {
@@ -388,6 +386,10 @@
     _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
     self.alertFlag = NO;
     self.sql = [SqlRequestUtil shareInstance];
+    [self.sql updateEveryDataUtilTempData:self.curMotion date:self.curMotion.date];
+    EveryDataUtil *data = [self.sql readSingleDataTemp:self.curMotion.date];
+    NSLog(@"%lf",data.singleTotalNum);
+
     self.typeSevVenConunt = 0;
     self.frequecyNum = 0;
     self.inpulse = 0.0;
@@ -404,10 +406,12 @@
     self.curMotion.date = [self.dateFormatter stringFromDate:[NSDate date]];
     
     [self initSqlTodayData];
-    [self initSqlEveryDataUtilTemp];
+    [self initSqlEveryDataUtilTemp:self.curMotion.date];
     if(self.curMotion.singleTotalNum > 0) {
         self.singleTimer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(singleEndAction) userInfo:nil repeats:YES];
     }
+    self.curUserParam = nil;
+    self.curUser = [RequestUtil getCurrentUser];
 }
 - (void)initSqlDaylyData {
     NSArray *arr = [self.sql readDaylyData];
@@ -458,8 +462,8 @@
         
     }
 }
-- (void)initSqlEveryDataUtilTemp {
-    EveryDataUtil *data = [self.sql readSingleDataTemp];
+- (void)initSqlEveryDataUtilTemp:(NSString *)date {
+    EveryDataUtil *data = [self.sql readSingleDataTemp:date];
     if(data && data.date.length > 0) {
         [self.dateFormatter setDateFormat:@"MM-dd"];
         if(![data.date isEqualToString:[self.dateFormatter stringFromDate:[NSDate date]]]){
@@ -490,8 +494,8 @@
                 total +=item.singleTotalNum;
             }
             [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:total dayMaxValueNum:maxVlue dayAlarmNum:alert daySportNum:data.count everyData:data block:^{
-                [self.sql clearSingleDataByDate:date];
             }];
+            [self.sql clearSingleDataByDate:date];
             total = 0.0;
              maxVlue = 0;
              alert = 0;
@@ -526,6 +530,7 @@
     if(self.sql) {
         [self.sql updateDayData:self.daylyMotion];
         [self.sql updateEveryDataUtilTempData:self.curMotion date:self.curMotion.date];
+        EveryDataUtil *data = [self.sql readSingleDataTemp:self.curMotion.date];
     }
     if(self.curUserParam)
     {
@@ -633,6 +638,7 @@
             }
 
             [self.singleTimer invalidate];
+            self.singleTimer = nil;
             self.intervalTime = self.curUserParam.intervalTimeParam * 60;
             self.intervalTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(intervalTimerAction) userInfo:nil repeats:YES];
             
@@ -644,8 +650,9 @@
     NSString *curM = [curTime substringFromIndex:3];
     NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
     //每天运动时间到达
-    if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedSame && (self.daylyMotion.daylyIsSave == NO))
+    if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && (self.daylyMotion.daylyIsSave == NO) && (self.singleTimer == nil))
     {
+        self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
         //上传今天的运动数据
         [self.sql updateDayData:self.daylyMotion];
                 //天运动量每到量
@@ -690,7 +697,6 @@
              ];
             [self showAlertMeg:@"今天运动过量"];
         }
-        self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
         [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.daylyMotion.alertNum daySportNum:self.todayData.count everyData:self.todayData block:^{
         }];
 

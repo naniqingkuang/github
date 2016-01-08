@@ -21,7 +21,7 @@
 - (void)clearSingleData;
 -(void)clearSingleDataByDate:(NSString *)date;
 - (void)updateEveryDataUtilData:(EveryDataUtil *)data;
-- (EveryDataUtil *)readSingleDataTemp;
+- (EveryDataUtil *)readSingleDataTemp:(NSString *)date;
 - (void)updateEveryDataUtilTempData:(EveryDataUtil *)data date:(NSString *)date;
 - (void)insertEveryDataUtilTempData:(EveryDataUtil *)data;
 - (void)clearEveryDataUtilTempData;

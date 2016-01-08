@@ -30,7 +30,7 @@ static SqlRequestUtil *static_sqlRequst;
         [self createTableDaylyData];
         [self createTableSingleData];
         [self createTableSingleDataTemp];
-       // [self test];
+        //[self test];
     }
     return self;
 }
@@ -39,24 +39,15 @@ static SqlRequestUtil *static_sqlRequst;
     EveryDataUtil *data = [[EveryDataUtil alloc]init];
     data.date = @"11-10";
     
-    [self insertEveryDataUtilData:data];
+    [self insertEveryDataUtilTempData:data];
     data = [[EveryDataUtil alloc]init];
     data.index = 1;
     data.singleTotalNum = 20.0;
     data.date = @"11-10";
-    [self insertEveryDataUtilData:data];
-    [self readSingleDataByDate:@"11-10"];
-    [self readSingleData];
-    data = [[EveryDataUtil alloc]init];
-    data.index = 1;
-    data.singleTotalNum = 20.0;
-    data.date = @"11-11";
-    [self insertEveryDataUtilData:data];
-    [self readSingleDataByDate:@"11-10"];
-    [self readSingleDataByDate:@"11-11"];
-    [self readSingleData];
-    [self clearSingleDataByDate:@"11-10"];
-    [self readSingleData];
+    EveryDataUtil *data1 = [self readSingleDataTemp:data.date];
+    [self updateEveryDataUtilTempData:data date:data.date];
+    EveryDataUtil *data2 = [self readSingleDataTemp:data.date];
+   
 
 }
 - (void)createDB{
@@ -199,7 +190,10 @@ static SqlRequestUtil *static_sqlRequst;
 }
 - (void)insertEveryDataUtilTempData:(EveryDataUtil *)data {
     if([db open]) {
-        [db executeUpdate:@"insert into SingleDataTemp (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
+        BOOL res =[db executeUpdate:@"insert into SingleDataTemp (date,startTime,maxNum,singleTotalNum,mIndex,endTime, isSave,alertCount) values(?,?,?,?,?,?,?,?)",data.date,data.startTime,[NSNumber numberWithInt:data.maxNum],[NSNumber numberWithDouble:data.singleTotalNum],[NSNumber numberWithInt:data.index],data.endTime,[NSNumber numberWithBool:data.isSave],[NSNumber numberWithInt:data.alertCount],nil];
+        if(!res){
+            NSLog(@"insert table SingleDataTemp err");
+        }
         [db close];
     }
 }
@@ -252,7 +246,7 @@ static SqlRequestUtil *static_sqlRequst;
 - (NSArray *)readSingleDataByDate:(NSString *)date {
     if ([db open]) {
         NSString * sql = [NSString stringWithFormat:
-                          @"SELECT * FROM %@ WHERE date ='%@' ",@"SingleData",date];
+                          @"SELECT * FROM %@ WHERE date = '%@' ",@"SingleData",date];
         NSMutableArray *arr = [[NSMutableArray alloc]initWithCapacity:10];
         FMResultSet * rs = [db executeQuery:sql];
         while ([rs next]) {
@@ -273,12 +267,13 @@ static SqlRequestUtil *static_sqlRequst;
     return nil;
 }
 
-- (EveryDataUtil *)readSingleDataTemp {
+- (EveryDataUtil *)readSingleDataTemp:(NSString *)date {
     if ([db open]) {
         NSString * sql = [NSString stringWithFormat:
-                          @"SELECT * FROM %@",@"SingleDataTemp"];
-        EveryDataUtil *data = [[EveryDataUtil alloc]init];
+                          @"SELECT * FROM %@ WHERE date = '%@'",@"SingleDataTemp",date];
         FMResultSet * rs = [db executeQuery:sql];
+        EveryDataUtil *data = [[EveryDataUtil alloc]init];
+        int flag = 0;
         while ([rs next]) {
             data.date = [rs stringForColumn:@"date"];
             data.startTime = [rs stringForColumn:@"startTime"];
@@ -288,9 +283,12 @@ static SqlRequestUtil *static_sqlRequst;
             data.endTime = [rs stringForColumn:@"endTime"];
             data.isSave = [rs boolForColumn:@"isSave"];
             data.alertCount = [rs intForColumn:@"alertCount"];
+            flag ++;
         }
         [db close];
-        return data;
+        if(flag) {
+            return data;
+        }
     }
     return nil;
 }

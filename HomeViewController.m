@@ -170,7 +170,7 @@
                     if(self.curMotion.isSave) {
                         self.curMotion.isSave = NO;
                         NSString *startTime= [format stringFromDate:[NSDate date]];
-                        self.curMotion.startTime = startTime;
+                        self.curMotion.startTime = [self getCurrentDateOfDateAndTime];
                         self.curMotion.maxNum = 0;
                         self.curMotion.singleTotalNum = 0;
                         self.curMotion.endTime = @"";
@@ -575,6 +575,9 @@
     if(self.curUserParam)
     {
         [self showToUser];
+        [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
+            NSLog(@"%@",hardWareEdition);
+        }];
         [self checkHistotyData];
         [self.dateFormatter setDateFormat:@"HH:mm"];
         NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
@@ -618,7 +621,7 @@
     [self.dateFormatter setDateFormat:@"HH:mm"];
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
     //单词运动判断
-        if(self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO)) {
+        if(self.curMotion.singleTotalNum > 0 && (self.curMotion.isSave == NO) && _singleTimer != nil) {
                         //单词完成过量
             if(self.curMotion.singleTotalNum > [self.curUserParam.singleValueMaxParam intValue])
             {
@@ -662,7 +665,7 @@
             if(!self.curMotion.isSave) {
                 //保存这次数据
                 self.curMotion.isSave = YES;
-                self.curMotion.endTime = curTime;
+                self.curMotion.endTime = [self getCurrentDateOfDateAndTime];
                 [self todayDataSave:self.curMotion];
                 //清除数据
                 {
@@ -804,7 +807,7 @@
                             [alertView show];
                         });
                     } else {
-                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"经医生诊断，您的处方不许要更新，请按照原处方继续运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"" message:@"经医生诊断，您的处方不需要更新，请按照原处方继续运动" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                         [alertView show];
                     }
                 }];
@@ -849,7 +852,7 @@
     NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
     //第二次没有运动     （前提：count 已经大于30了）
     //没有运动  （前提：count 已经大于30了）
-    if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"1"] && self.intervalTime <0 && 0 == self.curMotion.singleTotalNum ) {  //当时间未到，运动时count 置0
+    if([self.curUserParam.intervalTimeTypeParam isEqualToString:@"1"] && self.intervalTime <0 && 0 == self.curMotion.singleTotalNum && _intervalTimer != nil) {  //当时间未到，运动时count 置0
         [RequestUtil uploadAlertEvent:self.curUser.userName32
                                device:self.curUser.deviceID18
                                reason:@"6"

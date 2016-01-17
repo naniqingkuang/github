@@ -109,22 +109,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HomeViewController.m"
-            timestampString = "474715485.248612"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "776"
-            endingLineNumber = "776"
-            landmarkName = "-getHardInfo"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "LoginViewController.m"
             timestampString = "473955534.441998"
             startingColumnNumber = "9223372036854775807"
@@ -142,11 +126,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HomeViewController.m"
-            timestampString = "473963084.835677"
+            timestampString = "474719667.539016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "-initData"
             landmarkType = "5">
          </BreakpointContent>
@@ -413,70 +397,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HomeViewController.m"
-            timestampString = "474698572.427218"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "331"
-            endingLineNumber = "331"
-            landmarkName = "-showToUser"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HomeViewController.m"
-            timestampString = "474698582.305378"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
-            landmarkName = "-showToUser"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[HomeViewController showToUser]"
-                  moduleName = "MotionMeasurement"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/zhuzhu/Documents/github/HomeViewController.m"
-                  timestampString = "474698582.31893"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330"
-                  offsetFromSymbolStart = "44">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__32-[HomeViewController showToUser]_block_invoke"
-                  moduleName = "MotionMeasurement"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/zhuzhu/Documents/github/HomeViewController.m"
-                  timestampString = "474698582.319167"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "330"
-                  endingLineNumber = "330"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BlueToothUtil.m"
             timestampString = "474715557.829603"
             startingColumnNumber = "9223372036854775807"
@@ -494,11 +414,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HomeViewController.m"
-            timestampString = "474715485.248612"
+            timestampString = "474719667.539016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "685"
-            endingLineNumber = "685"
+            startingLineNumber = "687"
+            endingLineNumber = "687"
             landmarkName = "-singleEndAction"
             landmarkType = "5">
          </BreakpointContent>
@@ -510,11 +430,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HomeViewController.m"
-            timestampString = "474715485.248612"
+            timestampString = "474719667.539016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "852"
-            endingLineNumber = "852"
+            startingLineNumber = "863"
+            endingLineNumber = "863"
             landmarkName = "-intervalTimerAction"
             landmarkType = "5">
          </BreakpointContent>

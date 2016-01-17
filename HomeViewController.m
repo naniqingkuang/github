@@ -76,6 +76,7 @@
 @property (strong, nonatomic)NSTimer *alertTime;
 @property (assign, nonatomic) BOOL isHistoryDataAllUpload;
 @property (assign, nonatomic) BOOL isTodayDataUploading;
+@property (nonatomic, strong) NSTimer *batteryTimer;
 @end
 
 @implementation HomeViewController
@@ -103,6 +104,13 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGIN_SUCCESS object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:USER_LOGOUT_SUCCESS object:nil];
     [[NSNotificationCenter defaultCenter]removeObserver:self name:APNS_NOTIFICATION object:nil];
+}
+- (void)batteryAction {
+    [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
+        NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
+        self.chargeImageView.image = [UIImage imageNamed:str];
+        //self.rightBarButton.image = [UIImage imageNamed:str];
+    }];
 }
 -(void)setUp
 {
@@ -327,12 +335,6 @@
 }
 
 - (void)showToUser {
-    [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
-        NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
-        self.chargeImageView.image = [UIImage imageNamed:str];
-        //self.rightBarButton.image = [UIImage imageNamed:str];
-    }];
-
     //界面显示
     if(![self.curUserParam.userType isEqualToString:@"7"]){
         CGFloat percent = 0;
@@ -762,6 +764,15 @@
     } else if(CBPeripheralStateConnected == flag) {
         if(![[BlueToothUtil getBlueToothInstance]isBlueToothConnected]) {
             [[BlueToothUtil getBlueToothInstance] reScan];
+        } else {
+            if(!self.batteryTimer){
+                self.batteryTimer = [NSTimer scheduledTimerWithTimeInterval:200 target:self selector:@selector(batteryAction) userInfo:nil repeats:YES];
+                [[BlueToothUtil getBlueToothInstance]readBatterySum:^(short batterySum) {
+                    NSString *str = [NSString stringWithFormat:@"%d.jpg",(int)(batterySum /20)];
+                    self.chargeImageView.image = [UIImage imageNamed:str];
+                    //self.rightBarButton.image = [UIImage imageNamed:str];
+                }];
+            }
         }
     }
     if(!self.curUser.deviceID18) {
@@ -1008,12 +1019,16 @@
 //    }
 }
 - (void)showAlertMeg:(NSString *)msg {
-    if(!self.alertView){
-        self.alertView = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive){
+        if(!self.alertView){
+            self.alertView = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+        }
+        [self.alertView setMessage:msg];
+        [_alertView show];
+        [self alertTimeAction];
+    } else {
+        [self scheduleNotification:msg];
     }
-    [self.alertView setMessage:msg];
-    [_alertView show];
-    [self alertTimeAction];
 }
 - (void)alertTimeAction {
     [self playSound];
@@ -1082,4 +1097,29 @@
 //        self.daylyTotalProgress.tintColor = [UIColor redColor];
 //    }
 //}
+- (void)scheduleNotification:(NSString *)msg{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    //设置5秒之后
+    NSDate *pushDate = [NSDate dateWithTimeIntervalSinceNow:5];
+    if (notification != nil) {
+        // 设置推送时间（5秒后）
+        notification.fireDate = pushDate;
+        // 设置时区（此为默认时区）
+        notification.timeZone = [NSTimeZone defaultTimeZone];
+        // 设置重复间隔（默认0，不重复推送）
+        notification.repeatInterval = 0;
+        // 推送声音（系统默认）
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        // 推送内容
+        notification.alertBody = msg;
+        //显示在icon上的数字
+        notification.applicationIconBadgeNumber = 1;
+        //设置userinfo 方便在之后需要撤销的时候使用
+        NSDictionary *info = [NSDictionary dictionaryWithObject:@"name"forKey:@"key"];
+        notification.userInfo = info;
+        //添加推送到UIApplication
+        UIApplication *app = [UIApplication sharedApplication];
+        [app scheduleLocalNotification:notification];
+    }
+}
 @end

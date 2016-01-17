@@ -37,6 +37,13 @@
     [GeTuiSdk runBackgroundEnable:YES];
     [self registerUserNotification];
     [self receiveNotificationByLaunchingOptions:launchOptions];
+    
+    float sysVersion=[[UIDevice currentDevice]systemVersion].floatValue;
+    if (sysVersion>=8.0) {
+        UIUserNotificationType type=UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
+        UIUserNotificationSettings *setting=[UIUserNotificationSettings settingsForTypes:type categories:nil];
+        [[UIApplication sharedApplication]registerUserNotificationSettings:setting];
+    }
     // Override point for customization after application launch.
     return YES;
 }
@@ -163,9 +170,7 @@
 //- (void)backgroundHandler {
 //    
 //}
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
@@ -256,5 +261,16 @@
         }
     }
 }
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:notification.alertBody delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alert show];
+    
+    // 图标上的数字减1
+    application.applicationIconBadgeNumber -= 1;
+}
 
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // 直接打开app时，图标上的数字清零
+    application.applicationIconBadgeNumber = 0;
+}
 @end

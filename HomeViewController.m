@@ -575,9 +575,6 @@
     if(self.curUserParam)
     {
         [self showToUser];
-        [[BlueToothUtil getBlueToothInstance]readHareEdition:^(NSString *hardWareEdition) {
-            NSLog(@"%@",hardWareEdition);
-        }];
         [self checkHistotyData];
         [self.dateFormatter setDateFormat:@"HH:mm"];
         NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];

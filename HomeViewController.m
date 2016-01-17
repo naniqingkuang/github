@@ -74,6 +74,8 @@
 @property (strong, nonatomic) UIAlertView *alertView;
 @property (assign, atomic) BOOL alertFlag;
 @property (strong, nonatomic)NSTimer *alertTime;
+@property (assign, nonatomic) BOOL isHistoryDataAllUpload;
+@property (assign, nonatomic) BOOL isTodayDataUploading;
 @end
 
 @implementation HomeViewController
@@ -129,6 +131,7 @@
         NSString *curTime = [datefomattersportsEndTimeParam stringFromDate:[NSDate date]];
         self.equivalent = equivalent;  // 本次当量值
         self.inpulse = inpulse;  //
+        [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:equivalent inpluse:inpulse block:nil];
         if(![self.curUserParam.userName isEqualToString:@"7"]) {
             self.daylyMotion.daylyTotal += equivalent;    //今日总量
             if([curTime compare:self.curUserParam.sportsEndTimeParam]== NSOrderedAscending && [curTime compare:self.curUserParam.sportsBeginTimeParam]== NSOrderedDescending)
@@ -383,6 +386,8 @@
     }
 }
 - (void)initData {
+    _isHistoryDataAllUpload = NO;
+    _isTodayDataUploading = NO;
     _historyListDict = [[NSMutableDictionary alloc]initWithCapacity:20];
     self.alertFlag = NO;
     self.sql = [SqlRequestUtil shareInstance];
@@ -437,29 +442,54 @@
         [self.sql insertDaylyData:self.daylyMotion];
     }
 }
+- (NSArray *)ArrToSetFinalArr:(NSArray *)arr {
+    NSSet *set = nil;
+    if (arr) {
+        set = [NSSet setWithArray:arr];
+    }
+    return [set allObjects];
+}
 - (void)initSqlTodayData {
     NSArray *arr = [self.sql readSingleData];
     NSDateFormatter *format = [[NSDateFormatter alloc]init];
     [format setDateFormat:@"MM-dd"];
     if(arr.count){
-        EveryDataUtil *motion = arr[0]; //是今天的数据
+        //
+        NSMutableArray *hisDates = [NSMutableArray array];
         for (EveryDataUtil *item in arr) {
-            if([item.date isEqualToString:[format stringFromDate:[NSDate date]]]) {
-                [self.todayData addObject:item];
-            } else {
-                NSArray *keys = [_historyListDict allKeys];
-                for (NSString *str in keys) {
-                    if([str isEqualToString:item.date]){
-                        break;
-                    }
-                }
-                NSArray *arr = [self.sql readSingleDataByDate:item.date];
-                if(item.date) {
-                    [self.historyListDict setObject:arr forKey:item.date];
-                }
+            [hisDates addObject:item.date];
+        }
+        NSArray *singleArr = [self ArrToSetFinalArr:hisDates];
+        for (NSString *str in singleArr) {
+            if([str isEqualToString:[format stringFromDate:[NSDate date]]]) {
+                NSArray *arr = [self.sql readSingleDataByDate:str];
+                self.todayData = [NSMutableArray arrayWithArray:arr];
+                break;
             }
         }
-        
+    }
+}
+- (void)updateHistoryData {
+    NSArray *arr = [self.sql readSingleData];
+    NSDateFormatter *format = [[NSDateFormatter alloc]init];
+    [format setDateFormat:@"MM-dd"];
+    self.historyListDict = [[NSMutableDictionary alloc]init];
+    if(arr.count){
+        //
+        NSMutableArray *hisDates = [NSMutableArray array];
+        for (EveryDataUtil *item in arr) {
+            [hisDates addObject:item.date];
+        }
+        NSArray *singleArr = [self ArrToSetFinalArr:hisDates];
+        for (NSString *str in singleArr) {
+            if(![str isEqualToString:[format stringFromDate:[NSDate date]]]){
+                NSArray *arr = [self.sql readSingleDataByDate:str];
+                [self.historyListDict setObject:arr forKey:str];
+            }
+        }
+    }
+    if(self.historyListDict.count <= 0){
+        _isHistoryDataAllUpload = YES;
     }
 }
 - (void)initSqlEveryDataUtilTemp:(NSString *)date {
@@ -481,24 +511,26 @@
     }
 }
 - (void)uploadHistoryData:(NSDictionary *)dict {
-    double total = 0.0;
-    NSInteger maxVlue = 0;
-    NSInteger alert = 0;
-    NSArray *keys = [dict allKeys];
-    if(keys.count){
-        for (NSString *date in keys) {
-            NSArray *data = [dict objectForKey:date];
-            for (EveryDataUtil *item in data) {
-                maxVlue +=item.maxNum;
-                alert +=item.alertCount;
-                total +=item.singleTotalNum;
+    if(dict.count){
+        double total = 0.0;
+        NSInteger maxVlue = 0;
+        NSInteger alert = 0;
+        NSArray *keys = [dict allKeys];
+        if(keys.count){
+            for (NSString *date in keys) {
+                NSArray *data = [dict objectForKey:date];
+                for (EveryDataUtil *item in data) {
+                    maxVlue +=item.maxNum;
+                    alert +=item.alertCount;
+                    total +=item.singleTotalNum;
+                }
+                [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:total dayMaxValueNum:maxVlue dayAlarmNum:alert daySportNum:data.count everyData:data block:^{
+                        [self.sql clearSingleDataByDate:date];
+                }];
+                total = 0.0;
+                maxVlue = 0;
+                alert = 0;
             }
-            [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:total dayMaxValueNum:maxVlue dayAlarmNum:alert daySportNum:data.count everyData:data block:^{
-            }];
-            [self.sql clearSingleDataByDate:date];
-            total = 0.0;
-             maxVlue = 0;
-             alert = 0;
         }
     }
 }
@@ -521,6 +553,14 @@
     }
     self.dateNavigationItem.title = statusStr;
 }
+- (void)checkHistotyData {
+    static int i = 0;
+    if(i %200 == 40 && !_isHistoryDataAllUpload){
+        [self updateHistoryData];
+        [self uploadHistoryData:self.historyListDict];
+    }
+    i++;
+}
 #pragma mark  主线程
 - (void)mainThread {
     [self getHardInfo];
@@ -535,17 +575,19 @@
     if(self.curUserParam)
     {
         [self showToUser];
+        [self checkHistotyData];
         [self.dateFormatter setDateFormat:@"HH:mm"];
         NSString *curTime = [self.dateFormatter stringFromDate:[NSDate date]];
         NSString *curM = [curTime substringFromIndex:3];
         NSString *paramM = [self.curUserParam.sportsEndTimeParam substringFromIndex:3];
         
         if(![self.curUserParam.userType isEqualToString:@"7"]) { //用户不为7
-            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
-            [self todayEndTimeAction];
+            if(!_isTodayDataUploading){
+                [self todayEndTimeAction];
+            }
         } else { // 用户为7 天运动量没达到告警
             static int type7Flag = NO;
-            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.maxNum / self.curUserParam.maxValueNumParam block:nil];
+            //[RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.maxNum / self.curUserParam.maxValueNumParam block:nil];
             
             if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1)) {
                 if(self.curUserParam.maxValueNumParam > self.curMotion.maxNum) {
@@ -652,7 +694,6 @@
     //每天运动时间到达
     if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && (self.daylyMotion.daylyIsSave == NO) && (self.singleTimer == nil))
     {
-        self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
         //上传今天的运动数据
         [self.sql updateDayData:self.daylyMotion];
                 //天运动量每到量
@@ -697,9 +738,11 @@
              ];
             [self showAlertMeg:@"今天运动过量"];
         }
+        _isTodayDataUploading = YES;
         [RequestUtil uploadDaylyData:self.curUser.userName32 device:self.curUser.deviceID18 dayTotal:self.daylyMotion.daylyTotal dayMaxValueNum:self.todayData.count dayAlarmNum:self.daylyMotion.alertNum daySportNum:self.todayData.count everyData:self.todayData block:^{
+                _isTodayDataUploading = NO;
+                self.daylyMotion.daylyIsSave = YES; //已经保存置位防止多次发警告
         }];
-
     }
 }
 - (void)getHardInfo {
@@ -778,7 +821,6 @@
                     }];
                 }
             }
-            [self uploadHistoryData:self.historyListDict];
         } else {
             self.curUserParam = [userParam readFromDefault];
             if(self.curUserParam ==nil){
@@ -875,7 +917,7 @@
             self.heartBeatTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(heartBeatAction) userInfo:nil repeats:YES];
             break;
         case 7:
-            [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
+            //[RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.daylyMotion.daylyTotal / [self.curUserParam.dayValueMaxParam doubleValue] block:nil];
             break;
         case 8:
             break;
@@ -966,8 +1008,11 @@
 //    }
 }
 - (void)showAlertMeg:(NSString *)msg {
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
-    [alertView show];
+    if(!self.alertView){
+        self.alertView = [[UIAlertView alloc]initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:@"取消", nil];
+    }
+    [self.alertView setMessage:msg];
+    [_alertView show];
     [self alertTimeAction];
 }
 - (void)alertTimeAction {

@@ -493,6 +493,7 @@ static NSString *userName;
                             @"everyData":str
                             };
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
+        dispatch_async(dispatch_get_main_queue(), ^{
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
         if(200 == statusCode)
         {
@@ -505,6 +506,7 @@ static NSString *userName;
             NSString *err = [dict objectForKey:@"reason"];
             
         }
+        });
     }];
 }
 
@@ -530,12 +532,13 @@ static NSString *userName;
         }
     }];
 }
-+ (void)updatePercent:(NSString *)name device:(NSString *)deviceID percent:(double) progress block:(void (^)(void)) aBlock {
++ (void)updatePercent:(NSString *)name device:(NSString *)deviceID percent:(double) equivalent inpluse:(double) inpluse  block:(void (^)(void)) aBlock {
     NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_PROGRESS];
 
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
-                            @"progress":[NSString stringWithFormat:@"%lf",progress*100]
+                            @"sportsDL":[NSString stringWithFormat:@"%lf",equivalent],
+                            @"sportsCL":[NSString stringWithFormat:@"%lf",inpluse]
                             };
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];

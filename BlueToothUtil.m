@@ -167,6 +167,11 @@ static BlueToothUtil* blueTooth;
         unsigned char data[30] = {'\0'};
         unsigned char temp[4] = {'\0'};
         [characteristic.value getBytes:data];
+        for (int i = 0; i < 30; i ++) {
+            NSLog(@"%02X",data[i]);
+        }
+        NSLog(@"%s",data);
+        
         if(data[0] == 0xA5 && data[1] == 0x02)
         {
             switch (data[3]) {
@@ -217,17 +222,7 @@ static BlueToothUtil* blueTooth;
                 case 0x30:
                     if(self.m_readCurrentMotionMeasurement)
                     {
-                        temp[0] = data[4];
-                        temp[1] = data[5];
-                        temp[2] = data[6];
-                        temp[3] = data[7];
-                        float *Fdata1 = (float*)&temp;
-                        temp[0] = data[8];
-                        temp[1] = data[9];
-                        temp[2] = data[10];
-                        temp[3] = data[11];
-                        float *Fdata2 = (float*)&temp;
-                        self.m_readCurrentMotionMeasurement(*Fdata1, *Fdata2);
+                        self.m_readCurrentMotionMeasurement(*(float*)&data[4], *(float*)&data[8]);
                     }
                     break;
                 default:

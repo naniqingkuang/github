@@ -14,6 +14,7 @@
 #import "UpdatePasswdViewController.h"
 #import "DaylyDataViewController.h"
 #import "LoginViewController.h"
+#import "IPViewController.h"
 @interface LeftViewController ()<UITableViewDataSource,UITableViewDelegate>
 {
     UITableView *tableV;
@@ -91,6 +92,8 @@
         case 6:
             cell.textLabel.text = @"今日详细数据";
             break;
+        case 7:
+            cell.textLabel.text = @"ip 管理";
         default:
             break;
     }
@@ -99,7 +102,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 7;
+    return 8;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -133,6 +136,9 @@
             break;
         case 6:
             [[SliderViewController sharedSliderController]showContentControllerWithModel:@"DaylyDataViewController"];
+            break;
+        case 7:
+            [[SliderViewController sharedSliderController]showContentControllerWithModel:@"IPViewController"];
             break;
         default:
             break;

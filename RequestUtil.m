@@ -22,9 +22,21 @@ static NSString *userName;
     NetworkStatus status = [reach currentReachabilityStatus];
     return status;
 }
++ (NSString *)getIPAddress {
+    NSString *ip = [[NSUserDefaults standardUserDefaults]objectForKey:@"IPText"];
+    if(ip && ip.length){
+        NSMutableString *str = [[NSMutableString alloc]init];
+        [str appendString:ip];
+        [str appendString:@"/MSZNYL/app/"];
+        return str;
+    }else {
+        return Server_url;
+    }
+    
+}
 + (void)multiFormPost:(NSString *)url withPara:(NSDictionary *)param constructingBodyWithBlock:(void(^) (id<AFMultipartFormData> )) bodyBlock completionBlock:(void (^)(NSDictionary *)) completionBlock {
     if(![self checkNetState]){
-        return;
+        //return;
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
@@ -52,7 +64,7 @@ static NSString *userName;
 + (void)requestPost:(NSString *)url withPara:(NSDictionary *)para completionBlock:(void (^)(NSDictionary *)) completionBlock
 {
     if(![self checkNetState]){
-        return;
+        //return;
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFHTTPRequestSerializer alloc]init];
@@ -79,7 +91,7 @@ static NSString *userName;
 + (void)requestPostWithJson:(NSString *)url withPara:(NSDictionary *)para completionBlock:(void (^)(NSDictionary *)) completionBlock
 {
     if(![self checkNetState]){
-        return;
+        //return;
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.requestSerializer = [[AFJSONRequestSerializer alloc]init];
@@ -111,7 +123,7 @@ static NSString *userName;
 #pragma mark 登录
 + (void)userLogin:(NSString *)name passwd:(NSString *)passwd block:(void (^)(bool)) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:User_login];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:User_login];
     NSDictionary *dict = @{@"userName":name,@"password":passwd,@"deviceID":@""};
     [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -131,7 +143,7 @@ static NSString *userName;
 #pragma mark 注册
 + (void)userRegister:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:User_register];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:User_register];
     NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"registerdate":item.registerdate14,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8,@"height":item.height,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
         [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -151,7 +163,7 @@ static NSString *userName;
 #pragma mark 修改数据
 + (void)userUpdateInfo:(UserUtil *)item block:(void (^)(bool)) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_INFO_UPDATE];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_INFO_UPDATE];
     NSDictionary *dict =@{@"userName":item.userName32,@"userType":item.userType1,@"password":item.password32,@"deviceID":item.deviceID18,@"realName":item.realName32,@"gender":item.gender1,@"birthday":item.birthday8, @"height":item.height,@"weight":item.weight,@"address":item.address256,@"phone":item.phone32,@"email":item.email32,@"clientid1":@"",@"clientid2":item.clientid2_32};
     [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -172,7 +184,7 @@ static NSString *userName;
 #pragma mark 获取用户信息
 + (void)getUserinfo:(NSString *)userName block:(void(^)(NSDictionary *)) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:Get_UserInfo];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:Get_UserInfo];
     NSDictionary *dict = @{@"userName":userName};
     [self requestPost:fullUrl withPara:dict completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -193,7 +205,7 @@ static NSString *userName;
 #pragma mark 验证用户是否唯一
 + (void)checkUserName:(NSString *)userName withBlock:(void(^)()) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_NAME_CHECK];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_NAME_CHECK];
     NSDictionary *param = @{@"userName":userName};
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -213,7 +225,7 @@ static NSString *userName;
 #pragma mark 更新密码
 + (void)updatePasswd:(NSString *)name passed:(NSString *)passwd newPassed:(NSString *)aNewPasswd block:(void (^)()) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_RESET_PASSWD];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_RESET_PASSWD];
     NSDictionary *param = @{@"userName":name, @"password":passwd, @"newpwd":aNewPasswd};
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
         NSInteger statusCode = [[dict objectForKey:@"statusCode"]integerValue];
@@ -239,7 +251,7 @@ static NSString *userName;
                  sportsCL:(NSString *)sportsCL
                     block:(void (^) ()) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_CURRENT_DATA];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_CURRENT_DATA];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"sportsDL":sportsDL,
@@ -265,7 +277,7 @@ static NSString *userName;
 + (void)doloadPatam:(NSString *)name
              device:(NSString *)deviceID
               block:(void (^)(NSDictionary *))aBlock{
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_DOWN_PARAM];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_DOWN_PARAM];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID};
     [self requestPost:fullUrl withPara:param completionBlock:^(NSDictionary *dict) {
@@ -291,7 +303,7 @@ static NSString *userName;
                        soft:(NSString *)softID
                    hardWare:(NSString *)hardWareID
                       block:(void (^)()) aBlock{
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_HARDWARE_PARAM];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_HARDWARE_PARAM];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"appVersion":appID,
@@ -317,7 +329,7 @@ static NSString *userName;
              page:(int)pageNum
             block:(void (^)(NSDictionary *) )aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_LIST];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_GET_FEEDBACK_LIST];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"startTime":@"",
@@ -342,7 +354,7 @@ static NSString *userName;
              device:(NSString *)deviceID
          feedBackID:(NSString *)feedBackID
               block:(void (^)(NSDictionary *))aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_GET_FEEDBACK_ANSWER];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_GET_FEEDBACK_ANSWER];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"msgID":feedBackID};
@@ -368,7 +380,7 @@ static NSString *userName;
                  image:(NSArray *)imgarr
                 voice:(NSURL *)url
                  block:(void(^)()) aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_FDDATA];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_FDDATA];
     NSMutableArray *mulStr = [[NSMutableArray alloc]initWithCapacity:imgarr.count];
     int i = 1;
     for (i=1; i < imgarr.count+1; i++) {
@@ -430,7 +442,7 @@ static NSString *userName;
               daylyTotal:(double )daylyTotal
              maxValueNum:(int)value
                    block:(void(^)()) aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_ALERT_EVENT];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_ALERT_EVENT];
     if(!name) name = @"";
     if(!deviceID) deviceID = @"";
     if(!aReason) aReason = @"";
@@ -481,7 +493,7 @@ static NSString *userName;
         count += item.maxNum;
         [mulArr addObject:dict];
     }
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_DALYY_DATA];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_DALYY_DATA];
     NSData *data = [NSJSONSerialization dataWithJSONObject:mulArr options:NSJSONWritingPrettyPrinted error:nil];
     NSString *str = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *param = @{@"userName":name,
@@ -512,7 +524,7 @@ static NSString *userName;
 
 + (void)updateAPPClientID:(NSString *)name device:(NSString *)deviceID appClientID:(NSString *)appClientID block:(void(^)()) aBlock
 {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPDATE_APP_CLIENT_ID];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPDATE_APP_CLIENT_ID];
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
                             @"clientID":appClientID,
@@ -533,7 +545,7 @@ static NSString *userName;
     }];
 }
 + (void)updatePercent:(NSString *)name device:(NSString *)deviceID percent:(double) equivalent inpluse:(double) inpluse  block:(void (^)(void)) aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_UPLOAD_PROGRESS];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_UPLOAD_PROGRESS];
 
     NSDictionary *param = @{@"userName":name,
                             @"deviceID":deviceID,
@@ -559,7 +571,7 @@ static NSString *userName;
 
 
 + (void)keepHeartBeat:(NSString *)name device:(NSString *)deviceID block:(void(^)(NSString *)) aBlock {
-    NSString *fullUrl = [self getFullPathUrl:Server_url sub:USER_KEEP_HEART_BEAT];
+    NSString *fullUrl = [self getFullPathUrl:[self getIPAddress] sub:USER_KEEP_HEART_BEAT];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setDateFormat:@"YYYYMMDDhhmmss"];
     NSString *currentTime = [dateFormatter stringFromDate:[NSDate date]];

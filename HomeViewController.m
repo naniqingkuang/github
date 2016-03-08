@@ -588,14 +588,15 @@
                 [self todayEndTimeAction];
             }
         } else { // 用户为7 天运动量没达到告警
-            static int type7Flag = NO;
+            static BOOL type7Flag = NO;
             //[RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:self.curMotion.maxNum / self.curUserParam.maxValueNumParam block:nil];
             
-            if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && ([curM intValue] - [paramM intValue] < 1)) {
-                if(self.curUserParam.maxValueNumParam > self.curMotion.maxNum) {
+            if([curTime compare:self.curUserParam.sportsEndTimeParam] == NSOrderedDescending && type7Flag == NO) {
+                if(self.curUserParam.maxValueNumParam > self.daylyMotion.daylyTotal && self.daylyMotion.daylyIsSave == NO) {
+                    type7Flag = YES;
                     [RequestUtil uploadAlertEvent:self.curUser.userName32
                                            device:self.curUser.deviceID18
-                                           reason:@"3"
+                                           reason:@"9"
                                         startTime:[self getCurrentDateOfDateAndTime]
                                       MotionStart:self.curMotion.startTime
                                       singleTotal:self.curMotion.singleTotalNum
@@ -604,9 +605,12 @@
                                             block:^{
                                                 self.curMotion.alertCount ++;
                                                 self.daylyMotion.alertNum ++;
+                                                self.daylyMotion.daylyIsSave = YES;
+                                                [self.sql updateDayData:self.daylyMotion];
+                                                type7Flag = NO;
+                                                
                                             }
                      ];
-                    type7Flag = YES;
                     [self showAlertMeg:@"今天运动量未达到"];
                 }
             }

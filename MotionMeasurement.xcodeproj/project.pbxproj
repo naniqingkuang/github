@@ -20,6 +20,8 @@
 		7D357C351B872299001024A4 /* RIghtViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D357C341B872299001024A4 /* RIghtViewController.xib */; };
 		7D3981901BC003E70017806B /* DaylyDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D39818E1BC003E70017806B /* DaylyDataViewController.m */; };
 		7D3981911BC003E70017806B /* DaylyDataViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D39818F1BC003E70017806B /* DaylyDataViewController.xib */; };
+		7D79B78F1C87CDFE00E53AC0 /* IPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D79B78D1C87CDFE00E53AC0 /* IPViewController.m */; };
+		7D79B7901C87CDFE00E53AC0 /* IPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D79B78E1C87CDFE00E53AC0 /* IPViewController.xib */; };
 		7D8572811B9E8B5A00A33803 /* TableViewCell2.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D85727F1B9E8B5A00A33803 /* TableViewCell2.m */; };
 		7D8572821B9E8B5A00A33803 /* TableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D8572801B9E8B5A00A33803 /* TableViewCell2.xib */; };
 		7D8572851B9EAEC100A33803 /* UserUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8572841B9EAEC100A33803 /* UserUtil.m */; };
@@ -164,6 +166,9 @@
 		7D39818D1BC003E70017806B /* DaylyDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DaylyDataViewController.h; sourceTree = "<group>"; };
 		7D39818E1BC003E70017806B /* DaylyDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DaylyDataViewController.m; sourceTree = "<group>"; };
 		7D39818F1BC003E70017806B /* DaylyDataViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DaylyDataViewController.xib; sourceTree = "<group>"; };
+		7D79B78C1C87CDFE00E53AC0 /* IPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPViewController.h; sourceTree = "<group>"; };
+		7D79B78D1C87CDFE00E53AC0 /* IPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPViewController.m; sourceTree = "<group>"; };
+		7D79B78E1C87CDFE00E53AC0 /* IPViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IPViewController.xib; sourceTree = "<group>"; };
 		7D85727E1B9E8B5A00A33803 /* TableViewCell2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCell2.h; sourceTree = "<group>"; };
 		7D85727F1B9E8B5A00A33803 /* TableViewCell2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCell2.m; sourceTree = "<group>"; };
 		7D8572801B9E8B5A00A33803 /* TableViewCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewCell2.xib; sourceTree = "<group>"; };
@@ -425,6 +430,16 @@
 			name = Login;
 			sourceTree = "<group>";
 		};
+		7D79B78B1C87CDD500E53AC0 /* ip */ = {
+			isa = PBXGroup;
+			children = (
+				7D79B78C1C87CDFE00E53AC0 /* IPViewController.h */,
+				7D79B78D1C87CDFE00E53AC0 /* IPViewController.m */,
+				7D79B78E1C87CDFE00E53AC0 /* IPViewController.xib */,
+			);
+			name = ip;
+			sourceTree = "<group>";
+		};
 		7DA107E51BF967D600645651 /* APNS */ = {
 			isa = PBXGroup;
 			children = (
@@ -504,6 +519,7 @@
 		7DC719071B855B580068253C /* MotionMeasurementClass */ = {
 			isa = PBXGroup;
 			children = (
+				7D79B78B1C87CDD500E53AC0 /* ip */,
 				7D28DAF41BA15C1100EED6A8 /* FeedBack */,
 				7D2F95DE1B8B0CA600A8CE8A /* Login */,
 				7DC7191C1B855E500068253C /* MainNavigation */,
@@ -824,7 +840,7 @@
 								enabled = 0;
 							};
 							com.apple.Push = {
-								enabled = 0;
+								enabled = 1;
 							};
 						};
 					};
@@ -872,6 +888,7 @@
 				7DA8D6281BEB35EF00B35E8B /* notSelect.png in Resources */,
 				7DCD38B61BF342C300E979C7 /* delete_photo@2x.png in Resources */,
 				7D3279DD1BC8F0AF00F91566 /* police.png in Resources */,
+				7D79B7901C87CDFE00E53AC0 /* IPViewController.xib in Resources */,
 				7DC719191B855BA90068253C /* BlueToothSetViewController.xib in Resources */,
 				7D8E73B31BD5E5FA00648A4E /* voice.jpg in Resources */,
 				7D8572821B9E8B5A00A33803 /* TableViewCell2.xib in Resources */,
@@ -989,6 +1006,7 @@
 				7DC718E01B855B090068253C /* main.m in Sources */,
 				7DC7C6601BD0A12D00677469 /* SDWebImageManager.m in Sources */,
 				7DC7C5911BCE78CB00677469 /* SqlRequestUtil.m in Sources */,
+				7D79B78F1C87CDFE00E53AC0 /* IPViewController.m in Sources */,
 				7DC7C5891BCE77E500677469 /* FMDatabaseAdditions.m in Sources */,
 				7DC7C6611BD0A12D00677469 /* SDWebImagePrefetcher.m in Sources */,
 			);
@@ -1065,7 +1083,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1103,7 +1120,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "7afcba4d-04df-4e8b-a8b3-67534f5e8b9c";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1170,7 +1186,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhuzhu.-$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};
 			name = Debug;
@@ -1189,7 +1204,6 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zhuzhu.-$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MotionMeasurement.app/MotionMeasurement";
 			};
 			name = Release;

@@ -10,8 +10,8 @@
 #import "AFNetworking.h"
 #import "UserUtil.h"
 
-//#define Server_url          @"http://msznyl.com:8088/MSZNYL/app/"
-#define Server_url                              @"http://www.msyzn.net:8088/MSZNYL/app/"
+#define Server_url          @"http://msznyl.com:8088/MSZNYL/app/"
+//#define Server_url                              @"http://www.msyzn.net:8088/MSZNYL/app/"
 #define User_login                              @"userLogin"
 #define User_register                           @"receiveAppUserInfo"
 #define Get_UserInfo                            @"getAppUserInfo"

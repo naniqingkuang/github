@@ -140,7 +140,7 @@
         self.equivalent = equivalent;  // 本次当量值
         self.inpulse = inpulse;  //
         [RequestUtil updatePercent:self.curUser.userName32 device:self.curUser.deviceID18 percent:equivalent inpluse:inpulse block:nil];
-        if(![self.curUserParam.userName isEqualToString:@"7"]) {
+        if(self.curUserParam !=nil && self.curUserParam.userType != nil && (![self.curUserParam.userType isEqualToString:@"7"])) {
             self.daylyMotion.daylyTotal += equivalent;    //今日总量
             if([curTime compare:self.curUserParam.sportsEndTimeParam]== NSOrderedAscending && [curTime compare:self.curUserParam.sportsBeginTimeParam]== NSOrderedDescending)
             { //若今天的数据已经超出
@@ -295,6 +295,7 @@
             }
         } else {
             if(self.inpulse > [self.curUserParam.maxValueParam doubleValue]) {
+                self.daylyMotion.daylyTotal++;
                 self.curMotion.maxNum ++;
             }
         }
@@ -375,12 +376,16 @@
 
     } else {
         CGFloat percent = 0.0;
-        percent = self.curMotion.maxNum / self.curUserParam.maxValueNumParam;
+        percent = self.daylyMotion.daylyTotal / self.curUserParam.maxValueNumParam;
         if(1.0 - percent >0.01){
             [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor redColor].CGColor];
             [self.TodayMeasurementView setTitle:@"未达标" andTarget:nil];
+            [self.daylyTotalProgress setProgress:percent];
+            self.daylyTotalProgress.tintColor = [UIColor redColor];
         } else {
             percent = 1.0;
+            [self.daylyTotalProgress setProgress:percent];
+            self.daylyTotalProgress.tintColor = [UIColor greenColor];
             [self.TodayMeasurementView setPersentMaskOfCircle:(percent) color:[UIColor greenColor].CGColor];
             [self.TodayMeasurementView setTitle:@"已达标" andTarget:nil];
         }
@@ -611,7 +616,7 @@
                                                 
                                             }
                      ];
-                    [self showAlertMeg:@"今天运动量未达到"];
+                    [self showAlertMeg:@"今天运动冲量未完成"];
                 }
             }
         }

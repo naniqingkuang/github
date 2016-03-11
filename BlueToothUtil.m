@@ -35,9 +35,14 @@ static BlueToothUtil* blueTooth;
         [self.centerManager setDelegate:self];
         self.isConnetct = NO;
         self.discoverPeripheral = [[NSMutableArray alloc]initWithCapacity:10];
-
+        //[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeAction) userInfo:nil repeats:YES];
     }
     return self;
+}
+- (void)timeAction {
+    if(self.m_readCurrentMotionMeasurement){
+        self.m_readCurrentMotionMeasurement(20,20);
+    }
 }
 + (BlueToothUtil *)getBlueToothInstance
 {

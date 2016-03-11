@@ -89,6 +89,7 @@
             cell = (TableViewCell2 *)[[[NSBundle mainBundle]loadNibNamed:@"TableViewCell2" owner:self options:nil]lastObject];
         }
         cell.titleLB.text = title;
+        cell.contentLB.text = self.dataDest[indexPath.row];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.contentLB.tag = indexPath.row;
         return cell;

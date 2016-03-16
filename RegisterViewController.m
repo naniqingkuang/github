@@ -311,7 +311,7 @@
         TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
         if([cell respondsToSelector:@selector(contentText)]){
             if(textField == cell.contentText && i > 8) {
-                [self keboardHide:i];
+                //[self keboardHide:i];
             }
         }
     }
@@ -323,27 +323,27 @@
         TableViewCell1 *cell = [self.tableView cellForRowAtIndexPath:path];
         if([cell respondsToSelector:@selector(contentText)]){
             if(textField == cell.contentText && i > 8) {
-                [self keboardShow:i];
+               // [self keboardShow:i];
             }
         }
     }
     return YES;
 }
-- (void)keboardShow:(int )num {
-    CGRect frame = self.view.frame;
-    frame.origin.y -= 150;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:0.2];
-    self.view.frame = frame;
-    [UIView commitAnimations];
-}
-- (void)keboardHide:(int )num{
-    CGRect frame = self.view.frame;
-    frame.origin.y +=  150;
-    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-    [UIView setAnimationDuration:0.2];
-    self.view.frame = frame;
-    [UIView commitAnimations];
-}
+//- (void)keboardShow:(int )num {
+//    CGRect frame = self.view.frame;
+//    frame.origin.y -= 150;
+//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+//    [UIView setAnimationDuration:0.2];
+//    self.view.frame = frame;
+//    [UIView commitAnimations];
+//}
+//- (void)keboardHide:(int )num{
+//    CGRect frame = self.view.frame;
+//    frame.origin.y +=  150;
+//    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+//    [UIView setAnimationDuration:0.2];
+//    self.view.frame = frame;
+//    [UIView commitAnimations];
+//}
 
 @end

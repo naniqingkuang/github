@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModifyViewController">
@@ -40,7 +40,7 @@
                     </items>
                 </navigationBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Wn4-qS-fyL">
-                    <rect key="frame" x="0.0" y="64" width="600" height="386"/>
+                    <rect key="frame" x="0.0" y="64" width="600" height="256"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="XwT-Of-Stn"/>
@@ -108,7 +108,7 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="cmk-ct-a3u" secondAttribute="bottom" id="3IH-zV-P7d"/>
                 <constraint firstAttribute="trailing" secondItem="Wn4-qS-fyL" secondAttribute="trailing" id="BUI-Va-qtr"/>
-                <constraint firstAttribute="bottom" secondItem="Wn4-qS-fyL" secondAttribute="bottom" constant="150" id="JUE-ta-xqy"/>
+                <constraint firstAttribute="bottom" secondItem="Wn4-qS-fyL" secondAttribute="bottom" constant="280" id="JUE-ta-xqy"/>
                 <constraint firstItem="Vf6-4x-Tdv" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="NT2-ZP-P2G"/>
                 <constraint firstItem="Wn4-qS-fyL" firstAttribute="top" secondItem="Vf6-4x-Tdv" secondAttribute="bottom" id="OVf-3l-Cgr"/>
                 <constraint firstAttribute="trailing" secondItem="YGq-uJ-rkc" secondAttribute="trailing" id="Rfn-Pp-wbe"/>
